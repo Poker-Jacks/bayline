@@ -437,16 +437,16 @@ p{margin:0}
 .pcap{display:none}.pcap.on{display:block}
 .pcap b{font-family:var(--sans);font-size:19px;color:var(--espuma);font-weight:600}
 .pcap p{font-size:15px;color:var(--bajio);line-height:1.55;margin-top:9px}
-@keyframes contourDrift{
-  0%{transform:scale(1.08) translate(0,0)}
-  25%{transform:scale(1.09) translate(-0.8%,-3.8%)}
-  55%{transform:scale(1.085) translate(0.6%,2.4%)}
-  80%{transform:scale(1.09) translate(1%,-2.8%)}
-  100%{transform:scale(1.08) translate(0,0)}
+.glowlines{filter:drop-shadow(0 0 3px rgba(232,97,60,.55))}
+.glowlines polyline{fill:none;stroke:#E8613C;stroke-width:1.2;stroke-linecap:round;stroke-dasharray:8 100;stroke-dashoffset:0;opacity:0}
+@keyframes lightRun{
+  0%{stroke-dashoffset:0;opacity:0}
+  5%{opacity:1}
+  34%{stroke-dashoffset:-100;opacity:0}
+  100%{stroke-dashoffset:-100;opacity:0}
 }
 @media (prefers-reduced-motion:no-preference){
-  .contours{animation:contourDrift 19s ease-in-out infinite;transform-origin:center;will-change:transform}
-  .phaseband .contours{animation-duration:25s;animation-delay:-7s}
+  .glowlines polyline{animation:lightRun 8s linear infinite}
 }
 .boyachip{display:inline-flex;align-items:center}
 .boyachip svg{width:16px;height:16px;display:block}
@@ -493,7 +493,7 @@ p{margin:0}
 </div></nav>
 
 <header class="hero" id="top">
-  <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/></svg>
+  <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/><g class="glowlines" aria-hidden="true"><polyline points="0 0 25 2.4 50 4.7 75 6.9 100 9 125 11 150 12.8 175 14.3 200 15.6 225 16.7 250 17.4 275 17.9 300 18 325 17.8 350 17.4 375 16.6 400 15.5" pathLength="100" style="animation-delay:-0s"/><polyline points="0 33.6 25 35.3 50 36.8 75 38 100 38.9 125 39.6 150 39.9 175 40 200 39.7 225 39.1 250 38.3 275 37.1 300 35.7 325 34.1 350 32.2 375 30.2 400 28" pathLength="100" style="animation-delay:-3.1s"/><polyline points="0 61.7 25 62 50 61.9 75 61.6 100 60.9 125 59.9 150 58.7 175 57.2 200 55.5 225 53.6 250 51.5 275 49.3 300 47 325 44.6 350 42.3 375 39.9 400 37.7" pathLength="100" style="animation-delay:-6.2s"/><polyline points="0 81.5 25 80.2 50 78.6 75 76.9 100 74.9 125 72.8 150 70.5 175 68.2 200 65.8 225 63.5 250 61.2 275 59 300 56.8 325 54.9 350 53.1 375 51.6 400 50.3" pathLength="100" style="animation-delay:-1.6s"/><polyline points="0 94 25 91.8 50 89.4 75 87.1 100 84.7 125 82.4 150 80.2 175 78.2 200 76.3 225 74.6 250 73.1 275 71.9 300 71 325 70.4 350 70.1 375 70 400 70.3" pathLength="100" style="animation-delay:-4.7s"/><polyline points="0 103.7 25 101.5 50 99.5 75 97.7 100 96.1 125 94.7 150 93.6 175 92.8 200 92.2 225 92 250 92.1 275 92.5 300 93.2 325 94.2 350 95.4 375 96.9 400 98.6" pathLength="100" style="animation-delay:-2.3s"/><polyline points="0 116.3 25 115.3 50 114.6 75 114.1 100 114 125 114.2 150 114.7 175 115.5 200 116.5 225 117.9 250 119.5 275 121.3 300 123.2 325 125.4 350 127.6 375 129.9 400 132.3" pathLength="100" style="animation-delay:-5.4s"/><polyline points="0 136.3 25 136.9 50 137.8 75 139 100 140.4 125 142 150 143.9 175 145.9 200 148.1 225 150.4 250 152.7 275 155.1 300 157.4 325 159.7 350 161.9 375 163.9 400 165.8" pathLength="100" style="animation-delay:-7.0s"/></g></svg>
   <div class="wrap">
     <div>
       <span class="kick rv">Plataforma de comercio · Costa Rica</span>
@@ -560,7 +560,7 @@ p{margin:0}
 </div></section>
 
 <section class="sec dark-band" id="sistema">
-  <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/></svg>
+  <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/><g class="glowlines" aria-hidden="true"><polyline points="0 0 25 2.4 50 4.7 75 6.9 100 9 125 11 150 12.8 175 14.3 200 15.6 225 16.7 250 17.4 275 17.9 300 18 325 17.8 350 17.4 375 16.6 400 15.5" pathLength="100" style="animation-delay:-0s"/><polyline points="0 33.6 25 35.3 50 36.8 75 38 100 38.9 125 39.6 150 39.9 175 40 200 39.7 225 39.1 250 38.3 275 37.1 300 35.7 325 34.1 350 32.2 375 30.2 400 28" pathLength="100" style="animation-delay:-3.1s"/><polyline points="0 61.7 25 62 50 61.9 75 61.6 100 60.9 125 59.9 150 58.7 175 57.2 200 55.5 225 53.6 250 51.5 275 49.3 300 47 325 44.6 350 42.3 375 39.9 400 37.7" pathLength="100" style="animation-delay:-6.2s"/><polyline points="0 81.5 25 80.2 50 78.6 75 76.9 100 74.9 125 72.8 150 70.5 175 68.2 200 65.8 225 63.5 250 61.2 275 59 300 56.8 325 54.9 350 53.1 375 51.6 400 50.3" pathLength="100" style="animation-delay:-1.6s"/><polyline points="0 94 25 91.8 50 89.4 75 87.1 100 84.7 125 82.4 150 80.2 175 78.2 200 76.3 225 74.6 250 73.1 275 71.9 300 71 325 70.4 350 70.1 375 70 400 70.3" pathLength="100" style="animation-delay:-4.7s"/><polyline points="0 103.7 25 101.5 50 99.5 75 97.7 100 96.1 125 94.7 150 93.6 175 92.8 200 92.2 225 92 250 92.1 275 92.5 300 93.2 325 94.2 350 95.4 375 96.9 400 98.6" pathLength="100" style="animation-delay:-2.3s"/><polyline points="0 116.3 25 115.3 50 114.6 75 114.1 100 114 125 114.2 150 114.7 175 115.5 200 116.5 225 117.9 250 119.5 275 121.3 300 123.2 325 125.4 350 127.6 375 129.9 400 132.3" pathLength="100" style="animation-delay:-5.4s"/><polyline points="0 136.3 25 136.9 50 137.8 75 139 100 140.4 125 142 150 143.9 175 145.9 200 148.1 225 150.4 250 152.7 275 155.1 300 157.4 325 159.7 350 161.9 375 163.9 400 165.8" pathLength="100" style="animation-delay:-7.0s"/></g></svg>
   <div class="wrap brandsys">
     <span class="kick rv">Sistema de marca</span>
     <h2 class="rv" style="--i:1">Marcas propias,<br><span class="dim">casa común.</span></h2>
@@ -733,7 +733,7 @@ p{margin:0}
 </div></section>
 
 <section class="sec final">
-  <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/></svg>
+  <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/><g class="glowlines" aria-hidden="true"><polyline points="0 0 25 2.4 50 4.7 75 6.9 100 9 125 11 150 12.8 175 14.3 200 15.6 225 16.7 250 17.4 275 17.9 300 18 325 17.8 350 17.4 375 16.6 400 15.5" pathLength="100" style="animation-delay:-0s"/><polyline points="0 33.6 25 35.3 50 36.8 75 38 100 38.9 125 39.6 150 39.9 175 40 200 39.7 225 39.1 250 38.3 275 37.1 300 35.7 325 34.1 350 32.2 375 30.2 400 28" pathLength="100" style="animation-delay:-3.1s"/><polyline points="0 61.7 25 62 50 61.9 75 61.6 100 60.9 125 59.9 150 58.7 175 57.2 200 55.5 225 53.6 250 51.5 275 49.3 300 47 325 44.6 350 42.3 375 39.9 400 37.7" pathLength="100" style="animation-delay:-6.2s"/><polyline points="0 81.5 25 80.2 50 78.6 75 76.9 100 74.9 125 72.8 150 70.5 175 68.2 200 65.8 225 63.5 250 61.2 275 59 300 56.8 325 54.9 350 53.1 375 51.6 400 50.3" pathLength="100" style="animation-delay:-1.6s"/><polyline points="0 94 25 91.8 50 89.4 75 87.1 100 84.7 125 82.4 150 80.2 175 78.2 200 76.3 225 74.6 250 73.1 275 71.9 300 71 325 70.4 350 70.1 375 70 400 70.3" pathLength="100" style="animation-delay:-4.7s"/><polyline points="0 103.7 25 101.5 50 99.5 75 97.7 100 96.1 125 94.7 150 93.6 175 92.8 200 92.2 225 92 250 92.1 275 92.5 300 93.2 325 94.2 350 95.4 375 96.9 400 98.6" pathLength="100" style="animation-delay:-2.3s"/><polyline points="0 116.3 25 115.3 50 114.6 75 114.1 100 114 125 114.2 150 114.7 175 115.5 200 116.5 225 117.9 250 119.5 275 121.3 300 123.2 325 125.4 350 127.6 375 129.9 400 132.3" pathLength="100" style="animation-delay:-5.4s"/><polyline points="0 136.3 25 136.9 50 137.8 75 139 100 140.4 125 142 150 143.9 175 145.9 200 148.1 225 150.4 250 152.7 275 155.1 300 157.4 325 159.7 350 161.9 375 163.9 400 165.8" pathLength="100" style="animation-delay:-7.0s"/></g></svg>
   <div class="wrap">
     <span class="kick rv">El siguiente paso toma 30 minutos</span>
     <h2 class="rv" style="--i:1">Véalo funcionando <span class="rt">con sus propios productos.</span></h2>
