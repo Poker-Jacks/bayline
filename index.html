@@ -437,12 +437,12 @@ p{margin:0}
 .pcap{display:none}.pcap.on{display:block}
 .pcap b{font-family:var(--sans);font-size:19px;color:var(--espuma);font-weight:600}
 .pcap p{font-size:15px;color:var(--bajio);line-height:1.55;margin-top:9px}
-.glowlines{filter:drop-shadow(0 0 3px rgba(232,97,60,.55))}
-.glowlines polyline{fill:none;stroke:#E8613C;stroke-width:1.2;stroke-linecap:round;stroke-dasharray:8 100;stroke-dashoffset:0;opacity:0}
+.glowlines{filter:blur(3px) drop-shadow(0 0 6px rgba(232,97,60,.35))}
+.glowlines polyline{fill:none;stroke:#E8613C;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:5 100;stroke-dashoffset:0;opacity:0}
 @keyframes lightRun{
   0%{stroke-dashoffset:0;opacity:0}
-  5%{opacity:1}
-  34%{stroke-dashoffset:-100;opacity:0}
+  12%{opacity:.42}
+  38%{stroke-dashoffset:-100;opacity:0}
   100%{stroke-dashoffset:-100;opacity:0}
 }
 @media (prefers-reduced-motion:no-preference){
