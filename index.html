@@ -420,6 +420,18 @@ p{margin:0}
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .rv,.js .rv{opacity:1;transform:none}
 }
+
+/* El problema */
+#problema h2{max-width:22ch}
+#problema .body+.body{margin-top:-8px}
+/* Diferenciadores */
+#porque h2{max-width:none}
+.diffs{margin-top:34px;border-top:1px solid var(--line-c)}
+.diff{display:grid;grid-template-columns:40px 220px 1fr;gap:22px;padding:20px 2px;border-bottom:1px solid var(--line-c);align-items:baseline}
+.diff .dn{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--boya)}
+.diff .dl{font-family:var(--sans);font-size:16.5px;font-weight:600;color:var(--ink)}
+.diff .dp{font-size:14px;color:var(--muted);line-height:1.5;max-width:62ch}
+@media(max-width:720px){.diff{grid-template-columns:auto 1fr;gap:8px 14px;padding:16px 2px}.diff .dp{grid-column:1/-1}}
 </style>
 
 <!-- Iconografía de producto · monoline carta náutica (reemplaza recuadros vacíos) -->
@@ -490,6 +502,18 @@ p{margin:0}
   </div>
 </header>
 
+<!-- EL PROBLEMA -->
+<section class="sec" id="problema"><div class="wrap">
+  <div class="rv">
+    <div class="eyerow"><span class="kick">El punto de partida</span></div>
+    <h2>Su canal comercial no está digitalizado.</h2>
+    <p class="body">Pedidos por WhatsApp sin orden. Inventario en la cabeza o en una hoja de cálculo.
+      Cero trazabilidad. Y clientes que tienen que llamar o pasar solo para saber si hay producto.</p>
+    <p class="body"><b>No competimos contra otras webs de catálogo: competimos contra ese proceso manual.</b>
+      Bayline lo digitaliza, sin cambiar su ERP ni su forma de trabajar.</p>
+  </div>
+</div></section>
+
 <section class="sec" id="producto"><div class="wrap split">
   <div class="rv">
     <div class="eyerow"><span class="numchip">01</span><span class="kick">Tienda en línea</span></div>
@@ -520,6 +544,19 @@ p{margin:0}
 </div></section>
 
 <!-- SISTEMA DE MARCA -->
+<!-- DIFERENCIADORES -->
+<section class="sec" id="porque"><div class="wrap">
+  <div class="eyerow rv"><span class="kick">Por qué Bayline</span></div>
+  <h2 class="rv" style="--i:1">Lo que no negociamos.</h2>
+  <div class="diffs rv" style="--i:2">
+    <div class="diff"><span class="dn">01</span><span class="dl">Stock por sucursal</span><span class="dp">Disponibilidad real por punto de venta, a la vista del cliente.</span></div>
+    <div class="diff"><span class="dn">02</span><span class="dl">WhatsApp-first</span><span class="dp">El canal que su cliente en Latinoamérica ya usa todos los días.</span></div>
+    <div class="diff"><span class="dn">03</span><span class="dl">0% de comisión</span><span class="dp">Su venta es suya. Paga su plan y nada más, venda lo que venda.</span></div>
+    <div class="diff"><span class="dn">04</span><span class="dl">Hecho para LATAM</span><span class="dp">Moneda, impuestos y logística locales — no un molde de afuera.</span></div>
+    <div class="diff"><span class="dn">05</span><span class="dl">Crece por fases</span><span class="dp">La plataforma evoluciona con su negocio, sin rehacer lo construido.</span></div>
+  </div>
+</div></section>
+
 <section class="sec dark-band" id="sistema">
   <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/></svg>
   <div class="wrap brandsys">
