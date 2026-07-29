@@ -638,18 +638,18 @@ function viewCotizacion(){
 function viewPago(){
   const it=DB.products.slice(4,7);
   const sub=it.reduce((a,p)=>a+p.price,0), env=3500, tot=sub+env;
-  return header('')+`<div class="wrap pagetitle"><div class="crumb"><a href="#/">Inicio</a> › Pago en línea</div><h1>Pago en línea</h1><p>Pague con SINPE, tarjeta o Tilopay. Checkout seguro, sin salir de la tienda.</p></div>
+  return header('')+`<div class="wrap pagetitle"><div class="crumb"><a href="#/">Inicio</a> › Pago en línea</div><h1>Pago en línea</h1><p>Pague con SINPE Móvil o tarjeta, sin salir de la tienda. <b>Pantalla de demostración:</b> no procesa cobros reales.</p></div>
   <section class="sec"><div class="wrap"><div class="ckgrid">
     <div class="ckcard"><h3>Resumen del pedido</h3>
       ${it.map(p=>`<div class="ckline"><span class="th">${pio(p.icon)}</span><div><div class="nm">${p.t}</div><div class="q">${p.brand} · 1 unidad</div></div><span class="pr">${money(p.price)}</span></div>`).join('')}
       <div class="cktot"><div class="r"><span>Subtotal</span><span class="num">${money(sub)}</span></div><div class="r"><span>Envío a domicilio</span><span class="num">${money(env)}</span></div><div class="r t"><span>Total a pagar</span><span class="num">${money(tot)}</span></div></div>
     </div>
     <div class="ckcard"><h3>Método de pago</h3>
-      <div class="pmeth"><div class="pm2 on">SINPE Móvil</div><div class="pm2">Tarjeta</div><div class="pm2">Tilopay</div></div>
+      <div class="pmeth"><div class="pm2 on">SINPE Móvil</div><div class="pm2">Tarjeta</div><div class="pm2">Transferencia</div></div>
       <div class="field"><label>Número SINPE Móvil</label><input value="8888-8888"></div>
       <div class="field"><label>Nombre de quien paga</label><input placeholder="Nombre y apellido"></div>
       <button class="btn pri" style="width:100%;padding:14px;font-size:15px">Pagar ${money(tot)}</button>
-      <div class="seg">${I.check} Pago seguro · procesado por Tilopay</div>
+      <div class="seg">${I.check} Demostración · la pasarela de pagos se conecta en la puesta en marcha</div>
     </div>
   </div></div></section>`+footer();
 }
