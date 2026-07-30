@@ -38,12 +38,12 @@ export function boot(host){
     const x=c.getContext('2d');
     x.fillStyle=`rgb(${base.join(',')})`; x.fillRect(0,0,size,size);
     const im=x.getImageData(0,0,size,size), d=im.data;
-    for(let i=0;i<d.length;i+=4){ const n=(Math.random()-.5)*26;
+    for(let i=0;i<d.length;i+=4){ const n=(Math.random()-.5)*44;
       d[i]+=n; d[i+1]+=n*.95; d[i+2]+=n*.8; }
     x.putImageData(im,0,0);
-    x.globalAlpha=.09; x.strokeStyle='#7d6642'; x.lineWidth=2;
+    x.globalAlpha=.20; x.strokeStyle='#7a6038'; x.lineWidth=2.4;
     for(let y=0;y<size;y+=9){x.beginPath();x.moveTo(0,y);x.lineTo(size,y);x.stroke();}
-    x.globalAlpha=.05; x.strokeStyle='#fff6e6';
+    x.globalAlpha=.13; x.strokeStyle='#fff3dd';
     for(let y=4;y<size;y+=9){x.beginPath();x.moveTo(0,y);x.lineTo(size,y);x.stroke();}
     const t=new THREE.CanvasTexture(c);
     t.colorSpace=THREE.SRGBColorSpace; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.anisotropy=8;
@@ -52,14 +52,14 @@ export function boot(host){
   function bumpTex(size=512){
     const c=document.createElement('canvas'); c.width=c.height=size;
     const x=c.getContext('2d'); x.fillStyle='#808080'; x.fillRect(0,0,size,size);
-    for(let y=0;y<size;y+=9){
-      x.fillStyle='#6a6a6a'; x.fillRect(0,y,size,4);
-      x.fillStyle='#9a9a9a'; x.fillRect(0,y+4,size,5);
+    for(let y=0;y<size;y+=8){
+      x.fillStyle='#4d4d4d'; x.fillRect(0,y,size,3);
+      x.fillStyle='#b4b4b4'; x.fillRect(0,y+3,size,5);
     }
     const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; return t;
   }
   const carton = new THREE.MeshStandardMaterial({
-    map:cardTex(), bumpMap:bumpTex(), bumpScale:.012, roughness:.92, metalness:0 });
+    map:cardTex(), bumpMap:bumpTex(), bumpScale:.045, roughness:.95, metalness:0 });
   const madera = new THREE.MeshStandardMaterial({color:0xB79263, roughness:.88, metalness:0});
   const boyaM  = new THREE.MeshStandardMaterial({color:0xE8613C, roughness:.42, metalness:.06});
   const acero  = new THREE.MeshStandardMaterial({color:0xB9C9D4, roughness:.24, metalness:.92});
@@ -87,7 +87,7 @@ export function boot(host){
   pA.rotation.x=-.34; pB.rotation.x=.34;
 
   /* gancho y cables */
-  const gan=new THREE.Group(); root.add(gan);
+  const gan=new THREE.Group(); root.add(gan); scene.userData.gan=gan;
   const barra=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,1.8,16),acero);
   barra.position.y=2.85; barra.castShadow=true; gan.add(barra);
   const aro=new THREE.Mesh(new THREE.TorusGeometry(.22,.048,14,32),boyaM);
@@ -127,8 +127,9 @@ export function boot(host){
     const p=cur;
     root.position.x = trk(p,[[0,0],[.14,0],[.26,2.2],[.42,2.2],[.52,-2.2],[.64,-2.2],[.74,2.2],[.86,2.2],[.94,0],[1,0]]);
     root.rotation.y = -.42 + p*2.35;
-    root.position.y = Math.sin(p*Math.PI)*.26 - p*.1;
-    root.rotation.z = Math.sin(p*Math.PI*2)*.018;      // balanceo leve del gancho
+    root.position.y = 1.45 - p*2.05 + Math.sin(p*Math.PI*3)*.035;   // desciende
+    root.rotation.z = Math.sin(p*Math.PI*2)*.02;
+    gan.position.y = p*1.5;      // el gancho queda arriba: la caja se descuelga
     cam.position.set(0,.55+p*.7,9.2-p*.5);
     cam.lookAt(root.position.x*.4,-.05+p*.3,0);
     R.render(scene,cam);
