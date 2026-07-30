@@ -52,19 +52,19 @@ export function boot(host){
   function bumpTex(size=512){
     const c=document.createElement('canvas'); c.width=c.height=size;
     const x=c.getContext('2d'); x.fillStyle='#808080'; x.fillRect(0,0,size,size);
-    for(let y=0;y<size;y+=8){
-      x.fillStyle='#4d4d4d'; x.fillRect(0,y,size,3);
-      x.fillStyle='#b4b4b4'; x.fillRect(0,y+3,size,5);
+    for(let y=0;y<size;y+=18){
+      x.fillStyle='#333'; x.fillRect(0,y,size,7);
+      x.fillStyle='#d0d0d0'; x.fillRect(0,y+7,size,11);
     }
     const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; return t;
   }
   const carton = new THREE.MeshStandardMaterial({
-    map:cardTex(), bumpMap:bumpTex(), bumpScale:.045, roughness:.95, metalness:0 });
+    map:cardTex(), bumpMap:bumpTex(), bumpScale:.10, roughness:.95, metalness:0 });
   const madera = new THREE.MeshStandardMaterial({color:0xB79263, roughness:.88, metalness:0});
   const boyaM  = new THREE.MeshStandardMaterial({color:0xE8613C, roughness:.42, metalness:.06});
   const acero  = new THREE.MeshStandardMaterial({color:0xB9C9D4, roughness:.24, metalness:.92});
 
-  const root = new THREE.Group(); scene.add(root);
+  const root = new THREE.Group(); root.scale.setScalar(1.3); scene.add(root);
   const RB=(w,h,d,r,mat)=>{const m=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,r),mat);
     m.castShadow=true;m.receiveShadow=true;return m;};
 
@@ -107,7 +107,7 @@ export function boot(host){
   piso.rotation.x=-Math.PI/2; piso.position.y=-1.72; piso.receiveShadow=true; scene.add(piso);
 
   /* ── movimiento: solo gira y viaja ── */
-  let tgt=0,cur=0,t0=0;
+  let tgt=0,cur=0,t0=0,tStart=0,intro=0;
   const maxS=()=>Math.max(1,document.body.scrollHeight-innerHeight);
   const onS=()=>{tgt=scrollY/maxS()}; addEventListener('scroll',onS,{passive:true}); onS();
   const sm=t=>t*t*(3-2*t);
@@ -127,10 +127,13 @@ export function boot(host){
     const p=cur;
     root.position.x = trk(p,[[0,0],[.14,0],[.26,2.2],[.42,2.2],[.52,-2.2],[.64,-2.2],[.74,2.2],[.86,2.2],[.94,0],[1,0]]);
     root.rotation.y = -.42 + p*2.35;
-    root.position.y = 1.45 - p*2.05 + Math.sin(p*Math.PI*3)*.035;   // desciende
+    if(!tStart) tStart=now;
+    intro = Math.min(1,(now-tStart)/1500);
+    const e = 1-Math.pow(1-intro,3);                 // la caja cae al cargar
+    root.position.y = 2.2 - e*2.35 + Math.sin(now/900)*.05*e;
     root.rotation.z = Math.sin(p*Math.PI*2)*.02;
-    gan.position.y = p*1.5;      // el gancho queda arriba: la caja se descuelga
-    cam.position.set(0,.55+p*.7,9.2-p*.5);
+    gan.position.y = e*1.9;   // el gancho se queda arriba y el cable se alarga
+    cam.position.set(0,.8+p*.7,10.8-p*.5);
     cam.lookAt(root.position.x*.4,-.05+p*.3,0);
     R.render(scene,cam);
     requestAnimationFrame(loop);
