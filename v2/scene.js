@@ -128,11 +128,12 @@ export function boot(host){
     root.position.x = trk(p,[[0,0],[.14,0],[.26,2.2],[.42,2.2],[.52,-2.2],[.64,-2.2],[.74,2.2],[.86,2.2],[.94,0],[1,0]]);
     root.rotation.y = -.42 + p*2.35;
     if(!tStart) tStart=now;
-    intro = Math.min(1,(now-tStart)/1500);
-    const e = 1-Math.pow(1-intro,3);                 // la caja cae al cargar
-    root.position.y = 2.2 - e*2.35 + Math.sin(now/900)*.05*e;
+    intro = Math.min(1,(now-tStart)/1400);
+    const e = 1-Math.pow(1-intro,3);                  // entrada: cae al cargar
+    const sd = sm(Math.min(1, scrollY/innerHeight));  // sigue bajando con el scroll
+    root.position.y = 2.2 - e*2.3 - sd*2.6 + Math.sin(now/900)*.05*e;
     root.rotation.z = Math.sin(p*Math.PI*2)*.02;
-    gan.position.y = e*1.9;   // el gancho se queda arriba y el cable se alarga
+    gan.position.y = e*1.9 + sd*2.6;   // el gancho queda arriba: el cable se alarga
     cam.position.set(0,.8+p*.7,10.8-p*.5);
     cam.lookAt(root.position.x*.4,-.05+p*.3,0);
     R.render(scene,cam);
