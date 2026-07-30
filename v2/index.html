@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayline · su comercio, en ruta</title>
+<meta name="description" content="Bayline es una plataforma de ecommerce completa: catálogo, pagos en línea y entregas. Para cualquier negocio que quiera vender en línea.">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  --carta:#F5F2E9; --marea:#0C1622; --sonda:#12405E; --canal:#3E7CA6;
+  --bajio:#BDD3DE; --boya:#E8613C; --tinta:#101C26; --espuma:#F2F6F8; --gris:#5E6E79;
+  --sans:"Author",system-ui,-apple-system,sans-serif;
+  --mono:"Spline Sans Mono",ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--carta);color:var(--tinta);font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1440px;margin:0 auto;padding:0 40px}
+
+/* ── nav ── */
+.nav{position:fixed;inset:0 0 auto;z-index:50;padding:22px 0;
+  backdrop-filter:blur(10px);background:rgba(245,242,233,.72);
+  border-bottom:1px solid rgba(16,28,38,.07)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.brand svg{width:32px;height:32px;flex:none}
+.nav ul{display:flex;gap:30px;list-style:none;font-size:15px;color:var(--gris)}
+.nav a:hover{color:var(--tinta)}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;
+  padding:12px 22px;border-radius:9px;border:1.5px solid transparent;cursor:pointer;
+  transition:background .2s,border-color .2s,color .2s}
+.btn.pri{background:var(--boya);color:var(--tinta)}
+.btn.pri:hover{background:#d9532f}
+.btn.gho{border-color:rgba(16,28,38,.2);color:var(--tinta)}
+.btn.gho:hover{border-color:var(--tinta)}
+.btn svg{width:17px;height:17px}
+@media(max-width:900px){.nav ul{display:none}}
+
+/* ── escenario 3D fijo ── */
+#stage{position:fixed;inset:0;z-index:1;pointer-events:none}
+#stage canvas{display:block;width:100%;height:100%}
+#fallback{position:fixed;inset:0;z-index:1;display:none;align-items:center;justify-content:center}
+#fallback svg{width:min(52vw,560px);height:auto;opacity:.9}
+
+/* ── tipografía editorial ── */
+.kick{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--canal)}
+.kick b{color:var(--boya);font-weight:400}
+.giant{font-weight:800;letter-spacing:-.045em;line-height:.86;
+  font-size:clamp(58px,13.5vw,208px);text-transform:none}
+.giant .out{color:transparent;-webkit-text-stroke:2px var(--tinta)}
+
+/* ── secciones sobre el 3D ── */
+main{position:relative;z-index:2}
+section{position:relative}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding:140px 0 90px}
+.hero .l1{display:block}
+.hero .l2{display:block;text-align:right}
+.hero .lead{margin-top:34px;max-width:47ch;background:rgba(245,242,233,.86);
+  backdrop-filter:blur(7px);border:1px solid rgba(16,28,38,.07);border-radius:16px;
+  padding:26px 28px}
+.hero .sub{font-size:clamp(17px,1.5vw,21px);color:var(--gris);line-height:1.55}
+.hero .sub b{color:var(--tinta);font-weight:600}
+.hero .ctas{margin-top:22px;display:flex;gap:14px;flex-wrap:wrap}
+.hero .hint{position:absolute;left:40px;bottom:34px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--gris);display:flex;
+  align-items:center;gap:10px}
+.hero .hint i{display:block;width:34px;height:1px;background:var(--gris);
+  transform-origin:left;animation:sweep 2.4s ease-in-out infinite}
+@keyframes sweep{0%,100%{transform:scaleX(.3)}50%{transform:scaleX(1)}}
+
+/* paneles que pasan por encima del 3D */
+.pane{min-height:100svh;display:flex;align-items:center;padding:100px 0}
+.card{max-width:500px;background:rgba(245,242,233,.9);backdrop-filter:blur(8px);
+  border:1px solid rgba(16,28,38,.08);border-radius:20px;padding:46px 44px}
+.pane.right .card{margin-left:auto}
+.card h2{font-size:clamp(34px,4.4vw,58px);font-weight:800;letter-spacing:-.03em;
+  line-height:1.02;margin:18px 0 0}
+.card h2 .rt{color:var(--boya)}
+.card p{margin-top:20px;font-size:17.5px;line-height:1.6;color:var(--gris)}
+.card ul{margin-top:24px;list-style:none;display:flex;flex-direction:column;gap:13px}
+.card li{position:relative;padding-left:26px;font-size:16.5px}
+.card li::before{content:"";position:absolute;left:0;top:7px;width:11px;height:11px;
+  border:2.5px solid var(--boya);border-radius:50%}
+.num{font-family:var(--mono);font-size:12px;color:var(--boya);letter-spacing:.2em}
+
+/* cierre */
+.final{background:var(--marea);color:var(--espuma);padding:120px 0;position:relative;z-index:3}
+.final .wrap{text-align:center}
+.final h2{font-size:clamp(38px,6vw,84px);font-weight:800;letter-spacing:-.035em;line-height:1.0}
+.final h2 .rt{color:var(--boya)}
+.final p{margin:22px auto 0;max-width:52ch;color:var(--bajio);font-size:18px;line-height:1.55}
+.final .ctas{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.final .btn.gho{border-color:rgba(242,246,248,.3);color:var(--espuma)}
+.final .btn.gho:hover{border-color:var(--espuma)}
+footer{background:var(--marea);color:var(--gris);padding:0 0 54px;position:relative;z-index:3;
+  font-size:13.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  border-top:1px solid rgba(242,246,248,.12);padding-top:26px}
+
+@media(max-width:760px){
+  .wrap{padding:0 22px}
+  .hero .l2{text-align:left}
+  .card{padding:32px 26px;max-width:none}
+  .hero .hint{left:22px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero .hint i{animation:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="#top" aria-label="Bayline, inicio">
+    <svg viewBox="0 0 96 96" fill="none" aria-hidden="true">
+      <g transform="translate(0 5)">
+        <path d="M36 34 L22 52 L30 72" fill="none" stroke="#101C26" stroke-width="4"
+              stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/>
+        <circle cx="22" cy="52" r="4.5" fill="#101C26"/><circle cx="30" cy="72" r="4.5" fill="#101C26"/>
+        <g transform="rotate(-14 36 34)">
+          <path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" fill="none" stroke="#101C26" stroke-width="5"
+                stroke-linejoin="round"/>
+          <circle cx="36" cy="34" r="6.5" fill="none" stroke="#E8613C" stroke-width="4"/>
+        </g>
+      </g>
+    </svg>
+    <span>Bayline</span>
+  </a>
+  <ul>
+    <li><a href="#catalogo">Catálogo</a></li>
+    <li><a href="#pagos">Pagos</a></li>
+    <li><a href="#dockbay">Dockbay</a></li>
+  </ul>
+  <a class="btn pri" href="#contacto">Solicite una demo</a>
+</div></nav>
+
+<!-- escenario 3D (decorativo) -->
+<div id="stage" aria-hidden="true"></div>
+<div id="fallback" aria-hidden="true">
+  <svg viewBox="0 0 400 300"><g fill="none" stroke="#12405E" stroke-width="3" stroke-linejoin="round">
+    <path d="M80 120 h240 v130 H80 z"/><path d="M80 120 l40 -40 h240 l-40 40"/>
+    <path d="M320 120 l40 -40 v130 l-40 40"/><path d="M200 120 v130"/>
+  </g><path d="M60 262 h300" stroke="#E8613C" stroke-width="5" stroke-linecap="round"/></svg>
+</div>
+
+<main id="top">
+
+  <section class="hero"><div class="wrap">
+    <span class="kick">Bayline <b>·</b> ecommerce completo · Costa Rica</span>
+    <h1 class="giant" style="margin-top:18px">
+      <span class="l1">Su comercio,</span>
+      <span class="l2 out">en ruta.</span>
+    </h1>
+    <div class="lead">
+      <p class="sub">Todo lo que su negocio necesita para vender en línea: catálogo, pagos y
+        entregas, en una sola plataforma. <b>0% de comisión de nuestra parte.</b></p>
+      <div class="ctas">
+      <a class="btn pri" href="#contacto">Solicite una demo
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn gho" href="../tienda/" target="_blank" rel="noopener">Ver la tienda demo</a>
+      </div>
+    </div>
+    <div class="hint"><i></i> Baje para abrir la caja</div>
+  </div></section>
+
+  <section class="pane" id="catalogo"><div class="wrap"><div class="card">
+    <span class="num">01 · Tienda en línea</span>
+    <h2>Su tienda,<br><span class="rt">siempre abierta.</span></h2>
+    <p>Monte su catálogo en línea y véndalo las 24 horas, con su identidad y sus reglas.
+      Si maneja varios puntos de venta, cada uno muestra su disponibilidad real.</p>
+    <ul>
+      <li>Catálogo ilimitado, con su marca</li>
+      <li>Buscador, categorías y filtros</li>
+      <li>Pedido en línea o por WhatsApp</li>
+    </ul>
+  </div></div></section>
+
+  <section class="pane right" id="pagos"><div class="wrap"><div class="card">
+    <span class="num">02 · Pagos en línea</span>
+    <h2>Cobre en<br><span class="rt">el momento.</span></h2>
+    <p>SINPE Móvil y tarjeta dentro de la misma tienda. El pedido se cierra solo, sin
+      transferencias sueltas ni cobros que perseguir.</p>
+    <ul>
+      <li>SINPE Móvil y tarjeta</li>
+      <li>Sin salir de la tienda</li>
+      <li>La comisión la cobra la pasarela, no nosotros</li>
+    </ul>
+  </div></div></section>
+
+  <section class="pane" id="dockbay"><div class="wrap"><div class="card">
+    <span class="num">03 · Dockbay</span>
+    <h2>Del catálogo<br><span class="rt">a la puerta.</span></h2>
+    <p>Cuando el volumen crece, Dockbay ordena la operación: preparación guiada de pedidos,
+      rutas y seguimiento de cada entrega hasta el cliente.</p>
+    <ul>
+      <li>Preparación guiada, sin listas en papel</li>
+      <li>Rutas y transportistas</li>
+      <li>Estado de cada pedido, en vivo</li>
+    </ul>
+  </div></div></section>
+
+  <section class="final" id="contacto"><div class="wrap">
+    <h2>Una plataforma.<br>Tres etapas.<br><span class="rt">Un precio fijo.</span></h2>
+    <p>Sirve para cualquier negocio que venda: empiece con su catálogo en línea y avance
+      cuando quiera, sobre la misma plataforma. Nosotros no cobramos comisión por sus ventas.</p>
+    <div class="ctas">
+      <a class="btn pri" href="https://wa.me/50600000000" target="_blank" rel="noopener">Solicite una demo</a>
+      <a class="btn gho" href="../">Ver la versión clásica</a>
+    </div>
+  </div></section>
+
+  <footer><div class="wrap">
+    <span>Bayline · Dockbay</span>
+    <span class="mono" style="font-family:var(--mono)">poker-jacks.github.io/bayline</span>
+  </div></footer>
+</main>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js"}}
+</script>
+<script type="module">
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage = document.getElementById('stage');
+const fb = document.getElementById('fallback');
+
+function showFallback(){ stage.style.display='none'; fb.style.display='flex'; }
+
+if (reduce) { showFallback(); }
+else {
+  try {
+    const THREE = await import('three');
+
+    // ── setup ──────────────────────────────────────────────
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, innerWidth/innerHeight, 0.1, 100);
+    camera.position.set(0, 0.4, 9);
+
+    const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true, powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    stage.appendChild(renderer.domElement);
+
+    // ── luces ──────────────────────────────────────────────
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xBDD3DE, 1.15));
+    const key = new THREE.DirectionalLight(0xffffff, 2.0);
+    key.position.set(4, 7, 5);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024,1024);
+    key.shadow.camera.near = 1; key.shadow.camera.far = 24;
+    key.shadow.camera.left=-7; key.shadow.camera.right=7;
+    key.shadow.camera.top=7; key.shadow.camera.bottom=-7;
+    scene.add(key);
+    const rim = new THREE.DirectionalLight(0xE8613C, .5);
+    rim.position.set(-6, 2, -4); scene.add(rim);
+
+    // ── materiales de marca ────────────────────────────────
+    const M = (c,r=.72,m=.05)=> new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+    const matCaja   = M(0xEDE3CE, .85);
+    const matBorde  = M(0x12405E, .6, .25);
+    const matMadera = M(0xC9A87C, .92);
+    const matBoya   = M(0xE8613C, .55, .1);
+    const matProd   = M(0x3E7CA6, .7);
+    const matProd2  = M(0xBDD3DE, .8);
+    const matMetal  = M(0xAFC7D6, .35, .8);
+
+    // ── grupo raíz ─────────────────────────────────────────
+    const root = new THREE.Group(); root.scale.setScalar(0.8); scene.add(root);
+
+    // palet
+    const palet = new THREE.Group();
+    for (let i=0;i<3;i++){
+      const t = new THREE.Mesh(new THREE.BoxGeometry(3.4,.12,.42), matMadera);
+      t.position.set(0,-1.34, -1.05 + i*1.05); t.castShadow=true; t.receiveShadow=true;
+      palet.add(t);
+    }
+    for (let i=0;i<3;i++){
+      const b = new THREE.Mesh(new THREE.BoxGeometry(.34,.22,2.7), matMadera);
+      b.position.set(-1.4 + i*1.4, -1.5, 0); b.castShadow=true; b.receiveShadow=true;
+      palet.add(b);
+    }
+    root.add(palet);
+
+    // caja: 4 paredes + tapas que se abren
+    const W=3.2, H=2.0, D=2.4, T=.09;
+    const caja = new THREE.Group(); root.add(caja);
+    const mk=(w,h,d,mat)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+      m.castShadow=true;m.receiveShadow=true;return m;};
+
+    const piso = mk(W,T,D,matCaja); piso.position.y=-1.2; caja.add(piso);
+    const pL = mk(T,H,D,matCaja); pL.position.set(-W/2,-1.2+H/2,0); caja.add(pL);
+    const pR = mk(T,H,D,matCaja); pR.position.set( W/2,-1.2+H/2,0); caja.add(pR);
+    const pB = mk(W,H,T,matCaja); pB.position.set(0,-1.2+H/2,-D/2); caja.add(pB);
+    const pF = mk(W,H,T,matCaja); pF.position.set(0,-1.2+H/2, D/2); caja.add(pF);
+
+    // cinta boya en el frente (dosis de marca)
+    const cinta = mk(W*1.002,.16,T*1.4,matBoya);
+    cinta.position.set(0,-1.2+H*.62, D/2); caja.add(cinta);
+
+    // tapas
+    const tapaGeo = new THREE.BoxGeometry(W,T,D/2);
+    const tapaA = new THREE.Mesh(tapaGeo,matCaja); tapaA.castShadow=true;
+    const pivA = new THREE.Group(); pivA.position.set(0,-1.2+H,-D/2);
+    tapaA.position.set(0,0,D/4); pivA.add(tapaA); caja.add(pivA);
+    const tapaB = new THREE.Mesh(tapaGeo,matCaja); tapaB.castShadow=true;
+    const pivB = new THREE.Group(); pivB.position.set(0,-1.2+H, D/2);
+    tapaB.position.set(0,0,-D/4); pivB.add(tapaB); caja.add(pivB);
+
+    // producto adentro (se revela al abrir)
+    const carga = new THREE.Group(); root.add(carga);
+    const cajitas=[[-.85,0,-.5,matProd],[.05,0,-.5,matProd2],[.95,0,-.5,matProd],
+                   [-.45,0,.55,matProd2],[.55,0,.55,matProd]];
+    cajitas.forEach(([x,,z,m])=>{
+      const c = mk(.78,.72,.78,m); c.position.set(x,-1.2+.36+.06,z); carga.add(c);
+      const l = mk(.8,.06,.8,matBoya); l.position.set(x,-1.2+.74,z); carga.add(l);
+    });
+
+    // gancho + cables
+    const gan = new THREE.Group(); root.add(gan);
+    const barra = new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,1.5,12), matMetal);
+    barra.position.y = 2.55; gan.add(barra);
+    const anillo = new THREE.Mesh(new THREE.TorusGeometry(.24,.055,10,26), matBoya);
+    anillo.position.y = 1.72; anillo.rotation.x = Math.PI/2; gan.add(anillo);
+    [[-W/2,-D/2],[W/2,-D/2],[-W/2,D/2],[W/2,D/2]].forEach(([x,z])=>{
+      const len = Math.hypot(x,z,1.9);
+      const cb = new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,len,6), matMetal);
+      cb.position.set(x/2, .95, z/2);
+      cb.lookAt(new THREE.Vector3(x,-1.2+H,z));
+      cb.rotateX(Math.PI/2);
+      gan.add(cb);
+    });
+
+    // sombra de contacto
+    const piso2 = new THREE.Mesh(new THREE.PlaneGeometry(30,30),
+      new THREE.ShadowMaterial({opacity:.12}));
+    piso2.rotation.x = -Math.PI/2; piso2.position.y = -1.75; piso2.receiveShadow = true;
+    scene.add(piso2);
+
+    // ── scroll ─────────────────────────────────────────────
+    let target=0, cur=0;
+    const maxScroll = () => Math.max(1, document.body.scrollHeight - innerHeight);
+    const onScroll = () => { target = scrollY / maxScroll(); };
+    addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+    const lerp=(a,b,t)=>a+(b-a)*t;
+    const clamp01=v=>Math.min(1,Math.max(0,v));
+    // curva por tramo: [0-.28] baja y gira · [.28-.55] abre · [.55-.8] gira producto · [.8-1] sube
+    let t0=0;
+    function frame(now){
+      const dt = Math.min(.05,(now-t0)/1000||0); t0=now;
+      cur = lerp(cur, target, 1-Math.pow(0.0015, dt)); // suavizado independiente de fps
+
+      const p = cur;
+      // desplazamiento lateral: el objeto se aparta de la tarjeta de cada sección
+      const KX = [[0,0],[0.20,0],[0.30,2.6],[0.44,2.6],[0.54,-2.6],[0.64,-2.6],[0.74,2.6],[0.84,2.6],[0.93,0]];
+      let ox = 0;
+      for (let i=0;i<KX.length-1;i++){
+        const [p0,v0]=KX[i], [p1,v1]=KX[i+1];
+        if (p>=p0 && p<=p1){ const t=(p-p0)/(p1-p0||1); ox = v0+(v1-v0)*(t*t*(3-2*t)); break; }
+        if (p>p1 && i===KX.length-2) ox = v1;
+      }
+      root.position.x = ox;
+      root.rotation.y = -0.55 + p*2.6;
+      root.position.y = Math.sin(p*Math.PI)*0.35 - p*0.25;
+      gan.position.y  = 0;
+
+      const open = clamp01((p-0.24)/0.28);
+      const ease = open*open*(3-2*open);
+      pivA.rotation.x = -ease*2.05;
+      pivB.rotation.x =  ease*2.05;
+
+      const lift = clamp01((p-0.5)/0.3);
+      carga.position.y = lift*1.55;
+      carga.children.forEach((c,i)=>{ c.rotation.y = lift*(i%2?-0.5:0.5); });
+
+      camera.position.z = 10.2 - p*0.8;
+      camera.position.y = 0.6 + p*0.8;
+      camera.lookAt(ox*0.45, -0.1 + p*0.35, 0);
+
+      renderer.render(scene,camera);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    addEventListener('resize', ()=>{
+      camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+      renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    }, {passive:true});
+
+  } catch (e) {
+    console.warn('[bayline] 3D no disponible:', e);
+    showFallback();
+  }
+}
+</script>
+</body>
+</html>
