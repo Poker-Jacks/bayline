@@ -49,7 +49,9 @@ padding:12px 22px;border-radius:9px;border:1.5px solid transparent;transition:.2
 .giant{font-weight:800;letter-spacing:-.05em;line-height:.84;font-size:clamp(60px,13.4vw,214px)}
 .g1{position:relative;z-index:3}
 .g2{position:relative;z-index:1;text-align:right;color:transparent;-webkit-text-stroke:2px var(--tinta)}
-.shotwrap{position:relative;z-index:2;margin:-2.4vw auto -2.2vw;width:min(60%,760px);will-change:transform}
+.shotwrap{position:relative;z-index:2;margin:-5.4vw auto -4.6vw;width:min(84%,1080px);height:clamp(300px,44vh,520px)}
+#stage3d{position:absolute;inset:0}
+#stage3d canvas{display:block;width:100%;height:100%}
 .frame{border-radius:13px;overflow:hidden;background:#14212E;
 box-shadow:0 44px 90px rgba(16,28,38,.26),0 6px 18px rgba(16,28,38,.10)}
 .fbar{height:36px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#14212E}
@@ -205,12 +207,7 @@ border-top:1px solid rgba(242,246,248,.12);padding-top:22px}
 <section class="hero">
   <div class="wrap">
     <h1 class="giant g1">Su comercio,</h1>
-    <div class="shotwrap" id="hshot">
-      <div class="frame">
-        <div class="fbar"><i></i><i></i><i></i><span>su-negocio.bayline.app</span></div>
-        <img src="img/catalogo.jpg" alt="Tienda Bayline: catálogo con precio y disponibilidad por sucursal" style="height:clamp(210px,30vh,330px);object-fit:cover;object-position:top center;width:100%">
-      </div>
-    </div>
+    <div class="shotwrap" id="hshot"><div id="stage3d" aria-hidden="true"></div></div>
     <div class="giant g2">en ruta.</div>
     <div class="hrow">
       <div class="hleft">
@@ -349,6 +346,19 @@ cobra su propia comisión por transacción y se le paga directo a ella.</p>
 <span class="mono">poker-jacks.github.io/bayline</span></div></footer>
 </main>
 
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js",
+"three/addons/":"https://unpkg.com/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+const host=document.getElementById('stage3d');
+if(host && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  import('./scene.js').then(m=>m.boot(host)).catch(e=>{
+    console.warn('[bayline] 3D off:',e);
+    host.innerHTML='<img src="img/catalogo.jpg" alt="Tienda Bayline" style="width:100%;height:100%;object-fit:contain">';
+  });
+}
+</script>
 <script>
 /* curvas batimétricas en las secciones marcadas */
 (function(){
@@ -372,17 +382,7 @@ cobra su propia comisión por transacción y se le paga directo a ella.</p>
   });
 })();
 
-/* parallax suave del mockup del hero */
-(function(){
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const el=document.getElementById('hshot'); if(!el) return;
-  let t=0,c=0,raf;
-  const upd=()=>{t=Math.min(1,scrollY/700)};
-  addEventListener('scroll',upd,{passive:true}); upd();
-  (function loop(){ c+=(t-c)*.09;
-    el.style.transform=`translateY(${c*-46}px) scale(${1-c*.035}) rotate(${c*-.7}deg)`;
-    raf=requestAnimationFrame(loop);})();
-})();
+
 
 /* reveals */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),
