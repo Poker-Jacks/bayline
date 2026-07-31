@@ -694,9 +694,8 @@ potencia su canal comercial. El alcance de la integración se define en la propu
     const p=cur;
     const dx=.115*innerWidth;
     const dy=trk(p,[[0,0],[.35,46]]) + Math.sin(now/1400)*4;
+    /* la banda simplemente la tapa; al subir, reaparece con el scroll */
     o.style.transform=`translate(-50%,-46%) translate(${dx}px,${dy}px)`;
-    /* la caja se esconde tras la banda y no reaparece; al subir vuelve sola */
-    o.style.opacity = String(1-trk(p,[[.34,0],[.48,1]]));
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
