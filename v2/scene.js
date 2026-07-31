@@ -107,7 +107,7 @@ export function boot(host){
     tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=8; return tex;
   }
 
-  const root = new THREE.Group(); root.scale.setScalar(.86); scene.add(root);
+  const root = new THREE.Group(); root.scale.setScalar(.8); scene.add(root);
   const RB=(w,h,d,r,mat)=>{const m=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,r),mat);
     m.castShadow=true;m.receiveShadow=true;return m;};
 
@@ -178,11 +178,11 @@ export function boot(host){
     if(!tStart) tStart=now;
     intro = Math.min(1,(now-tStart)/1400);
     const e = 1-Math.pow(1-intro,3);
-    root.position.y = 2.1 - e*2.05 - p*3.4 + Math.sin(now/900)*.05*e;   // baja con el scroll
+    root.position.y = .55 - e*.75 - p*1.9 + Math.sin(now/1000)*.04*e;
     root.rotation.z = Math.sin(p*Math.PI*2)*.02;
-    gan.position.y = e*1.85 + p*3.4;   // el gancho queda arriba
-    cam.position.set(0,.8+p*.7,10.8-p*.5);
-    cam.lookAt(1.5,-.05+p*.3,0);
+    gan.position.y = 0;
+    cam.position.set(0,1.35+p*.5,12.4-p*.4);
+    cam.lookAt(1.5,.5+p*.25,0);
     R.render(scene,cam);
     requestAnimationFrame(loop);
   }
