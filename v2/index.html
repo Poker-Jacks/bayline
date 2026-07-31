@@ -50,8 +50,28 @@ padding:12px 22px;border-radius:9px;border:1.5px solid transparent;transition:.2
 .stickyzone{position:relative}
 .photoframe{position:absolute;inset:0;z-index:3;pointer-events:none}
 .stagestick{position:sticky;top:0;height:100vh;overflow:hidden}
-#stage3d{position:absolute;inset:0}
-#stage3d canvas{display:block;width:100%;height:100%}
+/* objeto hero: palet fotográfico con la marca impresa en perspectiva */
+#pobj{position:absolute;left:50%;top:50%;width:min(46vw,690px);
+transform:translate(-50%,-52%);will-change:transform}
+.pfall{position:relative;filter:drop-shadow(-60px 55px 38px rgba(16,28,38,.18))}
+.pfall img{width:100%;height:auto;display:block}
+@media (prefers-reduced-motion:no-preference){
+  .pfall{animation:pdrop 1.5s cubic-bezier(.16,1,.3,1) 1s both}
+  @keyframes pdrop{from{transform:translateY(-118vh)}to{transform:none}}
+}
+.pbrand{position:absolute;left:54.5%;top:31%;width:28%;display:flex;align-items:center;
+gap:5%;transform:skewY(4.2deg);mix-blend-mode:multiply;opacity:.92}
+.pbrand svg{width:24%;height:auto;flex:none}
+.pbrand .pbtxt{display:flex;flex-direction:column;gap:2px;color:#12405E}
+.pbrand .pbtxt b{font-weight:700;font-size:clamp(14px,2.2vw,31px);letter-spacing:-.02em;line-height:1}
+.pbrand .pbtxt span{font-family:var(--mono);font-size:clamp(4.5px,.56vw,8px);
+letter-spacing:.13em;text-transform:uppercase;color:#3E7CA6;white-space:nowrap}
+.pstamp{position:absolute;left:16.5%;top:57%;width:10%;display:flex;flex-direction:column;
+align-items:center;gap:3px;transform:skewY(-6deg);mix-blend-mode:multiply;opacity:.75}
+.pstamp svg{width:44%;height:auto}
+.pstamp span{font-family:var(--mono);font-size:clamp(4px,.46vw,7px);
+letter-spacing:.11em;text-transform:uppercase;color:#12405E;white-space:nowrap}
+@media(max-width:860px){#pobj{width:min(88vw,470px)}}
 .hero{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column;
 padding:118px 0 54px;background:transparent}
 .hero .wrap{position:relative;z-index:2;width:100%;flex:1;display:flex;
@@ -355,7 +375,27 @@ main{position:relative;z-index:2}
 
 <!-- ════ HERO + BANDA · overlay sticky de la referencia ════ -->
 <div class="stickyzone">
-  <div class="photoframe" aria-hidden="true"><div class="stagestick"><div id="stage3d"></div></div></div>
+  <div class="photoframe" aria-hidden="true"><div class="stagestick">
+    <div id="pobj"><div class="pfall">
+      <img src="img/palet.webp" alt="" width="1050" height="700">
+      <div class="pbrand">
+        <svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><g transform="translate(0 5)">
+        <path d="M36 34 L22 52 L30 72" fill="none" stroke="#12405E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/>
+        <circle cx="22" cy="52" r="4.5" fill="#12405E"/><circle cx="30" cy="72" r="4.5" fill="#12405E"/>
+        <g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" fill="none" stroke="#12405E" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="36" cy="34" r="6.5" fill="none" stroke="#E8613C" stroke-width="4"/></g></g></svg>
+        <div class="pbtxt"><b>Bayline</b><span>Su comercio, en ruta</span></div>
+      </div>
+      <div class="pstamp">
+        <svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><g transform="translate(0 5)">
+        <path d="M36 34 L22 52 L30 72" fill="none" stroke="#12405E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/>
+        <circle cx="22" cy="52" r="4.5" fill="#12405E"/><circle cx="30" cy="72" r="4.5" fill="#12405E"/>
+        <g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" fill="none" stroke="#12405E" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="36" cy="34" r="6.5" fill="none" stroke="#E8613C" stroke-width="4"/></g></g></svg>
+        <span>Pedido · Despachado</span>
+      </div>
+    </div></div>
+  </div></div>
 
   <section class="hero">
     <div class="wrap">
@@ -389,7 +429,7 @@ main{position:relative;z-index:2}
       <p class="mright">Digitalizar el canal de venta completo de su negocio: catálogo, pagos
         y entregas en una sola plataforma, del pedido a la puerta.</p>
     </div></div>
-    <div class="msp"></div><div class="msp"></div>
+    <div class="msp"></div><div class="msp"></div><div class="msp"></div>
   </section>
 </div>
 
@@ -606,18 +646,33 @@ potencia su canal comercial. El alcance de la integración se define en la propu
 <span class="mono">poker-jacks.github.io/bayline</span></div></footer>
 </main>
 
-<script type="importmap">
-{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js",
-"three/addons/":"https://unpkg.com/three@0.169.0/examples/jsm/"}}
-</script>
-<script type="module">
-const host=document.getElementById('stage3d');
-if(host && !matchMedia('(prefers-reduced-motion: reduce)').matches){
-  import('./scene.js').then(m=>m.boot(host)).catch(e=>{
-    console.warn('[bayline] 3D off:',e);
-    const f=host.closest('.photoframe'); if(f) f.style.display='none';
-  });
-}
+<script>
+/* viaje del palet: derecha en hero, cubierto por la banda, reaparece al centro en misión */
+(function(){
+  const o=document.getElementById('pobj'), zone=document.querySelector('.stickyzone');
+  if(!o||!zone) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const sm=t=>t*t*(3-2*t);
+  const trk=(p,K)=>{for(let i=0;i<K.length-1;i++){const[a,va]=K[i],[b,vb]=K[i+1];
+    if(p<=b){const t=Math.min(1,Math.max(0,(p-a)/((b-a)||1)));return va+(vb-va)*sm(t);}}
+    return K[K.length-1][1];};
+  let tgt=0,cur=0,t0=0;
+  const onS=()=>{
+    const total=Math.max(1,zone.offsetHeight-innerHeight);
+    tgt=Math.min(1,Math.max(0,-zone.getBoundingClientRect().top/total));
+  };
+  addEventListener('scroll',onS,{passive:true}); onS();
+  function loop(now){
+    const dt=Math.min(.05,(now-t0)/1000||0); t0=now;
+    cur+=(tgt-cur)*(1-Math.pow(.0016,dt));
+    const p=cur;
+    const dx=trk(p,[[0,.115],[.28,.115],[.5,0],[1,0]])*innerWidth;
+    const dy=trk(p,[[0,0],[.3,52],[.5,0],[1,0]]) + Math.sin(now/1400)*4;
+    o.style.transform=`translate(-50%,-52%) translate(${dx}px,${dy}px)`;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
 </script>
 <script>
 /* curvas batimétricas en las secciones marcadas */
