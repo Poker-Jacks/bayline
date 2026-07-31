@@ -43,14 +43,14 @@ padding:12px 22px;border-radius:9px;border:1.5px solid transparent;transition:.2
 @media(max-width:960px){.nav ul{display:none}}
 
 /* ── HERO: tipografía partida + producto real atravesándola ── */
-.hero{position:relative;min-height:100svh;padding:112px 0 54px;overflow:hidden;display:flex;align-items:center}
+.hero{position:relative;height:100vh;padding:104px 0 40px;display:flex;align-items:center;z-index:2}
 .hero .wrap{position:relative;z-index:2;width:100%}
 .hgrid{display:grid;grid-template-columns:1fr;gap:0}
 .giant{font-weight:700;letter-spacing:-.02em;line-height:.9;font-size:clamp(2.441rem,6.6vw,6.1rem);max-width:46%}
 .g1{position:relative;z-index:3}
 .g2{position:relative;z-index:1;text-align:left;color:transparent;-webkit-text-stroke:1.6px var(--tinta)}
 .shotwrap{height:16px}
-#stage3d{position:fixed;inset:0;z-index:1;pointer-events:none}
+#stage3d{position:absolute;inset:0;z-index:1;pointer-events:none}
 #stage3d canvas{display:block;width:100%;height:100%}
 .frame{border-radius:13px;overflow:hidden;background:#14212E;
 box-shadow:0 44px 90px rgba(16,28,38,.26),0 6px 18px rgba(16,28,38,.10)}
@@ -311,6 +311,12 @@ max-width:216px;display:flex;flex-direction:column;align-items:flex-end;gap:18px
 @media(max-width:1024px){.hright{position:static;transform:none;max-width:none;
 flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-top:28px;gap:16px 28px}
 .hleft{max-width:none}.giant{max-width:none!important}}
+
+/* pin con sticky: la caja queda clavada mientras se recorre el hero */
+.pinwrap{position:relative;height:210vh;z-index:1}
+.pinstick{position:sticky;top:0;height:100vh;overflow:hidden}
+#stage3d canvas{display:block;width:100%;height:100%}
+@media(max-width:860px){.pinwrap{height:170vh}}
 </style>
 </head>
 <body>
@@ -339,6 +345,7 @@ flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-
 <main id="top">
 
 <!-- ════ HERO ════ -->
+<div class="pinwrap"><div class="pinstick"><div id="stage3d" aria-hidden="true"></div>
 <section class="hero">
   <div class="wrap">
     <aside class="hright">
@@ -352,7 +359,7 @@ flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-
         <div class="stat"><b>6–8</b><span>semanas a producción</span></div>
       </aside>
     <h1 class="giant g1">Su comercio,</h1>
-    <div class="shotwrap" id="hshot"><div id="stage3d" aria-hidden="true"></div></div>
+    
     <div class="giant g2">en ruta.</div>
     <div class="hleft">
       <span class="since mono">Desde 2026 · Costa Rica</span>
@@ -366,6 +373,7 @@ flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-
     </div>
   </div>
 </section>
+</div></div>
 
 <!-- ════ CALLOUTS SOBRE EL PRODUCTO REAL ════ -->
 <section class="mission" id="producto">
