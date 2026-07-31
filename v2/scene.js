@@ -107,7 +107,7 @@ export function boot(host){
     tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=8; return tex;
   }
 
-  const root = new THREE.Group(); root.scale.setScalar(1.02); scene.add(root);
+  const root = new THREE.Group(); root.scale.setScalar(.86); scene.add(root);
   const RB=(w,h,d,r,mat)=>{const m=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,r),mat);
     m.castShadow=true;m.receiveShadow=true;return m;};
 
@@ -173,7 +173,7 @@ export function boot(host){
     const dt=Math.min(.05,(now-t0)/1000||0); t0=now;
     cur+=(tgt-cur)*(1-Math.pow(.0016,dt));
     const p=cur;
-    root.position.x = trk(p,[[0,0],[.14,0],[.26,2.2],[.42,2.2],[.52,-2.2],[.64,-2.2],[.74,2.2],[.86,2.2],[.94,0],[1,0]]);
+    root.position.x = 1.9;
     root.rotation.y = -.42 + p*2.35;
     if(!tStart) tStart=now;
     intro = Math.min(1,(now-tStart)/1400);
@@ -182,7 +182,7 @@ export function boot(host){
     root.rotation.z = Math.sin(p*Math.PI*2)*.02;
     gan.position.y = e*1.85 + p*3.4;   // el gancho queda arriba
     cam.position.set(0,.8+p*.7,10.8-p*.5);
-    cam.lookAt(root.position.x*.4,-.05+p*.3,0);
+    cam.lookAt(1.5,-.05+p*.3,0);
     R.render(scene,cam);
     requestAnimationFrame(loop);
   }

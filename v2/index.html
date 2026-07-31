@@ -46,10 +46,10 @@ padding:12px 22px;border-radius:9px;border:1.5px solid transparent;transition:.2
 .hero{position:relative;min-height:100svh;padding:112px 0 54px;overflow:hidden;display:flex;align-items:center}
 .hero .wrap{position:relative;z-index:2;width:100%}
 .hgrid{display:grid;grid-template-columns:1fr;gap:0}
-.giant{font-weight:700;letter-spacing:-.02em;line-height:.86;font-size:clamp(3.052rem,12.6vw,11.9rem)}
+.giant{font-weight:700;letter-spacing:-.02em;line-height:.9;font-size:clamp(2.441rem,6.6vw,6.1rem);max-width:46%}
 .g1{position:relative;z-index:3}
-.g2{position:relative;z-index:1;text-align:right;color:transparent;-webkit-text-stroke:2px var(--tinta)}
-.shotwrap{position:relative;z-index:2;margin:-5.4vw auto -4.6vw;width:min(84%,1080px);height:clamp(300px,44vh,520px)}
+.g2{position:relative;z-index:1;text-align:left;color:transparent;-webkit-text-stroke:1.6px var(--tinta)}
+.shotwrap{height:16px}
 #stage3d{position:fixed;inset:0;z-index:1;pointer-events:none}
 #stage3d canvas{display:block;width:100%;height:100%}
 .frame{border-radius:13px;overflow:hidden;background:#14212E;
@@ -278,7 +278,8 @@ align-items:center;pointer-events:none;padding:60px 0}
 .claim{font-size:1rem;line-height:1.55;color:var(--gris)}
 .demo-link{font-size:.9rem;color:var(--gris);border-bottom:1px solid rgba(16,28,38,.25);padding-bottom:2px}
 .demo-link:hover{color:var(--tinta);border-color:var(--tinta)}
-.hright{max-width:250px;display:flex;flex-direction:column;align-items:flex-end;gap:24px;text-align:right}
+.hright{max-width:230px;display:flex;flex-direction:column;align-items:flex-end;gap:20px;text-align:right;
+  background:rgba(245,242,233,.92);border-radius:16px;padding:20px 18px;backdrop-filter:blur(6px)}
 .rcard{background:rgba(255,255,255,.72);border:1px solid rgba(16,28,38,.09);border-radius:14px;
 padding:16px 18px;display:flex;flex-direction:column;gap:3px;backdrop-filter:blur(6px);text-align:left;width:100%}
 .rcard .mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--boya)}
@@ -297,8 +298,19 @@ padding:16px 18px;display:flex;flex-direction:column;gap:3px;backdrop-filter:blu
 /* capas: el 3D fijo detrás, las secciones claras semitransparentes, las oscuras lo tapan */
 main{position:relative;z-index:2}
 .hero{background:transparent}
-.split,.why,.faq{background:rgba(245,242,233,.88)}
+.split,.why,.faq{background:var(--carta)}
 .brandsys,.plans,.cmpsec,.end,footer{position:relative;z-index:3}
+
+/* hero sin superposiciones: titular y texto a la izquierda, caja a la derecha */
+.hleft{position:relative;z-index:4;max-width:42%;margin-top:30px;display:flex;
+flex-direction:column;align-items:flex-start;gap:16px}
+.claim b{color:var(--tinta);font-weight:600}
+.hctas{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.hright{position:absolute;right:14px;top:50%;transform:translateY(-50%);z-index:4;
+max-width:216px;display:flex;flex-direction:column;align-items:flex-end;gap:18px;text-align:right}
+@media(max-width:1024px){.hright{position:static;transform:none;max-width:none;
+flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-top:28px;gap:16px 28px}
+.hleft{max-width:none}.giant{max-width:none!important}}
 </style>
 </head>
 <body>
@@ -329,16 +341,7 @@ main{position:relative;z-index:2}
 <!-- ════ HERO ════ -->
 <section class="hero">
   <div class="wrap">
-    <div class="hgrid">
-      <aside class="hleft">
-        <span class="since mono">Desde 2026 · Costa Rica</span>
-        <p class="claim">Todo lo que su negocio necesita para vender en línea:
-          catálogo, pagos y entregas.</p>
-        <a class="btn pri" href="#contacto">Solicite una demo
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a class="demo-link" href="../tienda/" target="_blank" rel="noopener">Ver la tienda demo</a>
-      </aside>
-      <aside class="hright">
+    <aside class="hright">
         <div class="rcard">
           <span class="mono">Bayline</span>
           <b>Ecommerce completo</b>
@@ -348,10 +351,19 @@ main{position:relative;z-index:2}
         <div class="stat"><b>3</b><span>etapas de crecimiento</span></div>
         <div class="stat"><b>6–8</b><span>semanas a producción</span></div>
       </aside>
-    </div>
     <h1 class="giant g1">Su comercio,</h1>
     <div class="shotwrap" id="hshot"><div id="stage3d" aria-hidden="true"></div></div>
     <div class="giant g2">en ruta.</div>
+    <div class="hleft">
+      <span class="since mono">Desde 2026 · Costa Rica</span>
+      <p class="claim">Todo lo que su negocio necesita para vender en línea:
+        catálogo, pagos y entregas. <b>0% de comisión de nuestra parte.</b></p>
+      <div class="hctas">
+        <a class="btn pri" href="#contacto">Solicite una demo
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="demo-link" href="../tienda/" target="_blank" rel="noopener">Ver la tienda demo</a>
+      </div>
+    </div>
   </div>
 </section>
 
