@@ -487,16 +487,11 @@ p{margin:0}
 .stickyzone{position:relative}
 .photoframe{position:absolute;inset:0;z-index:3;pointer-events:none}
 .stagestick{position:sticky;top:0;height:100vh;overflow:hidden}
-#pobj{position:absolute;left:50%;top:50%;width:min(46vw,690px);transform:translate(-50%,-46%);will-change:transform;opacity:0;transition:opacity .25s}
+#pobj{position:absolute;left:50%;top:50%;width:min(40vw,600px);transform:translate(-50%,-49%);will-change:transform;opacity:0;transition:opacity .25s}
 #pobj.ok{opacity:1}
 .pfall{position:relative;filter:drop-shadow(-14px 26px 26px rgba(16,28,38,.13))}
 .pfall .palimg{width:100%;height:auto;display:block}
-.phook{position:absolute;left:0;top:-88.6%;width:100%;height:auto;pointer-events:none}
-.pfall .hookimg{position:absolute;left:42.8%;top:-70.1%;width:15.24%;height:auto}
-.sling{position:absolute;left:50%;top:-9.4%;height:clamp(4px,.6vw,8.5px);display:block;
-transform-origin:0 50%;background:url('img/cable.webp') repeat-x;background-size:auto 100%}
-.sling::after{content:"";position:absolute;right:0;top:-30%;width:min(14px,9%);height:160%;
-background:linear-gradient(#cdd4d9,#8d99a1 55%,#5f6b74);border-radius:2px}
+.phook{position:absolute;left:0;top:-11.9%;width:100%;height:auto;pointer-events:none}
 .bm{position:absolute;width:9.4%;display:flex;flex-direction:column;align-items:center;gap:6%;
 transform:translate(-50%,-50%) skewY(var(--sk,0deg));mix-blend-mode:multiply;pointer-events:none}
 .bm::before{content:"";width:42%;aspect-ratio:1;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><g transform="translate(0 5)" fill="none"><path d="M36 34 L22 52 L30 72" stroke="%2312405E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/><circle cx="22" cy="52" r="4.5" fill="%2312405E"/><circle cx="30" cy="72" r="4.5" fill="%2312405E"/><g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" stroke="%2312405E" stroke-width="5" stroke-linejoin="round"/><circle cx="36" cy="34" r="6.5" stroke="%23E8613C" stroke-width="4"/></g></g></svg>') center/contain no-repeat}
@@ -585,43 +580,37 @@ transform:translate(-50%,-50%) skewY(var(--sk,0deg));mix-blend-mode:multiply;poi
 <linearGradient id="vmet" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d99a1"/><stop offset=".45" stop-color="#dde3e7"/><stop offset=".7" stop-color="#aeb9c0"/><stop offset="1" stop-color="#6e7a83"/></linearGradient>
 <linearGradient id="vmetv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c3ccd2"/><stop offset=".5" stop-color="#8d99a1"/><stop offset="1" stop-color="#5f6b74"/></linearGradient>
 </defs>
-<g stroke="#8f979e" stroke-width="23"><line x1="477" y1="-620" x2="477" y2="-484"/><line x1="579" y1="-620" x2="579" y2="-484"/></g>
-<!-- las eslingas son tiras de cable real (ver .sling) -->
-<g fill="none" stroke="#5f6b74" stroke-width="6"><circle cx="188" cy="102" r="8"/><circle cx="523" cy="140" r="8"/><circle cx="855" cy="102" r="8"/></g>
+<line x1="522" y1="-620" x2="522" y2="-386" stroke="url(#vmet)" stroke-width="52"/>
 </svg>
-      <i class="sling" style="width:35.9%;transform:rotate(153.5deg)"></i>
-      <i class="sling" style="width:19.6%;transform:rotate(90.6deg)"></i>
-      <i class="sling" style="width:35.3%;transform:rotate(27deg)"></i>
-      <img class="hookimg" src="img/gancho2.webp" alt="" width="350" height="982">
-      <img class="palimg" src="img/palet.webp" alt="Palet de cajas con la marca Bayline colgando de una grua" width="1050" height="700">
-      <b class="bm r" style="left:53.0%;top:28.4%;--sk:-8deg"></b>
-      <b class="bm r" style="left:53.0%;top:45.9%;--sk:-8deg"></b>
-      <b class="bm r" style="left:53.0%;top:61.5%;--sk:-8deg"></b>
-      <b class="bm r" style="left:53.0%;top:76.0%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:26.8%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:43.4%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:58.7%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:72.7%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:24.9%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:40.6%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:55.2%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:68.8%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:22.8%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:37.8%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:51.9%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:65.0%;--sk:-8deg"></b>
-      <b class="bm l" style="left:22.5%;top:24.1%;--sk:10deg"></b>
-      <b class="bm l" style="left:22.5%;top:39.7%;--sk:10deg"></b>
-      <b class="bm l" style="left:22.5%;top:54.2%;--sk:10deg"></b>
-      <b class="bm l" style="left:22.5%;top:67.7%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:26.6%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:42.7%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:57.9%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:72.0%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:29.3%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:46.3%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:62.2%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:76.9%;--sk:10deg"></b>
+      <img class="palimg" src="img/rig.webp" alt="Palet de cajas con la marca Bayline colgando de una grua" width="1050" height="1180">
+      <b class="bm r" style="left:53.0%;top:57.5%;--sk:-8deg"></b>
+      <b class="bm r" style="left:53.0%;top:67.9%;--sk:-8deg"></b>
+      <b class="bm r" style="left:53.0%;top:77.2%;--sk:-8deg"></b>
+      <b class="bm r" style="left:53.0%;top:85.8%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:56.6%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:66.4%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:75.5%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:83.8%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:55.4%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:64.8%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:73.4%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:81.5%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:54.2%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:63.1%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:71.5%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:79.2%;--sk:-8deg"></b>
+      <b class="bm l" style="left:22.5%;top:55.0%;--sk:10deg"></b>
+      <b class="bm l" style="left:22.5%;top:64.2%;--sk:10deg"></b>
+      <b class="bm l" style="left:22.5%;top:72.8%;--sk:10deg"></b>
+      <b class="bm l" style="left:22.5%;top:80.8%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:56.5%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:66.0%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:75.0%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:83.4%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:58.1%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:68.1%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:77.6%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:86.3%;--sk:10deg"></b>
     </div></div>
   </div></div>
 
