@@ -154,10 +154,16 @@ export function boot(host){
   const piso=new THREE.Mesh(new THREE.PlaneGeometry(30,30), new THREE.ShadowMaterial({opacity:.16}));
   piso.rotation.x=-Math.PI/2; piso.position.y=-1.72; piso.receiveShadow=true; scene.add(piso);
 
-  /* ── movimiento: solo gira y viaja ── */
+  /* ── movimiento: entrada con caída (referencia: y de -530 a 0, delay 1s, 1.5s, sin rebote)
+        + progreso medido sobre la stickyzone, no sobre toda la página ── */
   let tgt=0,cur=0,t0=0,tStart=0,intro=0;
-  const maxS=()=>Math.max(1,document.body.scrollHeight-innerHeight);
-  const onS=()=>{tgt=scrollY/maxS()}; addEventListener('scroll',onS,{passive:true}); onS();
+  const zone=document.querySelector('.stickyzone');
+  const onS=()=>{
+    if(!zone){tgt=0;return}
+    const total=Math.max(1,zone.offsetHeight-innerHeight);
+    tgt=Math.min(1,Math.max(0,-zone.getBoundingClientRect().top/total));
+  };
+  addEventListener('scroll',onS,{passive:true}); onS();
   const sm=t=>t*t*(3-2*t);
   const trk=(p,K)=>{for(let i=0;i<K.length-1;i++){const[a,va]=K[i],[b,vb]=K[i+1];
     if(p<=b){const t=Math.min(1,Math.max(0,(p-a)/((b-a)||1)));return va+(vb-va)*sm(t);}}
@@ -173,16 +179,17 @@ export function boot(host){
     const dt=Math.min(.05,(now-t0)/1000||0); t0=now;
     cur+=(tgt-cur)*(1-Math.pow(.0016,dt));
     const p=cur;
-    root.position.x = 1.9;
-    root.rotation.y = -.42 + p*2.35;
     if(!tStart) tStart=now;
-    intro = Math.min(1,(now-tStart)/1400);
-    const e = 1-Math.pow(1-intro,3);
-    root.position.y = .55 - e*.75 - p*1.9 + Math.sin(now/1000)*.04*e;
+    /* entrada: espera 950ms y cae desde arriba en 1.5s, sin rebote */
+    intro = Math.min(1,Math.max(0,(now-tStart-950)/1500));
+    const e = 1-Math.pow(1-intro,4);
+    root.position.x = 1.1;
+    root.rotation.y = -.42 + p*1.9;
+    root.position.y = -.2 + (1-e)*5.4 - p*2.4 + Math.sin(now/1000)*.04*e;
     root.rotation.z = Math.sin(p*Math.PI*2)*.02;
     gan.position.y = 0;
     cam.position.set(0,1.35+p*.5,12.4-p*.4);
-    cam.lookAt(1.5,.5+p*.25,0);
+    cam.lookAt(.9,.45+p*.25,0);
     R.render(scene,cam);
     requestAnimationFrame(loop);
   }

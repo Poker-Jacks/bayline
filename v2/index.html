@@ -42,33 +42,57 @@ padding:12px 22px;border-radius:9px;border:1.5px solid transparent;transition:.2
 .btn svg{width:17px;height:17px}
 @media(max-width:960px){.nav ul{display:none}}
 
-/* ── HERO: tipografía partida + producto real atravesándola ── */
-.hero{position:relative;height:100vh;padding:104px 0 40px;display:flex;align-items:center;z-index:2}
-.hero .wrap{position:relative;z-index:2;width:100%}
-.hgrid{display:grid;grid-template-columns:1fr;gap:0}
-.giant{font-weight:700;letter-spacing:-.02em;line-height:.9;font-size:clamp(2.441rem,6.6vw,6.1rem);max-width:46%}
-.g1{position:relative;z-index:3}
-.g2{position:relative;z-index:1;text-align:left;color:transparent;-webkit-text-stroke:1.6px var(--tinta)}
-.shotwrap{height:16px}
-#stage3d{position:absolute;inset:0;z-index:1;pointer-events:none}
+/* ── HERO · arquitectura de la referencia: overlay sticky + secciones que lo cubren ── */
+.stickyzone{position:relative}
+.photoframe{position:absolute;inset:0;z-index:3;pointer-events:none}
+.stagestick{position:sticky;top:0;height:100vh;overflow:hidden}
+#stage3d{position:absolute;inset:0}
 #stage3d canvas{display:block;width:100%;height:100%}
+.hero{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column;
+padding:118px 0 54px;background:transparent}
+.hero .wrap{position:relative;z-index:2;width:100%;flex:1;display:flex;
+flex-direction:column;justify-content:space-between}
+.giant{font-weight:700;letter-spacing:-.02em;line-height:.85;font-size:clamp(3.052rem,9vw,9.3rem)}
+.g2{color:transparent;-webkit-text-stroke:1.8px var(--tinta);text-align:right}
+.hlower{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.hcta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.demo-link{font-size:.9rem;color:var(--gris);border-bottom:1px solid rgba(16,28,38,.25);padding-bottom:2px}
+.demo-link:hover{color:var(--tinta);border-color:var(--tinta)}
+@media(max-width:860px){
+  .hero{padding:96px 0 34px}
+  .hlower{flex-direction:column;align-items:stretch}
+  .hcta{order:2}
+}
+
+/* entrada coreografiada (spring sin rebote, delays de la referencia) */
+@media (prefers-reduced-motion:no-preference){
+  .appear{opacity:.001;animation:rise 1s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d,1s)}
+  @keyframes rise{from{opacity:.001;transform:translateY(var(--dy,51px))}to{opacity:1;transform:none}}
+}
+
+/* ── banda declaración: z mayor que el overlay, cubre la caja al scrollear ── */
+.band{position:relative;z-index:4;background:var(--marea);color:var(--espuma);
+min-height:92vh;display:flex;align-items:center;overflow:hidden}
+.band .wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;
+gap:26px;text-align:center;padding-top:90px;padding-bottom:90px}
+.band .kick{font-family:var(--mono);font-size:.8rem;font-weight:500;letter-spacing:.08em;
+text-transform:uppercase;color:var(--bajio)}
+.band h2{max-width:26ch;font-size:clamp(1.953rem,3.8vw,3.4rem);font-weight:700;
+letter-spacing:-.018em;line-height:1.14}
+.band h2 .w{display:inline-block}
+@media (prefers-reduced-motion:no-preference){
+  .band h2 .w{opacity:0;transform:translateY(.9em);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);
+  transition-delay:calc(var(--i)*45ms)}
+  .band h2.on .w{opacity:1;transform:none}
+}
+
 .frame{border-radius:13px;overflow:hidden;background:#14212E;
 box-shadow:0 44px 90px rgba(16,28,38,.26),0 6px 18px rgba(16,28,38,.10)}
 .fbar{height:36px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#14212E}
 .fbar i{width:9px;height:9px;border-radius:50%;background:#3a4a58}
 .fbar i:nth-child(3){background:var(--boya)}
 .fbar span{margin-left:14px;font-family:var(--mono);font-size:12px;color:#8aa0ad}
-.hrow{position:relative;z-index:4;display:flex;align-items:flex-end;justify-content:space-between;
-gap:30px;margin-top:14px;flex-wrap:wrap}
-.hleft .kick{font-family:var(--mono);font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--canal)}
-.hleft .kick b{color:var(--boya);font-weight:400}
-.hleft p{margin:14px 0 18px;max-width:40ch;font-size:17.5px;color:var(--gris);line-height:1.55}
-.hleft p b{color:var(--tinta);font-weight:600}
-.stats{display:flex;gap:44px;text-align:right}
-.stat b{display:block;font-size:clamp(1.563rem,2.6vw,2.441rem);font-weight:700;letter-spacing:-.02em;line-height:1}
-.stat span{font-size:13px;color:var(--gris)}
-@media(max-width:900px){.shotwrap{width:100%;margin:8px auto 18px}.g2{text-align:left}
-.stats{gap:26px;text-align:left}}
 
 /* ── CALLOUTS sobre el producto real ── */
 .mission{position:relative;background:var(--carta);padding:120px 0 130px;overflow:hidden}
@@ -186,25 +210,31 @@ border:2.5px solid var(--boya);border-radius:50%}
 .diff .dp{font-size:.95rem;color:var(--gris);line-height:1.55;max-width:62ch}
 @media(max-width:760px){.diff{grid-template-columns:1fr;gap:5px}.diff .dp{padding-left:24px}}
 
-.phases{background:var(--marea);color:var(--espuma);padding:120px 0;position:relative;overflow:hidden}
-.phases .wrap{position:relative;z-index:2;text-align:center}
+/* ── CRECE POR FASES: paneles sticky apilados con card rotada (patrón de la referencia) ── */
+.phases{background:var(--marea);color:var(--espuma);position:relative}
+.pintro{min-height:62vh;display:flex;align-items:center;text-align:center}
+.pintro .wrap{display:flex;flex-direction:column;align-items:center;gap:18px;
+padding-top:120px;padding-bottom:50px}
 .phases .kick{font-family:var(--mono);font-size:.8rem;font-weight:500;letter-spacing:.08em;
 text-transform:uppercase;color:var(--canal)}
-.phases h2{margin-top:14px;font-size:clamp(1.953rem,4.2vw,3.5rem);font-weight:700;letter-spacing:-.018em}
-.plead{margin:20px auto 0;max-width:58ch;color:var(--bajio);font-size:1.0625rem;line-height:1.6}
-.ptabs{margin-top:44px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-.ptab{background:none;border:1px solid rgba(189,211,222,.24);border-radius:12px;color:var(--bajio);
-padding:14px 22px;cursor:pointer;font-family:var(--sans);text-align:center;transition:.25s}
-.ptab b{display:block;font-size:1rem;font-weight:600;color:var(--espuma)}
-.ptab span{font-size:.85rem}
-.ptab.on{border-color:var(--boya);background:rgba(232,97,60,.1)}
-.ptab.on b{color:var(--boya)}
-.pcap{margin-top:34px;min-height:104px}
-.pc{display:none}.pc.on{display:block}
-.pc b{font-size:1.25rem;font-weight:600;color:var(--espuma)}
-.pc p{margin:9px auto 0;max-width:56ch;color:var(--bajio);font-size:1rem;line-height:1.55}
-.psim{margin-top:30px;position:relative;max-width:1000px;margin-inline:auto}
-.ps{display:none}.ps.on{display:block}
+.phases h2{font-size:clamp(1.953rem,4.2vw,3.5rem);font-weight:700;letter-spacing:-.018em}
+.plead{max-width:58ch;color:var(--bajio);font-size:1.0625rem;line-height:1.6}
+.pstage{position:relative;background:var(--marea);height:100vh;display:flex;align-items:center;
+padding:0 44px;overflow:hidden;position:sticky;top:0}
+.pstage[data-ph="1"]{z-index:3}.pstage[data-ph="2"]{z-index:4}.pstage[data-ph="3"]{z-index:5}
+.pcard{position:relative;z-index:2;width:min(390px,88vw);border:1px solid rgba(242,246,248,.4);
+padding:26px 22px 24px;transform:rotate(-12deg);display:flex;flex-direction:column;gap:18px;margin-left:7vw}
+.pstage[data-ph="1"] .pcard{background:var(--sonda)}
+.pstage[data-ph="2"] .pcard,.pstage[data-ph="3"] .pcard{background:rgba(242,246,248,.11);
+backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.pcard .pk{font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.1em;
+text-transform:uppercase;color:var(--bajio)}
+.pcard h3{margin-top:6px;font-size:1.563rem;font-weight:700;letter-spacing:-.01em}
+.pcard .shot{border:1px solid rgba(242,246,248,.25);overflow:hidden}
+.pcard .shot img{width:100%;height:auto;aspect-ratio:8/5;object-fit:cover;object-position:top center}
+.pcard p{color:#d3e0e8;font-size:.98rem;line-height:1.5}
+@media(max-width:860px){.pstage{justify-content:center;padding:0 22px}
+.pcard{margin-left:0;transform:rotate(-8deg)}}
 
 
 /* ── regla global: ninguna captura se desborda ── */
@@ -267,61 +297,15 @@ justify-content:space-between;gap:18px;font-size:1.0625rem;font-weight:600}
 .q .a{padding:0 0 24px;color:var(--gris);font-size:1rem;line-height:1.65;max-width:72ch}
 .q .a b{color:var(--tinta)}
 
-/* ── hero 1:1 con la referencia ── */
-.hero{position:relative;min-height:100svh;padding:104px 0 40px;overflow:hidden;display:flex;align-items:center}
-.hero .wrap{position:relative;z-index:2;width:100%}
-.hgrid{position:absolute;inset:0 14px;z-index:4;display:flex;justify-content:space-between;
-align-items:center;pointer-events:none;padding:60px 0}
-.hgrid>*{pointer-events:auto}
-.hleft{max-width:290px;display:flex;flex-direction:column;align-items:flex-start;gap:16px}
-.since{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
-.claim{font-size:1rem;line-height:1.55;color:var(--gris)}
-.demo-link{font-size:.9rem;color:var(--gris);border-bottom:1px solid rgba(16,28,38,.25);padding-bottom:2px}
-.demo-link:hover{color:var(--tinta);border-color:var(--tinta)}
-.hright{max-width:230px;display:flex;flex-direction:column;align-items:flex-end;gap:20px;text-align:right;
-  background:rgba(245,242,233,.92);border-radius:16px;padding:20px 18px;backdrop-filter:blur(6px)}
-.rcard{background:rgba(255,255,255,.72);border:1px solid rgba(16,28,38,.09);border-radius:14px;
-padding:16px 18px;display:flex;flex-direction:column;gap:3px;backdrop-filter:blur(6px);text-align:left;width:100%}
-.rcard .mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--boya)}
-.rcard b{font-size:1rem;font-weight:600}
-.rcard span:last-child{font-size:.82rem;color:var(--gris)}
-.stat b{display:block;font-size:2.441rem;font-weight:700;letter-spacing:-.02em;line-height:1}
-.stat span{font-size:.82rem;color:var(--gris)}
-@media(max-width:1180px){.hleft,.hright{max-width:210px}.stat b{font-size:1.953rem}}
-@media(max-width:860px){
-  .hgrid{position:static;flex-direction:column;align-items:stretch;gap:26px;padding:0 0 22px}
-  .hleft,.hright{max-width:none;align-items:flex-start;text-align:left}
-  .hright{flex-direction:row;flex-wrap:wrap;gap:18px 30px}
-  .rcard{width:100%}
-}
-
-/* capas: el 3D fijo detrás, las secciones claras semitransparentes, las oscuras lo tapan */
+/* capas: overlay solo dentro de la stickyzone; el resto del flujo normal */
 main{position:relative;z-index:2}
-.hero{background:transparent}
 .split,.why,.faq{background:var(--carta)}
 .brandsys,.plans,.cmpsec,.end,footer{position:relative;z-index:3}
-
-/* hero sin superposiciones: titular y texto a la izquierda, caja a la derecha */
-.hleft{position:relative;z-index:4;max-width:42%;margin-top:30px;display:flex;
-flex-direction:column;align-items:flex-start;gap:16px}
-.claim b{color:var(--tinta);font-weight:600}
-.hctas{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.hright{position:absolute;right:14px;top:50%;transform:translateY(-50%);z-index:4;
-max-width:216px;display:flex;flex-direction:column;align-items:flex-end;gap:18px;text-align:right}
-@media(max-width:1024px){.hright{position:static;transform:none;max-width:none;
-flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-top:28px;gap:16px 28px}
-.hleft{max-width:none}.giant{max-width:none!important}}
-
-/* pin con sticky: la caja queda clavada mientras se recorre el hero */
-.pinwrap{position:relative;height:210vh;z-index:1}
-.pinstick{position:sticky;top:0;height:100vh;overflow:hidden}
-#stage3d canvas{display:block;width:100%;height:100%}
-@media(max-width:860px){.pinwrap{height:170vh}}
 </style>
 </head>
 <body>
 
-<nav class="nav"><div class="wrap">
+<nav class="nav appear" style="--d:.9s"><div class="wrap">
 <a class="brand" href="#top" aria-label="Bayline, inicio">
 <svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><g transform="translate(0 5)">
 <path d="M36 34 L22 52 L30 72" fill="none" stroke="#101C26" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/>
@@ -344,36 +328,33 @@ flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-
 
 <main id="top">
 
-<!-- ════ HERO ════ -->
-<div class="pinwrap"><div class="pinstick"><div id="stage3d" aria-hidden="true"></div>
-<section class="hero">
-  <div class="wrap">
-    <aside class="hright">
-        <div class="rcard">
-          <span class="mono">Bayline</span>
-          <b>Ecommerce completo</b>
-          <span>catálogo, pagos y entregas</span>
+<!-- ════ HERO + BANDA · overlay sticky de la referencia ════ -->
+<div class="stickyzone">
+  <div class="photoframe" aria-hidden="true"><div class="stagestick"><div id="stage3d"></div></div></div>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="giant g1 appear" style="--d:1.3s;--dy:120px">Su comercio,</h1>
+      <div class="hlower">
+        <div class="hcta appear" style="--d:1s">
+          <a class="btn pri" href="#contacto">Solicite una demo
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="demo-link" href="../tienda/" target="_blank" rel="noopener">Ver la tienda demo</a>
         </div>
-        <div class="stat"><b>0%</b><span>de comisión nuestra</span></div>
-        <div class="stat"><b>3</b><span>etapas de crecimiento</span></div>
-        <div class="stat"><b>6–8</b><span>semanas a producción</span></div>
-      </aside>
-    <h1 class="giant g1">Su comercio,</h1>
-    
-    <div class="giant g2">en ruta.</div>
-    <div class="hleft">
-      <span class="since mono">Desde 2026 · Costa Rica</span>
-      <p class="claim">Todo lo que su negocio necesita para vender en línea:
-        catálogo, pagos y entregas. <b>0% de comisión de nuestra parte.</b></p>
-      <div class="hctas">
-        <a class="btn pri" href="#contacto">Solicite una demo
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a class="demo-link" href="../tienda/" target="_blank" rel="noopener">Ver la tienda demo</a>
+        <div class="giant g2 appear" style="--d:1.45s;--dy:120px">en ruta.</div>
       </div>
     </div>
-  </div>
-</section>
-</div></div>
+  </section>
+
+  <section class="band" id="nosotros">
+    <div class="wrap">
+      <span class="kick">Sobre Bayline</span>
+      <h2 id="bandh">Todo lo que su negocio necesita para vender en línea: catálogo, pagos y entregas. Sin comisión de nuestra parte, siempre.</h2>
+      <a class="btn pri" href="#producto">Ver el producto
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </section>
+</div>
 
 <!-- ════ CALLOUTS SOBRE EL PRODUCTO REAL ════ -->
 <section class="mission" id="producto">
@@ -427,32 +408,31 @@ flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;margin-
   </div>
 </div></section>
 
-<!-- ════ CRECE POR FASES (de la landing original) ════ -->
-<section class="phases" id="fases"><div class="wrap">
-  <span class="kick rv">Crece por fases</span>
-  <h2 class="rv">Un camino, no tres cajas.</h2>
-  <p class="plead rv">Hoy sus pedidos viven en WhatsApp y su inventario en una hoja de cálculo.
-    Bayline digitaliza ese proceso por etapas: empiece donde esté hoy y avance cuando quiera,
-    sobre la misma plataforma.</p>
-  <div class="ptabs rv" role="tablist">
-    <button class="ptab on" data-ph="1" role="tab" aria-selected="true"><b>Fase 1</b><span>Tienda en línea</span></button>
-    <button class="ptab" data-ph="2" role="tab" aria-selected="false"><b>Fase 2</b><span>Pagos en línea</span></button>
-    <button class="ptab" data-ph="3" role="tab" aria-selected="false"><b>Fase 3</b><span>Logística con Dockbay</span></button>
-  </div>
-  <div class="pcap rv">
-    <div class="pc on" data-ph="1"><b>Su catálogo, en línea</b><p>Precio y disponibilidad por sucursal a la vista. Sus clientes consultan y arman el pedido por WhatsApp a cualquier hora.</p></div>
-    <div class="pc" data-ph="2"><b>Cobre en el momento</b><p>SINPE Móvil y tarjeta integrados: el pedido se cierra y se paga en el sitio, sin transferencias sueltas.</p></div>
-    <div class="pc" data-ph="3"><b>Del catálogo a la entrega</b><p>Con Dockbay controla bodega, rutas y entregas. Cada pedido con estado y trazabilidad, hasta la puerta.</p></div>
-  </div>
-  <div class="psim rv">
-    <div class="ps on" data-ph="1"><div class="frame"><div class="fbar"><i></i><i></i><i></i><span>tienda.bayline.app</span></div>
-      <img src="img/catalogo.jpg" alt="Tienda en línea Bayline: catálogo con productos y precios" width="3200" height="2000" loading="lazy"></div></div>
-    <div class="ps" data-ph="2"><div class="frame"><div class="fbar"><i></i><i></i><i></i><span>pago seguro</span></div>
-      <img src="img/pago.jpg" alt="Pago en línea Bayline: SINPE Móvil y tarjeta" width="3200" height="2000" loading="lazy"></div></div>
-    <div class="ps" data-ph="3"><div class="frame"><div class="fbar"><i></i><i></i><i></i><span>Dockbay · operación</span></div>
-      <img src="img/logistica.jpg" alt="Logística Dockbay: entregas con estado y chofer" width="3200" height="2000" loading="lazy"></div></div>
-  </div>
-</div></section>
+<!-- ════ CRECE POR FASES · paneles sticky apilados (patrón de la referencia) ════ -->
+<section class="phases" id="fases">
+  <div class="pintro"><div class="wrap">
+    <span class="kick rv">Crece por fases</span>
+    <h2 class="rv">Un camino, no tres cajas.</h2>
+    <p class="plead rv">Hoy sus pedidos viven en WhatsApp y su inventario en una hoja de cálculo.
+      Bayline digitaliza ese proceso por etapas: empiece donde esté hoy y avance cuando quiera,
+      sobre la misma plataforma.</p>
+  </div></div>
+  <div class="pstage" data-ph="1"><article class="pcard">
+    <div><span class="pk">Fase 1</span><h3>Tienda en línea</h3></div>
+    <div class="shot"><img src="img/catalogo.jpg" alt="Tienda en línea Bayline: catálogo con productos y precios" width="3200" height="2000" loading="lazy"></div>
+    <p>Su catálogo con precio y disponibilidad por sucursal a la vista. Sus clientes consultan y arman el pedido por WhatsApp a cualquier hora.</p>
+  </article></div>
+  <div class="pstage" data-ph="2"><article class="pcard">
+    <div><span class="pk">Fase 2</span><h3>Pagos en línea</h3></div>
+    <div class="shot"><img src="img/pago.jpg" alt="Pago en línea Bayline: SINPE Móvil y tarjeta" width="3200" height="2000" loading="lazy"></div>
+    <p>SINPE Móvil y tarjeta integrados: el pedido se cierra y se paga en el sitio, sin transferencias sueltas.</p>
+  </article></div>
+  <div class="pstage" data-ph="3"><article class="pcard">
+    <div><span class="pk">Fase 3</span><h3>Logística con Dockbay</h3></div>
+    <div class="shot"><img src="img/logistica.jpg" alt="Logística Dockbay: entregas con estado y chofer" width="3200" height="2000" loading="lazy"></div>
+    <p>Con Dockbay controla bodega, rutas y entregas. Cada pedido con estado y trazabilidad, hasta la puerta.</p>
+  </article></div>
+</section>
 
 
 <!-- ════ PLANES ════ -->
@@ -597,7 +577,7 @@ const host=document.getElementById('stage3d');
 if(host && !matchMedia('(prefers-reduced-motion: reduce)').matches){
   import('./scene.js').then(m=>m.boot(host)).catch(e=>{
     console.warn('[bayline] 3D off:',e);
-    host.innerHTML='<img src="img/catalogo.jpg" alt="Tienda Bayline" style="width:100%;height:100%;object-fit:contain">';
+    const f=host.closest('.photoframe'); if(f) f.style.display='none';
   });
 }
 </script>
@@ -605,22 +585,26 @@ if(host && !matchMedia('(prefers-reduced-motion: reduce)').matches){
 /* curvas batimétricas en las secciones marcadas */
 (function(){
   const tpl=document.getElementById('ctpl');
-  ['.hero','.end'].forEach(sel=>{   // solo superficies grandes, no detrás de cuerpo
-    const s=document.querySelector(sel); if(!s) return;
-    const dark=/stackwrap|plans|end/.test(sel);
-    const g=tpl.cloneNode(true); g.id=''; g.style.display='';
-    g.querySelectorAll('polyline').forEach((p,i)=>{
-      p.setAttribute('stroke', dark ? (i%2?'#3E7CA6':'#BDD3DE') : (i%2?'#3E7CA6':'#BDD3DE'));
-      p.setAttribute('opacity', dark ? '.11' : '.13');
+  ['.hero','.end','.pstage'].forEach(sel=>{   // superficies grandes, no detrás de cuerpo
+    document.querySelectorAll(sel).forEach(s=>{
+      const dark=/end|pstage/.test(sel);
+      const g=tpl.cloneNode(true); g.id=''; g.style.display='';
+      g.querySelectorAll('polyline').forEach((p,i)=>{
+        p.setAttribute('stroke', i%2?'#3E7CA6':'#BDD3DE');
+        p.setAttribute('opacity', dark ? '.10' : '.13');
+      });
+      s.prepend(g);
+      if(sel==='.hero'||sel==='.end'){
+        const glow=tpl.cloneNode(true); glow.id=''; glow.style.display='';
+        glow.classList.add('glow');
+        glow.querySelectorAll('polyline').forEach((p,i)=>{
+          p.removeAttribute('stroke'); p.removeAttribute('opacity');
+          p.setAttribute('pathLength','100');
+          p.style.animationDelay = (-(i*1.7)) + 's';
+        });
+        s.prepend(glow);
+      }
     });
-    const glow=tpl.cloneNode(true); glow.id=''; glow.style.display='';
-    glow.classList.add('glow');
-    glow.querySelectorAll('polyline').forEach((p,i)=>{
-      p.removeAttribute('stroke'); p.removeAttribute('opacity');
-      p.setAttribute('pathLength','100');
-      p.style.animationDelay = (-(i*1.7)) + 's';
-    });
-    s.prepend(glow); s.prepend(g);
   });
 })();
 
@@ -653,17 +637,14 @@ document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)
 })();
 
 
-/* fases: tabs */
+/* declaración palabra por palabra (patrón de la referencia) */
 (function(){
-  const tabs=[...document.querySelectorAll('.ptab')]; if(!tabs.length) return;
-  const set=n=>{
-    tabs.forEach(t=>{const a=t.dataset.ph===n;t.classList.toggle('on',a);
-      t.setAttribute('aria-selected',a?'true':'false')});
-    document.querySelectorAll('.pc').forEach(c=>c.classList.toggle('on',c.dataset.ph===n));
-    document.querySelectorAll('.ps').forEach(c=>c.classList.toggle('on',c.dataset.ph===n));
-  };
-  tabs.forEach(t=>{t.addEventListener('click',()=>set(t.dataset.ph));
-    t.addEventListener('mouseenter',()=>set(t.dataset.ph));});
+  const h=document.getElementById('bandh'); if(!h) return;
+  h.innerHTML=h.textContent.trim().split(/\s+/)
+    .map((w,i)=>`<span class="w" style="--i:${i}">${w}</span>`).join(' ');
+  const o=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){h.classList.add('on');o.disconnect()}}),{threshold:.4});
+  o.observe(h);
 })();
 </script>
 </body>
