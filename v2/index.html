@@ -492,6 +492,11 @@ p{margin:0}
 .pfall .palimg{width:100%;height:auto;display:block}
 .phook{position:absolute;left:0;top:-88.6%;width:100%;height:auto;pointer-events:none}
 .pfall .hookimg{position:absolute;left:42.8%;top:-70.1%;width:15.24%;height:auto}
+.sling{position:absolute;left:50%;top:-11.1%;height:clamp(4px,.6vw,8.5px);display:block;
+transform-origin:0 50%;background:url('img/cable.webp') repeat-x;background-size:auto 100%}
+.sling::after{content:"";position:absolute;right:0;top:-30%;width:min(14px,9%);height:160%;
+background:linear-gradient(#cdd4d9,#8d99a1 55%,#5f6b74);border-radius:2px}
+.pfall .mlink{position:absolute;left:47.9%;top:-17.3%;width:4.2%;height:auto}
 .fgrid{position:absolute;display:grid;mix-blend-mode:multiply;pointer-events:none}
 .fgrid i{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%}
 .fgrid i::before{content:"";width:30%;aspect-ratio:1;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><g transform="translate(0 5)" fill="none"><path d="M36 34 L22 52 L30 72" stroke="%2312405E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/><circle cx="22" cy="52" r="4.5" fill="%2312405E"/><circle cx="30" cy="72" r="4.5" fill="%2312405E"/><g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" stroke="%2312405E" stroke-width="5" stroke-linejoin="round"/><circle cx="36" cy="34" r="6.5" stroke="%23E8613C" stroke-width="4"/></g></g></svg>') center/contain no-repeat}
@@ -583,14 +588,13 @@ p{margin:0}
 <linearGradient id="vmetv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c3ccd2"/><stop offset=".5" stop-color="#8d99a1"/><stop offset="1" stop-color="#5f6b74"/></linearGradient>
 </defs>
 <g stroke="#8f979e" stroke-width="23"><line x1="477" y1="-620" x2="477" y2="-484"/><line x1="579" y1="-620" x2="579" y2="-484"/></g>
-<circle cx="525" cy="-100" r="15" fill="none" stroke="#5f6b74" stroke-width="11"/>
-<g fill="none" stroke-linecap="round">
-<path d="M517 -92 L188 98" stroke="#4d565e" stroke-width="12"/><path d="M517 -92 L188 98" stroke="url(#vmetv)" stroke-width="8"/><path d="M515 -95 L186 95" stroke="#e8edf0" stroke-width="2"/>
-<path d="M525 -88 L523 136" stroke="#4d565e" stroke-width="12"/><path d="M525 -88 L523 136" stroke="url(#vmetv)" stroke-width="8"/><path d="M521 -88 L519 136" stroke="#e8edf0" stroke-width="2"/>
-<path d="M533 -92 L855 98" stroke="#4d565e" stroke-width="12"/><path d="M533 -92 L855 98" stroke="url(#vmetv)" stroke-width="8"/><path d="M531 -95 L853 95" stroke="#e8edf0" stroke-width="2"/>
-</g>
+<!-- las eslingas son tiras de cable real (ver .sling) -->
 <g fill="none" stroke="#5f6b74" stroke-width="6"><circle cx="188" cy="102" r="8"/><circle cx="523" cy="140" r="8"/><circle cx="855" cy="102" r="8"/></g>
 </svg>
+      <i class="sling" style="width:36.4%;transform:rotate(151.9deg)"></i>
+      <i class="sling" style="width:20.8%;transform:rotate(90.5deg)"></i>
+      <i class="sling" style="width:35.8%;transform:rotate(28.6deg)"></i>
+      <img class="mlink" src="img/eslabon.webp" alt="" width="98" height="104">
       <img class="hookimg" src="img/gancho2.webp" alt="" width="350" height="982">
       <img class="palimg" src="img/palet.webp" alt="Palet de cajas con la marca Bayline colgando de una grua" width="1050" height="700">
       <div class="fgrid fr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
