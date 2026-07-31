@@ -107,7 +107,7 @@ export function boot(host){
     tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=8; return tex;
   }
 
-  const root = new THREE.Group(); root.scale.setScalar(.8); scene.add(root);
+  const root = new THREE.Group(); root.scale.setScalar(.9); scene.add(root);
   const RB=(w,h,d,r,mat)=>{const m=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,r),mat);
     m.castShadow=true;m.receiveShadow=true;return m;};
 
@@ -183,9 +183,10 @@ export function boot(host){
     /* entrada: espera 950ms y cae desde arriba en 1.5s, sin rebote */
     intro = Math.min(1,Math.max(0,(now-tStart-950)/1500));
     const e = 1-Math.pow(1-intro,4);
-    root.position.x = 1.1;
-    root.rotation.y = -.42 + p*1.9;
-    root.position.y = -.2 + (1-e)*5.4 - p*2.4 + Math.sin(now/1000)*.04*e;
+    /* viaje: baja mientras la banda lo cubre y reaparece colgando al centro en misión */
+    root.position.x = trk(p,[[0,1.1],[.28,1.1],[.5,0],[1,0]]);
+    root.rotation.y = -.42 + p*2.0;
+    root.position.y = -.2 + (1-e)*5.4 + trk(p,[[0,0],[.3,-.22],[.5,0],[1,0]]) + Math.sin(now/1000)*.04*e;
     root.rotation.z = Math.sin(p*Math.PI*2)*.02;
     gan.position.y = 0;
     cam.position.set(0,1.35+p*.5,12.4-p*.4);
