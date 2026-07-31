@@ -240,31 +240,26 @@ border:2.5px solid var(--boya);border-radius:50%}
 .diff .dp{font-size:.95rem;color:var(--gris);line-height:1.55;max-width:62ch}
 @media(max-width:760px){.diff{grid-template-columns:1fr;gap:5px}.diff .dp{padding-left:24px}}
 
-/* ── CRECE POR FASES: paneles sticky apilados con card rotada (patrón de la referencia) ── */
-.phases{background:var(--marea);color:var(--espuma);position:relative}
-.pintro{min-height:62vh;display:flex;align-items:center;text-align:center}
-.pintro .wrap{display:flex;flex-direction:column;align-items:center;gap:18px;
-padding-top:120px;padding-bottom:50px}
+/* ── CRECE POR FASES (formato de la landing original) ── */
+.phases{background:var(--marea);color:var(--espuma);padding:120px 0;position:relative;overflow:hidden}
+.phases .wrap{position:relative;z-index:2;text-align:center}
 .phases .kick{font-family:var(--mono);font-size:.8rem;font-weight:500;letter-spacing:.08em;
 text-transform:uppercase;color:var(--canal)}
-.phases h2{font-size:clamp(1.953rem,4.2vw,3.5rem);font-weight:700;letter-spacing:-.018em}
-.plead{max-width:58ch;color:var(--bajio);font-size:1.0625rem;line-height:1.6}
-.pstage{position:relative;background:var(--marea);height:100vh;display:flex;align-items:center;
-padding:0 44px;overflow:hidden;position:sticky;top:0}
-.pstage[data-ph="1"]{z-index:3}.pstage[data-ph="2"]{z-index:4}.pstage[data-ph="3"]{z-index:5}
-.pcard{position:relative;z-index:2;width:min(390px,88vw);border:1px solid rgba(242,246,248,.4);
-padding:26px 22px 24px;transform:rotate(-12deg);display:flex;flex-direction:column;gap:18px;margin-left:7vw}
-.pstage[data-ph="1"] .pcard{background:var(--sonda)}
-.pstage[data-ph="2"] .pcard,.pstage[data-ph="3"] .pcard{background:rgba(242,246,248,.11);
-backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.pcard .pk{font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.1em;
-text-transform:uppercase;color:var(--bajio)}
-.pcard h3{margin-top:6px;font-size:1.563rem;font-weight:700;letter-spacing:-.01em}
-.pcard .shot{border:1px solid rgba(242,246,248,.25);overflow:hidden}
-.pcard .shot img{width:100%;height:auto;aspect-ratio:8/5;object-fit:cover;object-position:top center}
-.pcard p{color:#d3e0e8;font-size:.98rem;line-height:1.5}
-@media(max-width:860px){.pstage{justify-content:center;padding:0 22px}
-.pcard{margin-left:0;transform:rotate(-8deg)}}
+.phases h2{margin-top:14px;font-size:clamp(1.953rem,4.2vw,3.5rem);font-weight:700;letter-spacing:-.018em}
+.plead{margin:20px auto 0;max-width:58ch;color:var(--bajio);font-size:1.0625rem;line-height:1.6}
+.ptabs{margin-top:44px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.ptab{background:none;border:1px solid rgba(189,211,222,.24);border-radius:12px;color:var(--bajio);
+padding:14px 22px;cursor:pointer;font-family:var(--sans);text-align:center;transition:.25s}
+.ptab b{display:block;font-size:1rem;font-weight:600;color:var(--espuma)}
+.ptab span{font-size:.85rem}
+.ptab.on{border-color:var(--boya);background:rgba(232,97,60,.1)}
+.ptab.on b{color:var(--boya)}
+.pcap{margin-top:34px;min-height:104px}
+.pc{display:none}.pc.on{display:block}
+.pc b{font-size:1.25rem;font-weight:600;color:var(--espuma)}
+.pc p{margin:9px auto 0;max-width:56ch;color:var(--bajio);font-size:1rem;line-height:1.55}
+.psim{margin-top:30px;position:relative;max-width:940px;margin-inline:auto}
+.ps{display:none}.ps.on{display:block}
 
 
 /* ── regla global: ninguna captura se desborda ── */
@@ -450,31 +445,62 @@ main{position:relative;z-index:2}
   </div>
 </div></section>
 
-<!-- ════ CRECE POR FASES · paneles sticky apilados (patrón de la referencia) ════ -->
-<section class="phases" id="fases">
-  <div class="pintro"><div class="wrap">
-    <span class="kick rv">Crece por fases</span>
-    <h2 class="rv">Un camino, no tres cajas.</h2>
-    <p class="plead rv">Hoy sus pedidos viven en WhatsApp y su inventario en una hoja de cálculo.
-      Bayline digitaliza ese proceso por etapas: empiece donde esté hoy y avance cuando quiera,
-      sobre la misma plataforma.</p>
-  </div></div>
-  <div class="pstage" data-ph="1"><article class="pcard">
-    <div><span class="pk">Fase 1</span><h3>Tienda en línea</h3></div>
-    <div class="shot"><img src="img/catalogo.jpg" alt="Tienda en línea Bayline: catálogo con productos y precios" width="3200" height="2000" loading="lazy"></div>
-    <p>Su catálogo con precio y disponibilidad por sucursal a la vista. Sus clientes consultan y arman el pedido por WhatsApp a cualquier hora.</p>
-  </article></div>
-  <div class="pstage" data-ph="2"><article class="pcard">
-    <div><span class="pk">Fase 2</span><h3>Pagos en línea</h3></div>
-    <div class="shot"><img src="img/pago.jpg" alt="Pago en línea Bayline: SINPE Móvil y tarjeta" width="3200" height="2000" loading="lazy"></div>
-    <p>SINPE Móvil y tarjeta integrados: el pedido se cierra y se paga en el sitio, sin transferencias sueltas.</p>
-  </article></div>
-  <div class="pstage" data-ph="3"><article class="pcard">
-    <div><span class="pk">Fase 3</span><h3>Logística con Dockbay</h3></div>
-    <div class="shot"><img src="img/logistica.jpg" alt="Logística Dockbay: entregas con estado y chofer" width="3200" height="2000" loading="lazy"></div>
-    <p>Con Dockbay controla bodega, rutas y entregas. Cada pedido con estado y trazabilidad, hasta la puerta.</p>
-  </article></div>
-</section>
+<!-- ════ SISTEMA DE MARCA (de la landing original) ════ -->
+<section class="brandsys" id="marcas"><div class="wrap">
+<span class="kick rv">Sistema de marca</span>
+<h2 class="rv">Marcas propias,<br><span class="dim">casa común.</span></h2>
+<div class="marks rv">
+  <article class="mk">
+    <svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><g transform="translate(0 5)">
+    <path d="M36 34 L22 52 L30 72" fill="none" stroke="#F2F6F8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/>
+    <circle cx="22" cy="52" r="4.5" fill="#F2F6F8"/><circle cx="30" cy="72" r="4.5" fill="#F2F6F8"/>
+    <g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" fill="none" stroke="#F2F6F8" stroke-width="5" stroke-linejoin="round"/>
+    <circle cx="36" cy="34" r="6.5" fill="none" stroke="#E8613C" stroke-width="4"/></g></g></svg>
+    <div class="mn">Bayline</div>
+    <p>La plataforma de comercio: catálogo, pedidos y pagos. Una etiqueta de precio con su hilo,
+      porque cada producto lleva su ruta atada.</p>
+  </article>
+  <article class="mk">
+    <svg viewBox="0 0 96 96" fill="none" aria-hidden="true">
+    <path d="M4 76 L92 76" fill="none" stroke="#F2F6F8" stroke-width="4" stroke-linecap="round" stroke-dasharray="6.82 5.68"/>
+    <rect x="14" y="24" width="42" height="30" rx="3" fill="none" stroke="#F2F6F8" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M56 32 L70 32 L80 42 L80 54 L56 54" fill="none" stroke="#F2F6F8" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M22 31 h22 M22 39 h16 M22 47 h12" stroke="#F2F6F8" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="30" cy="66" r="7" fill="none" stroke="#E8613C" stroke-width="4"/>
+    <circle cx="70" cy="66" r="7" fill="none" stroke="#F2F6F8" stroke-width="4"/></svg>
+    <div class="mn">Dockbay</div>
+    <p>La app de operación logística: bodega, preparación de pedidos, rutas y entregas.
+      Marca hermana, del mismo sistema.</p>
+  </article>
+</div>
+</div></section>
+
+<!-- ════ CRECE POR FASES (de la landing original) ════ -->
+<section class="phases" id="fases"><div class="wrap">
+  <span class="kick rv">Crece por fases</span>
+  <h2 class="rv">Un camino, no tres cajas.</h2>
+  <p class="plead rv">Hoy sus pedidos viven en WhatsApp y su inventario en una hoja de cálculo.
+    Bayline digitaliza ese proceso por etapas: empiece donde esté hoy y avance cuando quiera,
+    sobre la misma plataforma.</p>
+  <div class="ptabs rv" role="tablist">
+    <button class="ptab on" data-ph="1" role="tab" aria-selected="true"><b>Fase 1</b><span>Tienda en línea</span></button>
+    <button class="ptab" data-ph="2" role="tab" aria-selected="false"><b>Fase 2</b><span>Pagos en línea</span></button>
+    <button class="ptab" data-ph="3" role="tab" aria-selected="false"><b>Fase 3</b><span>Logística con Dockbay</span></button>
+  </div>
+  <div class="pcap rv">
+    <div class="pc on" data-ph="1"><b>Su catálogo, en línea</b><p>Precio y disponibilidad por sucursal a la vista. Sus clientes consultan y arman el pedido por WhatsApp a cualquier hora.</p></div>
+    <div class="pc" data-ph="2"><b>Cobre en el momento</b><p>SINPE Móvil y tarjeta integrados: el pedido se cierra y se paga en el sitio, sin transferencias sueltas.</p></div>
+    <div class="pc" data-ph="3"><b>Del catálogo a la entrega</b><p>Con Dockbay controla bodega, rutas y entregas. Cada pedido con estado y trazabilidad, hasta la puerta.</p></div>
+  </div>
+  <div class="psim rv">
+    <div class="ps on" data-ph="1"><div class="frame"><div class="fbar"><i></i><i></i><i></i><span>tienda.bayline.app</span></div>
+      <img src="img/catalogo.jpg" alt="Tienda en línea Bayline: catálogo con productos y precios" width="3200" height="2000" loading="lazy"></div></div>
+    <div class="ps" data-ph="2"><div class="frame"><div class="fbar"><i></i><i></i><i></i><span>pago seguro</span></div>
+      <img src="img/pago.jpg" alt="Pago en línea Bayline: SINPE Móvil y tarjeta" width="3200" height="2000" loading="lazy"></div></div>
+    <div class="ps" data-ph="3"><div class="frame"><div class="fbar"><i></i><i></i><i></i><span>Dockbay · operación</span></div>
+      <img src="img/logistica.jpg" alt="Logística Dockbay: entregas con estado y chofer" width="3200" height="2000" loading="lazy"></div></div>
+  </div>
+</div></section>
 
 
 <!-- ════ PLANES ════ -->
@@ -512,62 +538,6 @@ cobra su propia comisión por transacción y se le paga directo a ella.</p>
 
 
 
-<!-- ════ SISTEMA DE MARCA (de la landing original) ════ -->
-<section class="brandsys" id="marcas"><div class="wrap">
-<span class="kick rv">Sistema de marca</span>
-<h2 class="rv">Marcas propias,<br><span class="dim">casa común.</span></h2>
-<div class="marks rv">
-  <article class="mk">
-    <svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><g transform="translate(0 5)">
-    <path d="M36 34 L22 52 L30 72" fill="none" stroke="#F2F6F8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/>
-    <circle cx="22" cy="52" r="4.5" fill="#F2F6F8"/><circle cx="30" cy="72" r="4.5" fill="#F2F6F8"/>
-    <g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" fill="none" stroke="#F2F6F8" stroke-width="5" stroke-linejoin="round"/>
-    <circle cx="36" cy="34" r="6.5" fill="none" stroke="#E8613C" stroke-width="4"/></g></g></svg>
-    <div class="mn">Bayline</div>
-    <p>La plataforma de comercio: catálogo, pedidos y pagos. Una etiqueta de precio con su hilo,
-      porque cada producto lleva su ruta atada.</p>
-  </article>
-  <article class="mk">
-    <svg viewBox="0 0 96 96" fill="none" aria-hidden="true">
-    <path d="M4 76 L92 76" fill="none" stroke="#F2F6F8" stroke-width="4" stroke-linecap="round" stroke-dasharray="6.82 5.68"/>
-    <rect x="14" y="24" width="42" height="30" rx="3" fill="none" stroke="#F2F6F8" stroke-width="5" stroke-linejoin="round"/>
-    <path d="M56 32 L70 32 L80 42 L80 54 L56 54" fill="none" stroke="#F2F6F8" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
-    <path d="M22 31 h22 M22 39 h16 M22 47 h12" stroke="#F2F6F8" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="30" cy="66" r="7" fill="none" stroke="#E8613C" stroke-width="4"/>
-    <circle cx="70" cy="66" r="7" fill="none" stroke="#F2F6F8" stroke-width="4"/></svg>
-    <div class="mn">Dockbay</div>
-    <p>La app de operación logística: bodega, preparación de pedidos, rutas y entregas.
-      Marca hermana, del mismo sistema.</p>
-  </article>
-</div>
-</div></section>
-
-<!-- ════ FAQ (de la landing original) ════ -->
-<section class="faq" id="faq"><div class="wrap">
-<span class="kick rv">Preguntas frecuentes</span>
-<h2 class="rv">Lo que siempre nos preguntan.</h2>
-<div class="qs rv">
-<details class="q"><summary>¿Quién carga los productos al catálogo?<span class="pl"></span></summary>
-<div class="a">Nosotros. La carga inicial completa (productos, precios, fotos, sucursales) forma parte de la
-implementación: usted entrega sus datos en Excel o desde su sistema y en 6 a 8 semanas está en línea.
-Después su equipo lo mantiene desde el panel.</div></details>
-<details class="q"><summary>¿Cobran comisión por venta?<span class="pl"></span></summary>
-<div class="a">Nosotros no: <b>0%, siempre</b>. Su plan es una mensualidad fija, venda ₡100 000 o
-₡100 millones. Aparte va la comisión de la pasarela de pagos (aproximadamente de 1,5% con SINPE Móvil
-a 4,8% con tarjeta, IVA incluido): ese es el costo de cobrar con tarjeta, igual que un datáfono en el
-mostrador, y se le paga directo a ella.</div></details>
-<details class="q"><summary>¿Y si dejo de pagar, pierdo mi información?<span class="pl"></span></summary>
-<div class="a">Nunca. Sus datos son suyos: puede exportarlos en Excel en cualquier momento desde su
-panel, y al terminar el servicio le entregamos la exportación completa sin costo.</div></details>
-<details class="q"><summary>¿Sirve si mis precios cambian a cada rato?<span class="pl"></span></summary>
-<div class="a">Sí, para eso es el panel: cambia un precio y queda publicado al instante. También hay
-carga masiva por Excel para actualizar cientos de productos de una vez.</div></details>
-<details class="q"><summary>¿Tengo que cambiar el sistema que ya uso?<span class="pl"></span></summary>
-<div class="a">No. Bayline no reemplaza su ERP ni su punto de venta: se integra con lo que ya tiene y
-potencia su canal comercial. El alcance de la integración se define en la propuesta.</div></details>
-</div>
-</div></section>
-
 <!-- ════ COMPARATIVA (de la landing original) ════ -->
 <section class="cmpsec" id="comparar"><div class="wrap">
 <span class="kick rv">Comparar</span>
@@ -594,6 +564,32 @@ potencia su canal comercial. El alcance de la integración se define en la propu
 <tr><th>Mejoras del producto incluidas</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="#E8613C"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="#E8613C"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="#E8613C"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
 <tr><th>0% de comisión de Bayline por sus ventas</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="#E8613C"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="#E8613C"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="#E8613C"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
 </tbody></table></div>
+</div></section>
+
+<!-- ════ FAQ (de la landing original) ════ -->
+<section class="faq" id="faq"><div class="wrap">
+<span class="kick rv">Preguntas frecuentes</span>
+<h2 class="rv">Lo que siempre nos preguntan.</h2>
+<div class="qs rv">
+<details class="q"><summary>¿Quién carga los productos al catálogo?<span class="pl"></span></summary>
+<div class="a">Nosotros. La carga inicial completa (productos, precios, fotos, sucursales) forma parte de la
+implementación: usted entrega sus datos en Excel o desde su sistema y en 6 a 8 semanas está en línea.
+Después su equipo lo mantiene desde el panel.</div></details>
+<details class="q"><summary>¿Cobran comisión por venta?<span class="pl"></span></summary>
+<div class="a">Nosotros no: <b>0%, siempre</b>. Su plan es una mensualidad fija, venda ₡100 000 o
+₡100 millones. Aparte va la comisión de la pasarela de pagos (aproximadamente de 1,5% con SINPE Móvil
+a 4,8% con tarjeta, IVA incluido): ese es el costo de cobrar con tarjeta, igual que un datáfono en el
+mostrador, y se le paga directo a ella.</div></details>
+<details class="q"><summary>¿Y si dejo de pagar, pierdo mi información?<span class="pl"></span></summary>
+<div class="a">Nunca. Sus datos son suyos: puede exportarlos en Excel en cualquier momento desde su
+panel, y al terminar el servicio le entregamos la exportación completa sin costo.</div></details>
+<details class="q"><summary>¿Sirve si mis precios cambian a cada rato?<span class="pl"></span></summary>
+<div class="a">Sí, para eso es el panel: cambia un precio y queda publicado al instante. También hay
+carga masiva por Excel para actualizar cientos de productos de una vez.</div></details>
+<details class="q"><summary>¿Tengo que cambiar el sistema que ya uso?<span class="pl"></span></summary>
+<div class="a">No. Bayline no reemplaza su ERP ni su punto de venta: se integra con lo que ya tiene y
+potencia su canal comercial. El alcance de la integración se define en la propuesta.</div></details>
+</div>
 </div></section>
 
 <!-- ════ CIERRE ════ -->
@@ -627,9 +623,9 @@ if(host && !matchMedia('(prefers-reduced-motion: reduce)').matches){
 /* curvas batimétricas en las secciones marcadas */
 (function(){
   const tpl=document.getElementById('ctpl');
-  ['.hero','.end','.pstage'].forEach(sel=>{   // superficies grandes, no detrás de cuerpo
+  ['.hero','.end'].forEach(sel=>{   // superficies grandes, no detrás de cuerpo
     document.querySelectorAll(sel).forEach(s=>{
-      const dark=/end|pstage/.test(sel);
+      const dark=/end/.test(sel);
       const g=tpl.cloneNode(true); g.id=''; g.style.display='';
       g.querySelectorAll('polyline').forEach((p,i)=>{
         p.setAttribute('stroke', i%2?'#3E7CA6':'#BDD3DE');
@@ -703,6 +699,19 @@ document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)
   addEventListener('load',draw); setTimeout(draw,300);
 })();
 
+
+/* fases: tabs */
+(function(){
+  const tabs=[...document.querySelectorAll('.ptab')]; if(!tabs.length) return;
+  const set=n=>{
+    tabs.forEach(t=>{const a=t.dataset.ph===n;t.classList.toggle('on',a);
+      t.setAttribute('aria-selected',a?'true':'false')});
+    document.querySelectorAll('.pc').forEach(c=>c.classList.toggle('on',c.dataset.ph===n));
+    document.querySelectorAll('.ps').forEach(c=>c.classList.toggle('on',c.dataset.ph===n));
+  };
+  tabs.forEach(t=>{t.addEventListener('click',()=>set(t.dataset.ph));
+    t.addEventListener('mouseenter',()=>set(t.dataset.ph));});
+})();
 
 /* declaración palabra por palabra (patrón de la referencia) */
 (function(){
