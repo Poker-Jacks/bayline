@@ -929,8 +929,16 @@ stops.forEach(s=>{
     '<circle cx="36" cy="34" r="6.5" fill="none" stroke="#E8613C" stroke-width="4"/></g></g></svg>'+
     '<b>Bayline</b><small>Su comercio, en ruta</small></div>';
   document.body.appendChild(L);
-  setTimeout(function(){L.classList.add('done');
-    setTimeout(function(){L.remove()},1300)},800);
+  var t0=Date.now(), fired=false;
+  function reveal(){
+    if(fired) return; fired=true;
+    var wait=Math.max(0, 800-(Date.now()-t0));
+    setTimeout(function(){L.classList.add('done');
+      setTimeout(function(){L.remove()},1300)}, wait);
+  }
+  if(document.readyState==='complete') reveal();
+  else addEventListener('load', reveal);
+  setTimeout(reveal, 3500);
 })();
 (function(){
   var o=document.getElementById('pobj'), zone=document.querySelector('.stickyzone');
