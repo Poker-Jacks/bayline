@@ -64,7 +64,50 @@ export function boot(host){
   const boyaM  = new THREE.MeshStandardMaterial({color:0xE8613C, roughness:.42, metalness:.06});
   const acero  = new THREE.MeshStandardMaterial({color:0xB9C9D4, roughness:.24, metalness:.92});
 
-  const root = new THREE.Group(); root.scale.setScalar(1.3); scene.add(root);
+  // etiqueta impresa: se dibuja en canvas y se aplica a la cara frontal
+  function labelTex(){
+    const W=1024,H=640,c=document.createElement('canvas');
+    c.width=W;c.height=H;const x=c.getContext('2d');
+    x.fillStyle='#DCCBA9';x.fillRect(0,0,W,H);
+    // grano del cartón
+    const im=x.getImageData(0,0,W,H),d=im.data;
+    for(let i=0;i<d.length;i+=4){const n=(Math.random()-.5)*40;d[i]+=n;d[i+1]+=n*.95;d[i+2]+=n*.8;}
+    x.putImageData(im,0,0);
+    x.globalAlpha=.16;x.strokeStyle='#6f5730';x.lineWidth=3;
+    for(let y=0;y<H;y+=22){x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke();}
+    x.globalAlpha=1;
+    // isotipo Bayline (etiqueta + hilo + aro de boya), en tinta
+    x.save(); x.translate(90,150); x.scale(1.7,1.7);
+    x.strokeStyle='#12405E'; x.lineWidth=5; x.lineJoin='round'; x.lineCap='round';
+    x.setLineDash([13.5,11.3]);
+    x.beginPath(); x.moveTo(36,34); x.lineTo(22,52); x.lineTo(30,72); x.stroke();
+    x.setLineDash([]);
+    x.fillStyle='#12405E';
+    x.beginPath(); x.arc(22,52,4.5,0,7); x.fill();
+    x.beginPath(); x.arc(30,72,4.5,0,7); x.fill();
+    x.save(); x.translate(36,34); x.rotate(-14*Math.PI/180); x.translate(-36,-34);
+    x.beginPath(); x.moveTo(38,16); x.lineTo(78,16); x.lineTo(78,52); x.lineTo(38,52);
+    x.lineTo(20,34); x.closePath(); x.stroke();
+    x.strokeStyle='#E8613C'; x.lineWidth=4.5;
+    x.beginPath(); x.arc(36,34,6.5,0,7); x.stroke();
+    x.restore(); x.restore();
+    // wordmark
+    x.fillStyle='#12405E'; x.font='700 92px "Author", system-ui, sans-serif';
+    x.fillText('Bayline', 246, 214);
+    // línea de anotación mono
+    x.fillStyle='#5E6E79'; x.font='500 34px "Spline Sans Mono", monospace';
+    x.fillText('SU COMERCIO, EN RUTA', 250, 268);
+    // sello inferior
+    x.strokeStyle='#8a6f45'; x.lineWidth=3; x.globalAlpha=.55;
+    x.strokeRect(92,392,360,112); x.globalAlpha=1;
+    x.fillStyle='#5E6E79'; x.font='500 30px "Spline Sans Mono", monospace';
+    x.fillText('PEDIDO  ·  DESPACHADO', 118, 436);
+    x.fillText('ECOMMERCE COMPLETO', 118, 478);
+    const tex=new THREE.CanvasTexture(c);
+    tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=8; return tex;
+  }
+
+  const root = new THREE.Group(); root.scale.setScalar(1.02); scene.add(root);
   const RB=(w,h,d,r,mat)=>{const m=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,r),mat);
     m.castShadow=true;m.receiveShadow=true;return m;};
 
@@ -77,7 +120,12 @@ export function boot(host){
   const caja=new THREE.Group(); root.add(caja);
   const cuerpo = RB(3.15,2.0,2.35,.045,carton); cuerpo.position.y=-.18; caja.add(cuerpo);
   /* cinta boya */
-  const cinta = RB(3.17,.17,2.37,.02,boyaM); cinta.position.y=.10; caja.add(cinta);
+  const cinta = RB(3.17,.16,2.37,.02,boyaM); cinta.position.y=-.86; caja.add(cinta);
+  const matLabel = new THREE.MeshStandardMaterial({map:labelTex(), roughness:.94, metalness:0});
+  const front = new THREE.Mesh(new THREE.PlaneGeometry(2.98,1.86), matLabel);
+  front.position.set(0,-.18,1.183); front.castShadow=false; caja.add(front);
+  const side = new THREE.Mesh(new THREE.PlaneGeometry(2.2,1.86), matLabel);
+  side.position.set(1.58,-.18,0); side.rotation.y=Math.PI/2; caja.add(side);
   /* solapas superiores entreabiertas (sin abrir del todo) */
   const flapGeo=(w,d)=>new RoundedBoxGeometry(w,.055,d,2,.02);
   const fA=new THREE.Mesh(flapGeo(3.13,1.14),carton); fA.castShadow=true;
@@ -129,11 +177,10 @@ export function boot(host){
     root.rotation.y = -.42 + p*2.35;
     if(!tStart) tStart=now;
     intro = Math.min(1,(now-tStart)/1400);
-    const e = 1-Math.pow(1-intro,3);                  // entrada: cae al cargar
-    const sd = sm(Math.min(1, scrollY/innerHeight));  // sigue bajando con el scroll
-    root.position.y = 2.2 - e*2.3 - sd*2.6 + Math.sin(now/900)*.05*e;
+    const e = 1-Math.pow(1-intro,3);
+    root.position.y = 2.1 - e*2.05 - p*3.4 + Math.sin(now/900)*.05*e;   // baja con el scroll
     root.rotation.z = Math.sin(p*Math.PI*2)*.02;
-    gan.position.y = e*1.9 + sd*2.6;   // el gancho queda arriba: el cable se alarga
+    gan.position.y = e*1.85 + p*3.4;   // el gancho queda arriba
     cam.position.set(0,.8+p*.7,10.8-p*.5);
     cam.lookAt(root.position.x*.4,-.05+p*.3,0);
     R.render(scene,cam);

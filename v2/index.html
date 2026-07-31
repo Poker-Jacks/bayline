@@ -50,7 +50,7 @@ padding:12px 22px;border-radius:9px;border:1.5px solid transparent;transition:.2
 .g1{position:relative;z-index:3}
 .g2{position:relative;z-index:1;text-align:right;color:transparent;-webkit-text-stroke:2px var(--tinta)}
 .shotwrap{position:relative;z-index:2;margin:-5.4vw auto -4.6vw;width:min(84%,1080px);height:clamp(300px,44vh,520px)}
-#stage3d{position:absolute;inset:0}
+#stage3d{position:fixed;inset:0;z-index:1;pointer-events:none}
 #stage3d canvas{display:block;width:100%;height:100%}
 .frame{border-radius:13px;overflow:hidden;background:#14212E;
 box-shadow:0 44px 90px rgba(16,28,38,.26),0 6px 18px rgba(16,28,38,.10)}
@@ -293,6 +293,12 @@ padding:16px 18px;display:flex;flex-direction:column;gap:3px;backdrop-filter:blu
   .hright{flex-direction:row;flex-wrap:wrap;gap:18px 30px}
   .rcard{width:100%}
 }
+
+/* capas: el 3D fijo detrás, las secciones claras semitransparentes, las oscuras lo tapan */
+main{position:relative;z-index:2}
+.hero{background:transparent}
+.split,.why,.faq{background:rgba(245,242,233,.88)}
+.brandsys,.plans,.cmpsec,.end,footer{position:relative;z-index:3}
 </style>
 </head>
 <body>
