@@ -487,19 +487,23 @@ p{margin:0}
 .stickyzone{position:relative}
 .photoframe{position:absolute;inset:0;z-index:3;pointer-events:none}
 .stagestick{position:sticky;top:0;height:100vh;overflow:hidden}
-#pobj{position:absolute;left:50%;top:50%;width:min(40vw,600px);transform:translate(-50%,-49%);will-change:transform;opacity:0}
+#pobj{position:absolute;left:50%;top:50%;width:min(46vw,690px);transform:translate(-50%,-46%);will-change:transform;opacity:0;transition:opacity .25s}
 #pobj.ok{opacity:1}
 .pfall{position:relative;filter:drop-shadow(-14px 26px 26px rgba(16,28,38,.13))}
 .pfall .palimg{width:100%;height:auto;display:block}
-.phook{position:absolute;left:0;top:-11.9%;width:100%;height:auto;pointer-events:none}
+.phook{position:absolute;left:0;top:-88.6%;width:100%;height:auto;pointer-events:none}
+.pfall .hookimg{position:absolute;left:42.8%;top:-70.1%;width:15.24%;height:auto}
+.sling{position:absolute;left:50%;top:-9.4%;height:clamp(4px,.6vw,8.5px);display:block;
+transform-origin:0 50%;background:url('img/cable.webp') repeat-x;background-size:auto 100%}
+.sling::after{content:"";position:absolute;right:0;top:-30%;width:min(14px,9%);height:160%;
+background:linear-gradient(#cdd4d9,#8d99a1 55%,#5f6b74);border-radius:2px}
 .bm{position:absolute;width:9.4%;display:flex;flex-direction:column;align-items:center;gap:6%;
 transform:translate(-50%,-50%) skewY(var(--sk,0deg));mix-blend-mode:multiply;pointer-events:none}
 .bm::before{content:"";width:42%;aspect-ratio:1;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><g transform="translate(0 5)" fill="none"><path d="M36 34 L22 52 L30 72" stroke="%2312405E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="13.5 11.3"/><circle cx="22" cy="52" r="4.5" fill="%2312405E"/><circle cx="30" cy="72" r="4.5" fill="%2312405E"/><g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" stroke="%2312405E" stroke-width="5" stroke-linejoin="round"/><circle cx="36" cy="34" r="6.5" stroke="%23E8613C" stroke-width="4"/></g></g></svg>') center/contain no-repeat}
 .bm::after{content:"Bayline";font-weight:700;color:#12405E;letter-spacing:-.02em;line-height:1}
 .bm.r{opacity:.9}.bm.r::after{font-size:clamp(6px,.95vw,14px)}
 .bm.l{opacity:.7}.bm.l::after{font-size:clamp(5px,.8vw,12px)}
-.vhero{position:relative;overflow:hidden;background:transparent;z-index:4;min-height:100svh;display:flex;flex-direction:column;padding:112px 0 54px}
-.vlines{position:absolute;top:0;left:0;right:0;height:100svh;z-index:1;overflow:hidden;pointer-events:none}
+.vhero{position:relative;overflow:hidden;background:var(--ground);z-index:2;min-height:100svh;display:flex;flex-direction:column;padding:112px 0 54px}
 .vhero .vwrap{position:relative;z-index:1;width:100%;flex:1;display:flex;flex-direction:column;justify-content:space-between}
 .vgiant{font-weight:700;letter-spacing:-.02em;line-height:.88;font-size:clamp(3.052rem,9vw,9.3rem);color:var(--ink);margin:10px 0 0}
 .vgiant.g2{color:transparent;-webkit-text-stroke:1.8px var(--ink);margin:0;text-align:right}
@@ -518,8 +522,7 @@ transform:translate(-50%,-50%) skewY(var(--sk,0deg));mix-blend-mode:multiply;poi
 #loader.done .lcol{transform:scaleY(0)}
 #loader.done .lmark{opacity:0}
 @media (prefers-reduced-motion:no-preference){
-  .pfall{transform:translateY(-118vh)}
-  #pobj.ok .pfall{animation:pdrop 1.5s cubic-bezier(.16,1,.3,1) .3s both}
+  .pfall{animation:pdrop 1.5s cubic-bezier(.16,1,.3,1) 1s both}
   @keyframes pdrop{from{transform:translateY(-118vh)}to{transform:none}}
   .vappear{opacity:.001;animation:vrise 1s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d,1s)}
   @keyframes vrise{from{opacity:.001;transform:translateY(var(--dy,51px))}to{opacity:1;transform:none}}
@@ -582,44 +585,48 @@ transform:translate(-50%,-50%) skewY(var(--sk,0deg));mix-blend-mode:multiply;poi
 <linearGradient id="vmet" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d99a1"/><stop offset=".45" stop-color="#dde3e7"/><stop offset=".7" stop-color="#aeb9c0"/><stop offset="1" stop-color="#6e7a83"/></linearGradient>
 <linearGradient id="vmetv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c3ccd2"/><stop offset=".5" stop-color="#8d99a1"/><stop offset="1" stop-color="#5f6b74"/></linearGradient>
 </defs>
-<line x1="522" y1="-620" x2="522" y2="-386" stroke="url(#vmet)" stroke-width="52"/>
+<g stroke="#8f979e" stroke-width="23"><line x1="477" y1="-620" x2="477" y2="-484"/><line x1="579" y1="-620" x2="579" y2="-484"/></g>
+<!-- las eslingas son tiras de cable real (ver .sling) -->
+<g fill="none" stroke="#5f6b74" stroke-width="6"><circle cx="188" cy="102" r="8"/><circle cx="523" cy="140" r="8"/><circle cx="855" cy="102" r="8"/></g>
 </svg>
-      <img class="palimg" src="img/rig.webp" alt="Palet de cajas con la marca Bayline colgando de una grua" width="1050" height="1180">
-      <b class="bm r" style="left:53.0%;top:57.5%;--sk:-8deg"></b>
-      <b class="bm r" style="left:53.0%;top:67.9%;--sk:-8deg"></b>
-      <b class="bm r" style="left:53.0%;top:77.2%;--sk:-8deg"></b>
-      <b class="bm r" style="left:53.0%;top:85.8%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:56.6%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:66.4%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:75.5%;--sk:-8deg"></b>
-      <b class="bm r" style="left:60.6%;top:83.8%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:55.4%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:64.8%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:73.4%;--sk:-8deg"></b>
-      <b class="bm r" style="left:69.2%;top:81.5%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:54.2%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:63.1%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:71.5%;--sk:-8deg"></b>
-      <b class="bm r" style="left:77.6%;top:79.2%;--sk:-8deg"></b>
-      <b class="bm l" style="left:22.5%;top:55.0%;--sk:10deg"></b>
-      <b class="bm l" style="left:22.5%;top:64.2%;--sk:10deg"></b>
-      <b class="bm l" style="left:22.5%;top:72.8%;--sk:10deg"></b>
-      <b class="bm l" style="left:22.5%;top:80.8%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:56.5%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:66.0%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:75.0%;--sk:10deg"></b>
-      <b class="bm l" style="left:32.2%;top:83.4%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:58.1%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:68.1%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:77.6%;--sk:10deg"></b>
-      <b class="bm l" style="left:42.9%;top:86.3%;--sk:10deg"></b>
+      <i class="sling" style="width:35.9%;transform:rotate(153.5deg)"></i>
+      <i class="sling" style="width:19.6%;transform:rotate(90.6deg)"></i>
+      <i class="sling" style="width:35.3%;transform:rotate(27deg)"></i>
+      <img class="hookimg" src="img/gancho2.webp" alt="" width="350" height="982">
+      <img class="palimg" src="img/palet.webp" alt="Palet de cajas con la marca Bayline colgando de una grua" width="1050" height="700">
+      <b class="bm r" style="left:53.0%;top:28.4%;--sk:-8deg"></b>
+      <b class="bm r" style="left:53.0%;top:45.9%;--sk:-8deg"></b>
+      <b class="bm r" style="left:53.0%;top:61.5%;--sk:-8deg"></b>
+      <b class="bm r" style="left:53.0%;top:76.0%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:26.8%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:43.4%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:58.7%;--sk:-8deg"></b>
+      <b class="bm r" style="left:60.6%;top:72.7%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:24.9%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:40.6%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:55.2%;--sk:-8deg"></b>
+      <b class="bm r" style="left:69.2%;top:68.8%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:22.8%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:37.8%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:51.9%;--sk:-8deg"></b>
+      <b class="bm r" style="left:77.6%;top:65.0%;--sk:-8deg"></b>
+      <b class="bm l" style="left:22.5%;top:24.1%;--sk:10deg"></b>
+      <b class="bm l" style="left:22.5%;top:39.7%;--sk:10deg"></b>
+      <b class="bm l" style="left:22.5%;top:54.2%;--sk:10deg"></b>
+      <b class="bm l" style="left:22.5%;top:67.7%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:26.6%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:42.7%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:57.9%;--sk:10deg"></b>
+      <b class="bm l" style="left:32.2%;top:72.0%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:29.3%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:46.3%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:62.2%;--sk:10deg"></b>
+      <b class="bm l" style="left:42.9%;top:76.9%;--sk:10deg"></b>
     </div></div>
   </div></div>
 
-  <div class="vlines" aria-hidden="true"><svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/><g class="glowlines" aria-hidden="true"><polyline points="0 0 25 2.4 50 4.7 75 6.9 100 9 125 11 150 12.8 175 14.3 200 15.6 225 16.7 250 17.4 275 17.9 300 18 325 17.8 350 17.4 375 16.6 400 15.5" pathLength="100" style="animation-delay:-0s"/><polyline points="0 33.6 25 35.3 50 36.8 75 38 100 38.9 125 39.6 150 39.9 175 40 200 39.7 225 39.1 250 38.3 275 37.1 300 35.7 325 34.1 350 32.2 375 30.2 400 28" pathLength="100" style="animation-delay:-3.1s"/><polyline points="0 61.7 25 62 50 61.9 75 61.6 100 60.9 125 59.9 150 58.7 175 57.2 200 55.5 225 53.6 250 51.5 275 49.3 300 47 325 44.6 350 42.3 375 39.9 400 37.7" pathLength="100" style="animation-delay:-6.2s"/><polyline points="0 81.5 25 80.2 50 78.6 75 76.9 100 74.9 125 72.8 150 70.5 175 68.2 200 65.8 225 63.5 250 61.2 275 59 300 56.8 325 54.9 350 53.1 375 51.6 400 50.3" pathLength="100" style="animation-delay:-1.6s"/><polyline points="0 94 25 91.8 50 89.4 75 87.1 100 84.7 125 82.4 150 80.2 175 78.2 200 76.3 225 74.6 250 73.1 275 71.9 300 71 325 70.4 350 70.1 375 70 400 70.3" pathLength="100" style="animation-delay:-4.7s"/><polyline points="0 103.7 25 101.5 50 99.5 75 97.7 100 96.1 125 94.7 150 93.6 175 92.8 200 92.2 225 92 250 92.1 275 92.5 300 93.2 325 94.2 350 95.4 375 96.9 400 98.6" pathLength="100" style="animation-delay:-2.3s"/><polyline points="0 116.3 25 115.3 50 114.6 75 114.1 100 114 125 114.2 150 114.7 175 115.5 200 116.5 225 117.9 250 119.5 275 121.3 300 123.2 325 125.4 350 127.6 375 129.9 400 132.3" pathLength="100" style="animation-delay:-5.4s"/><polyline points="0 136.3 25 136.9 50 137.8 75 139 100 140.4 125 142 150 143.9 175 145.9 200 148.1 225 150.4 250 152.7 275 155.1 300 157.4 325 159.7 350 161.9 375 163.9 400 165.8" pathLength="100" style="animation-delay:-7.0s"/></g></svg></div>
-
   <header class="vhero">
-    
+    <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/><g class="glowlines" aria-hidden="true"><polyline points="0 0 25 2.4 50 4.7 75 6.9 100 9 125 11 150 12.8 175 14.3 200 15.6 225 16.7 250 17.4 275 17.9 300 18 325 17.8 350 17.4 375 16.6 400 15.5" pathLength="100" style="animation-delay:-0s"/><polyline points="0 33.6 25 35.3 50 36.8 75 38 100 38.9 125 39.6 150 39.9 175 40 200 39.7 225 39.1 250 38.3 275 37.1 300 35.7 325 34.1 350 32.2 375 30.2 400 28" pathLength="100" style="animation-delay:-3.1s"/><polyline points="0 61.7 25 62 50 61.9 75 61.6 100 60.9 125 59.9 150 58.7 175 57.2 200 55.5 225 53.6 250 51.5 275 49.3 300 47 325 44.6 350 42.3 375 39.9 400 37.7" pathLength="100" style="animation-delay:-6.2s"/><polyline points="0 81.5 25 80.2 50 78.6 75 76.9 100 74.9 125 72.8 150 70.5 175 68.2 200 65.8 225 63.5 250 61.2 275 59 300 56.8 325 54.9 350 53.1 375 51.6 400 50.3" pathLength="100" style="animation-delay:-1.6s"/><polyline points="0 94 25 91.8 50 89.4 75 87.1 100 84.7 125 82.4 150 80.2 175 78.2 200 76.3 225 74.6 250 73.1 275 71.9 300 71 325 70.4 350 70.1 375 70 400 70.3" pathLength="100" style="animation-delay:-4.7s"/><polyline points="0 103.7 25 101.5 50 99.5 75 97.7 100 96.1 125 94.7 150 93.6 175 92.8 200 92.2 225 92 250 92.1 275 92.5 300 93.2 325 94.2 350 95.4 375 96.9 400 98.6" pathLength="100" style="animation-delay:-2.3s"/><polyline points="0 116.3 25 115.3 50 114.6 75 114.1 100 114 125 114.2 150 114.7 175 115.5 200 116.5 225 117.9 250 119.5 275 121.3 300 123.2 325 125.4 350 127.6 375 129.9 400 132.3" pathLength="100" style="animation-delay:-5.4s"/><polyline points="0 136.3 25 136.9 50 137.8 75 139 100 140.4 125 142 150 143.9 175 145.9 200 148.1 225 150.4 250 152.7 275 155.1 300 157.4 325 159.7 350 161.9 375 163.9 400 165.8" pathLength="100" style="animation-delay:-7.0s"/></g></svg>
     <div class="wrap vwrap">
       <div>
         <span class="kick vappear" style="--d:1.15s">Plataforma de comercio · Costa Rica</span>
