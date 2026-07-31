@@ -717,7 +717,7 @@ potencia su canal comercial. El alcance de la integración se define en la propu
         p.setAttribute('opacity', dark ? '.10' : '.13');
       });
       s.prepend(g);
-      if(sel==='.hero'||sel==='.end'){
+      if(sel==='.end'){
         const glow=tpl.cloneNode(true); glow.id=''; glow.style.display='';
         glow.classList.add('glow');
         glow.querySelectorAll('polyline').forEach((p,i)=>{
