@@ -437,6 +437,32 @@ display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .25s,transf
   .ckline .pr{order:4;flex:1 0 100%;margin-left:57px;margin-top:2px}
   .ckline .rm{position:absolute;right:0;top:14px;margin:0}
 }
+
+/* ====== SEGUIMIENTO DEL PEDIDO ====== */
+.trk{display:flex;flex-direction:column;gap:0;margin:6px 0 4px}
+.trk .st{display:flex;gap:15px;position:relative;padding-bottom:22px}
+.trk .st:last-child{padding-bottom:0}
+.trk .st::before{content:"";position:absolute;left:12px;top:26px;bottom:0;width:2px;background:var(--line)}
+.trk .st:last-child::before{display:none}
+.trk .st.done::before{background:var(--boya)}
+.trk .dot{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;
+border:2px solid var(--line);background:var(--surface);color:var(--gris);z-index:1}
+.trk .st.done .dot{background:var(--boya);border-color:var(--boya);color:var(--tinta)}
+.trk .st.now .dot{border-color:var(--boya);color:var(--boya);box-shadow:0 0 0 4px rgba(232,97,60,.14)}
+.trk .dot svg{width:14px;height:14px}
+.trk .tx b{display:block;font-size:14.5px;font-weight:600;line-height:1.3}
+.trk .st.now .tx b{color:var(--boya)}
+.trk .tx span{font-size:12.5px;color:var(--gris)}
+.ordhead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;
+padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.ordhead .on{font-family:var(--mono);font-size:15px;color:var(--sonda);font-weight:600}
+.ordhead .od{font-size:12.5px;color:var(--gris);margin-top:3px}
+.ordhead .opill{align-self:center}
+.ordmeta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.ordmeta .m{background:var(--carta);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.ordmeta .m .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
+.ordmeta .m .v{font-size:14px;font-weight:600;margin-top:3px}
+@media(max-width:560px){.ordmeta{grid-template-columns:1fr}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -967,11 +993,12 @@ function payDemo(){
     let n=1;
     try{n=(parseInt(localStorage.getItem('bayline-ord')||'0',10)||0)+1;localStorage.setItem('bayline-ord',n);}catch(e){}
     const ord='BL-2026-'+String(n).padStart(4,'0');
+    ordCreate(ord, PM[PMSEL].n);
     ov.innerHTML=`<div class="paybox"><div class="okmark">${I.check.replace('<svg','<svg width=30 height=30')}</div>
       <h3>Pago aprobado</h3><p>Su pedido qued&oacute; registrado y pasa a preparaci&oacute;n en bodega.</p>
       <div class="ordn">${ord}</div>
       <p style="font-size:12.5px">Demostraci&oacute;n: no se realiz&oacute; ning&uacute;n cobro real.</p>
-      <div class="acts"><a class="btn pri" href="#/logistica" onclick="closePay()">Ver el seguimiento</a>
+      <div class="acts"><a class="btn pri" href="#/pedido/${ord}" onclick="closePay()">Ver el seguimiento</a>
       <a class="btn gho" href="#/catalogo" onclick="closePay()">Seguir comprando</a></div></div>`;
     cartClear();
   },1700);
@@ -1000,6 +1027,57 @@ document.addEventListener('click',function(e){
   if(e.target.closest('#paybtn')){payDemo();return;}
 });
 
+
+/* ============ PEDIDOS (demostracion) ============ */
+const OKEY='bayline-orders-v1';
+const ordLoad=()=>{try{return JSON.parse(localStorage.getItem(OKEY))||[]}catch(e){return []}};
+const ordSave=a=>{try{localStorage.setItem(OKEY,JSON.stringify(a))}catch(e){}};
+function ordCreate(num,metodo){
+  const ls=cartLines(), sub=cartSub();
+  const o={ord:num, ts:Date.now(), metodo:metodo, suc:branch(ALM).n,
+    guia:'GUIA 04-'+String(1180+ordLoad().length).padStart(4,'0'),
+    lines:ls.map(l=>({t:l.p.t,brand:l.p.brand,icon:l.p.icon,price:l.p.price,q:l.q})),
+    sub:sub, envio:ENVIO, tot:sub+ENVIO};
+  const all=ordLoad(); all.unshift(o); ordSave(all); return o;
+}
+function ordFmt(ts){try{return new Date(ts).toLocaleDateString('es-CR',{day:'2-digit',month:'long',year:'numeric'});}catch(e){return '';}}
+
+function viewPedido(num){
+  const o=ordLoad().find(x=>x.ord===num);
+  const head=header('')+`<div class="wrap pagetitle"><div class="crumb"><a href="#/">Inicio</a> &rsaquo; Seguimiento</div><h1>Seguimiento de su pedido</h1><p>Estado de su compra, paso a paso. <b>Demostraci&oacute;n:</b> los estados son de ejemplo.</p></div>`;
+  if(!o) return head+`<section class="sec"><div class="wrap"><div class="ckcard cempty">
+    <div class="ic">${I.cart}</div><h3>No encontramos ese pedido</h3>
+    <p>El seguimiento se genera al completar una compra en esta demostraci&oacute;n.</p>
+    <a class="btn pri" href="#/catalogo">Ver el cat&aacute;logo</a></div></div></section>`+footer();
+  const pasos=[
+    {b:'Pago aprobado',s:'Su pago qued&oacute; confirmado',st:'done'},
+    {b:'Pedido recibido',s:'La tienda confirm&oacute; su pedido',st:'done'},
+    {b:'En preparaci&oacute;n en bodega',s:'Estamos alistando sus productos en '+o.suc,st:'now'},
+    {b:'En ruta',s:'Un transportista lo lleva a su direcci&oacute;n',st:''},
+    {b:'Entregado',s:'Firma de recibido y comprobante',st:''}];
+  return head+`<section class="sec"><div class="wrap"><div class="ckgrid">
+    <div class="ckcard">
+      <div class="ordhead"><div><div class="on">${o.ord}</div><div class="od">Compra del ${ordFmt(o.ts)} &middot; ${o.lines.reduce((a,l)=>a+l.q,0)} art&iacute;culo${o.lines.reduce((a,l)=>a+l.q,0)===1?'':'s'}</div></div>
+        <span class="opill bod">En preparaci&oacute;n</span></div>
+      <div class="trk">${pasos.map(p=>`<div class="st ${p.st}"><span class="dot">${p.st==='done'?I.check:''}</span>
+        <div class="tx"><b>${p.b}</b><span>${p.s}</span></div></div>`).join('')}</div>
+      <div class="ordmeta">
+        <div class="m"><div class="k">Gu&iacute;a</div><div class="v">${o.guia}</div></div>
+        <div class="m"><div class="k">Sale de</div><div class="v">${o.suc}</div></div>
+        <div class="m"><div class="k">Entrega estimada</div><div class="v">24 a 48 horas</div></div>
+        <div class="m"><div class="k">Pagado con</div><div class="v">${o.metodo}</div></div>
+      </div>
+    </div>
+    <div class="ckcard"><h3>Lo que viene en camino</h3>
+      ${o.lines.map(l=>`<div class="ckline"><span class="th">${pio(l.icon)}</span><div><div class="nm">${l.t}</div><div class="q">${l.brand} &middot; ${l.q} unidad${l.q===1?'':'es'}</div></div><span class="pr">${money(l.price*l.q)}</span></div>`).join('')}
+      <div class="cktot"><div class="r"><span>Subtotal</span><span class="num">${money(o.sub)}</span></div>
+        <div class="r"><span>Env&iacute;o a domicilio</span><span class="num">${money(o.envio)}</span></div>
+        <div class="r t"><span>Total pagado</span><span class="num">${money(o.tot)}</span></div></div>
+      <a class="btn gho" href="#/catalogo" style="width:100%;margin-top:16px">Seguir comprando</a>
+      <div class="seg">${I.check} Le avisamos por WhatsApp en cada cambio de estado</div>
+    </div>
+  </div></div></section>`+footer();
+}
 /* ============ ROUTER ============ */
 function route(){
   const h=location.hash.replace(/^#/,'')||'/';
@@ -1018,7 +1096,8 @@ function route(){
     const lo=document.getElementById('logout'); if(lo)lo.onclick=()=>{sessionStorage.removeItem(ADMKEY);location.hash='#/';};
     return;
   }
-  if(seg[0]==='carrito')app.innerHTML=viewCarrito();
+  if(seg[0]==='pedido')app.innerHTML=viewPedido(decodeURIComponent(seg[1]||''));
+  else if(seg[0]==='carrito')app.innerHTML=viewCarrito();
   else if(seg[0]==='producto'){app.innerHTML=viewProducto(seg[1]);bindProducto();}
   else if(seg[0]==='catalogo'){app.innerHTML=viewCatalogo(params);bindCatalogo();}
   else if(seg[0]==='promociones')app.innerHTML=viewPromos();
