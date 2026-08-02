@@ -546,6 +546,27 @@ background:var(--carta);border:1px solid var(--line);border-radius:12px;padding:
 .entrega .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
 .entrega .v{font-size:14px;font-weight:600;margin-top:3px}
 .entrega .d{font-size:13px;color:var(--gris);margin-top:3px;line-height:1.45}
+
+/* ====== comprobante de transferencia ====== */
+.drop{display:flex;align-items:center;gap:13px;border:1.5px dashed var(--bajio);border-radius:12px;
+padding:15px 16px;cursor:pointer;background:var(--carta);transition:border-color .18s,background .18s}
+.drop:hover,.drop.on{border-color:var(--boya);background:#fff}
+.drop .di svg{width:18px;height:18px}
+.drop .di{width:36px;height:36px;border-radius:9px;background:var(--surface);border:1px solid var(--line);
+display:grid;place-items:center;color:var(--sonda);flex-shrink:0}
+.drop .dt{display:flex;flex-direction:column;gap:2px}
+.drop .dt b{font-size:14px}
+.drop .dt span{font-size:12.5px;color:var(--gris)}
+.cpfile{display:flex;align-items:center;gap:12px;margin-top:11px;border:1px solid var(--line);
+border-radius:11px;padding:10px 12px;background:var(--surface)}
+.cpfile img{width:46px;height:46px;object-fit:cover;border-radius:8px;flex-shrink:0}
+.cpfile .pdf{width:46px;height:46px;border-radius:8px;background:var(--bajio);color:var(--sonda);
+display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0}
+.cpfile .cpn{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.cpfile .cpn b{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpfile .cpn span{font-family:var(--mono);font-size:11.5px;color:var(--gris)}
+.cpfile .lnk{background:none;border:0;border-bottom:1px solid var(--bajio);padding:0 0 2px;
+font-family:var(--sans);font-size:12.5px;color:var(--gris);cursor:pointer;flex-shrink:0}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -638,6 +659,7 @@ const waLink=(num,msg)=>'https://wa.me/'+(num||'50600000000')+'?text='+encodeURI
 
 /* ============ ICONOS UI ============ */
 const I={
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
   cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 7H6"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>',
   search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5" stroke-linecap="round"/></svg>',
   store:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9l1-4h14l1 4M4 9v10h16V9M4 9h16" stroke-linejoin="round"/><path d="M9 19v-5h6v5"/></svg>',
@@ -676,6 +698,7 @@ function header(active){
       <div class="almacen" id="almbtn">${I.store.replace('<svg','<svg class="st"')}<div><div class="a-l">Mi sucursal</div><div class="a-v">${branch(ALM).n} ${I.chev.replace('<svg','<svg width=12 height=12')}</div></div>
         <div class="dd hidden" id="almdd">${b.map(x=>`<button data-alm="${x.id}" class="${x.id===ALM?'sel':''}">${x.n}</button>`).join('')}</div>
       </div>
+      <a class="cartbtn" href="#/cuenta" aria-label="Mi cuenta" title="Mi cuenta">${I.user}</a>
       <a class="cartbtn" id="cartbtn" href="#/carrito" aria-label="Carrito">${I.cart}<span class="n hidden" id="cartn">0</span></a>
       <a class="wa" href="${waLink(branch(ALM).wa,'Hola, quiero consultar disponibilidad (demo).')}" target="_blank" aria-label="WhatsApp">${I.wa}</a>
     </div>
@@ -1271,9 +1294,112 @@ function bindDatos(){
     location.hash='#/pago';
   };
 }
+
+/* ============ CUENTA DEL CLIENTE ============ */
+const SKEY='bayline-sesion-v1';
+let SES=(()=>{try{return localStorage.getItem(SKEY)||''}catch(e){return ''}})();
+const sesSave=()=>{try{SES?localStorage.setItem(SKEY,SES):localStorage.removeItem(SKEY)}catch(e){}};
+const sesCli=()=>DB.customers.find(c=>c.id===SES)||null;
+const soloDig=v=>(v||'').replace(/[^0-9]/g,'');
+window.salirCuenta=function(){SES='';sesSave();route();};
+
+function viewCuenta(){
+  const c=sesCli();
+  const head=header('')+`<div class="wrap pagetitle"><div class="crumb"><a href="#/">Inicio</a> &rsaquo; Mi cuenta</div>
+    <h1>${c?'Hola, '+c.n:'Mi cuenta'}</h1>
+    <p>${c?'Ac&aacute; ve sus pedidos y sus datos de entrega.':'Ingrese con el n&uacute;mero de tel&eacute;fono que us&oacute; en su compra.'} <b>Demostraci&oacute;n:</b> sin contrase&ntilde;a, los datos viven en este navegador.</p></div>`;
+  if(!c) return head+`<section class="sec"><div class="wrap"><div class="ckgrid">
+    <div class="ckcard"><h3>Entrar</h3>
+      <div class="field"><label>N&uacute;mero de tel&eacute;fono</label><input id="s-tel" placeholder="8888-8888" inputmode="tel" value="${CKD.tel||''}"></div>
+      <button class="btn pri" id="s-in" style="width:100%;padding:13px">Ver mis pedidos</button>
+      <p class="err" id="s-err" style="display:none;color:var(--boya);font-size:13px;margin:12px 0 0"></p>
+      <div class="seg">${I.check} No pedimos contrase&ntilde;a en la demostraci&oacute;n</div>
+    </div>
+    <div class="ckcard"><h3>&iquest;Todav&iacute;a no ha comprado?</h3>
+      <p style="color:var(--gris);font-size:14px;line-height:1.6;margin:0 0 16px">Cuando haga su primer pedido, su historial aparece ac&aacute; autom&aacute;ticamente.</p>
+      <a class="btn gho" href="#/catalogo" style="width:100%">Ver el cat&aacute;logo</a></div>
+  </div></div></section>`+footer();
+
+  const os=DB.orders.filter(o=>o.cli===c.id).sort((a,b)=>b.ts-a.ts);
+  const tot=os.reduce((a,o)=>a+o.tot,0), arts=os.reduce((a,o)=>a+o.lines.reduce((b,l)=>b+l.q,0),0);
+  return head+`<section class="sec"><div class="wrap">
+    <div class="ordmeta" style="margin:0 0 22px">
+      <div class="m"><div class="k">Pedidos</div><div class="v">${os.length}</div></div>
+      <div class="m"><div class="k">Total comprado</div><div class="v">${money(tot)}</div></div>
+      <div class="m"><div class="k">Art&iacute;culos</div><div class="v">${arts}</div></div>
+      <div class="m"><div class="k">Cliente desde</div><div class="v">${c.desde||'hoy'}</div></div>
+    </div>
+    <div class="ckgrid">
+    <div class="ckcard"><h3>Mis pedidos</h3>
+      ${os.length?os.map(o=>`<div class="hord">
+        <div class="hh"><span class="on">${o.ord}</span><span class="opill ${EST[o.est||'entregado'].c}">${EST[o.est||'entregado'].l}</span></div>
+        <div class="hd">${new Date(o.ts).toLocaleDateString('es-CR',{day:'2-digit',month:'long',year:'numeric'})} &middot; ${o.metodo} &middot; ${o.modo==='retiro'?'Retiro en '+o.suc:'Env&iacute;o a domicilio'}</div>
+        <div class="hl">${o.lines.map(l=>`${l.q} &times; ${l.t}`).join(' &middot; ')}</div>
+        <div class="hh" style="margin-top:8px"><span class="ht">${money(o.tot)}</span>
+          <a class="lnk" href="#/pedido/${o.ord}">Ver seguimiento</a></div>
+      </div>`).join(''):'<p class="aempty">Todav&iacute;a no tiene pedidos registrados.</p>'}
+    </div>
+    <div class="ckcard"><h3>Mis datos</h3>
+      <div class="field"><label>Nombre</label><input id="s-nom" value="${c.n}"></div>
+      <div class="field"><label>Tel&eacute;fono</label><input id="s-tel2" value="${c.wa||CKD.tel||''}" inputmode="tel"></div>
+      <div class="field"><label>Direcci&oacute;n de entrega</label><textarea id="s-dir" placeholder="Provincia, cant&oacute;n, distrito y se&ntilde;as">${c.dir||CKD.dir||''}</textarea></div>
+      <button class="btn pri" id="s-save" style="width:100%">Guardar mis datos</button>
+      <a class="btn gho" href="#/catalogo" style="width:100%;margin-top:10px">Seguir comprando</a>
+      <button class="lnk" onclick="salirCuenta()" style="background:none;border:0;margin-top:16px;cursor:pointer;font-family:var(--sans);font-size:13px;color:var(--gris)">Cerrar sesi&oacute;n</button>
+    </div>
+  </div></div></section>`+footer();
+}
+function bindCuenta(){
+  const g=id=>document.getElementById(id);
+  const inb=g('s-in');
+  if(inb) inb.onclick=()=>{
+    const t=soloDig(g('s-tel').value), e=g('s-err');
+    if(t.length<8){e.style.display='block';e.innerHTML='Escriba su n&uacute;mero completo.';return;}
+    const c=DB.customers.find(x=>soloDig(x.wa).endsWith(t.slice(-8)));
+    if(!c){e.style.display='block';e.innerHTML='No encontramos compras con ese n&uacute;mero. Revise el n&uacute;mero o haga su primer pedido.';return;}
+    SES=c.id; sesSave(); COMP=null; route();
+  };
+  const sv=g('s-save');
+  if(sv) sv.onclick=()=>{
+    const c=sesCli(); if(!c)return;
+    c.n=(g('s-nom').value||'').trim()||c.n;
+    c.wa=soloDig(g('s-tel2').value)||c.wa;
+    c.dir=(g('s-dir').value||'').trim();
+    CKD.nom=c.n; CKD.tel=g('s-tel2').value.trim(); if(c.dir)CKD.dir=c.dir;
+    save(); ckdSave(); toast('Datos guardados'); route();
+  };
+}
 const PM={sinpe:{n:'SINPE M&oacute;vil',f:`<div class="field"><label>N&uacute;mero SINPE M&oacute;vil</label><input value="8888-8888"></div><div class="field"><label>Nombre de quien paga</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`},
  tarjeta:{n:'Tarjeta',f:`<div class="field"><label>N&uacute;mero de tarjeta</label><input value="4242 4242 4242 4242"></div><div class="field"><label>Vence</label><input value="12/29"></div><div class="field"><label>Nombre en la tarjeta</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`},
- transfer:{n:'Transferencia',f:`<div class="field"><label>Banco</label><input value="Banco Nacional"></div><div class="field"><label>Comprobante</label><input placeholder="N&uacute;mero de comprobante"></div><div class="field"><label>Nombre de quien paga</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`}};
+ transfer:{n:'Transferencia',f:`<div class="field"><label>Banco</label><input value="Banco Nacional"></div><div class="field"><label>N&uacute;mero de comprobante</label><input placeholder="Ej.: 0012458"></div><div class="field"><label>Nombre de quien paga</label><input id="pay-nom" placeholder="Nombre y apellido"></div>
+ <div class="field"><label>Comprobante de la transferencia</label>
+   <label class="drop" id="cp-drop"><input type="file" id="cp-file" accept="image/*,application/pdf" style="display:none">
+     <span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span><span class="dt"><b>Adjunte el comprobante</b><span>Imagen o PDF del recibo de su banco</span></span></label>
+   <div class="cpprev" id="cp-prev"></div></div>`}};
+let COMP=null;
+function bindComp(){
+  const f=document.getElementById('cp-file'); if(!f)return;
+  const prev=document.getElementById('cp-prev'), drop=document.getElementById('cp-drop');
+  const pinta=()=>{
+    if(!COMP){prev.innerHTML='';return;}
+    prev.innerHTML=`<div class="cpfile">${COMP.prev?`<img src="${COMP.prev}" alt="">`:`<span class="pdf">PDF</span>`}
+      <div class="cpn"><b>${COMP.n}</b><span>${COMP.kb} KB</span></div>
+      <button type="button" class="lnk" id="cp-rm">Quitar</button></div>`;
+    const rm=document.getElementById('cp-rm'); if(rm)rm.onclick=()=>{COMP=null;f.value='';pinta();};
+  };
+  f.onchange=()=>{
+    const file=f.files&&f.files[0]; if(!file)return;
+    const kb=Math.max(1,Math.round(file.size/1024));
+    if(file.type.indexOf('image')===0){
+      imgResize(file,d=>{COMP={n:file.name,kb:kb,prev:d};pinta();});
+    } else {COMP={n:file.name,kb:kb,prev:''};pinta();}
+  };
+  if(drop){drop.ondragover=e=>{e.preventDefault();drop.classList.add('on');};
+    drop.ondragleave=()=>drop.classList.remove('on');
+    drop.ondrop=e=>{e.preventDefault();drop.classList.remove('on');
+      if(e.dataTransfer.files&&e.dataTransfer.files[0]){f.files=e.dataTransfer.files;f.onchange();}};}
+  pinta();
+}
 let PMSEL='sinpe';
 
 function viewPago(){
@@ -1315,10 +1441,13 @@ function viewPago(){
 }
 
 function payDemo(){
+  if(PMSEL==='transfer'&&!COMP){toast('Adjunte el comprobante de la transferencia');return;}
   const tot=cartSub()+envioActual();
+  const tr=PMSEL==='transfer';
   const ov=document.createElement('div'); ov.className='payov'; ov.id='payov';
   ov.innerHTML=`<div class="paybox"><div class="spin"></div>
-    <h3>Conectando con la pasarela</h3><p>Autorizando ${money(tot)} por ${PM[PMSEL].n}...</p></div>`;
+    <h3>${tr?'Recibiendo su comprobante':'Conectando con la pasarela'}</h3>
+    <p>${tr?('Verificando la transferencia por '+money(tot)+'...'):('Autorizando '+money(tot)+' por '+PM[PMSEL].n+'...')}</p></div>`;
   document.body.appendChild(ov);
   setTimeout(()=>{
     let n=1;
@@ -1326,7 +1455,7 @@ function payDemo(){
     const ord='BL-2026-'+String(n).padStart(4,'0');
     ordCreate(ord, PM[PMSEL].n);
     ov.innerHTML=`<div class="paybox"><div class="okmark">${I.check.replace('<svg','<svg width=30 height=30')}</div>
-      <h3>Pago aprobado</h3><p>Su pedido qued&oacute; registrado y pasa a preparaci&oacute;n en bodega.</p>
+      <h3>${tr?'Comprobante recibido':'Pago aprobado'}</h3><p>${tr?'Verificamos su transferencia y preparamos el pedido en bodega.':'Su pedido qued&oacute; registrado y pasa a preparaci&oacute;n en bodega.'}</p>
       <div class="ordn">${ord}</div>
       <p style="font-size:12.5px">Demostraci&oacute;n: no se realiz&oacute; ning&uacute;n cobro real.</p>
       <div class="acts"><a class="btn pri" href="#/pedido/${ord}" onclick="closePay()">Ver el seguimiento</a>
@@ -1353,9 +1482,9 @@ document.addEventListener('click',function(e){
   const rm=e.target.closest('[data-rm]');
   if(rm){cartSet(rm.dataset.rm,0);route();return;}
   const pm=e.target.closest('[data-pm]');
-  if(pm){PMSEL=pm.dataset.pm;
+  if(pm){PMSEL=pm.dataset.pm; COMP=null;
     document.querySelectorAll('.pm2').forEach(x=>x.classList.toggle('on',x===pm));
-    const f=document.getElementById('pmfields'); if(f)f.innerHTML=PM[PMSEL].f; return;}
+    const f=document.getElementById('pmfields'); if(f){f.innerHTML=PM[PMSEL].f;bindComp();} return;}
   if(e.target.closest('#paybtn')){payDemo();return;}
 });
 
@@ -1371,7 +1500,8 @@ function ordCreate(num,metodo){
     modo:CKD.modo, dir:CKD.dir||'', nom:CKD.nom||'', tel:CKD.tel||'', nota:CKD.not||'',
     guia:'GUIA 04-'+String(1180+ordLoad().length).padStart(4,'0'),
     lines:ls.map(l=>({t:l.p.t,brand:l.p.brand,icon:l.p.icon,img:l.p.img||'',price:l.p.price,q:l.q})),
-    sub:sub, envio:envioActual(), tot:sub+envioActual()};
+    sub:sub, envio:envioActual(), tot:sub+envioActual(),
+    comp:COMP?{n:COMP.n,kb:COMP.kb,prev:COMP.prev}:null};
   const all=ordLoad(); all.unshift(o); ordSave(all);
   /* queda tambien en la base para el panel, ligado a su cliente */
   const nom=(CKD.nom||val('pay-nom')||'').trim()||'Cliente de mostrador';
@@ -1380,6 +1510,8 @@ function ordCreate(num,metodo){
   if(!c){c={id:'c'+Date.now(),n:nom,tipo:'Persona',wa:tel,mail:'',desde:new Date().toISOString().slice(0,10)};DB.customers.unshift(c);}
   else if(tel&&!c.wa){c.wa=tel;}
   DB.orders.unshift({...o, cli:c.id, est:'prep'});
+  if(CKD.dir)c.dir=CKD.dir;
+  SES=c.id; sesSave();
   save(); logAdd('Pedido nuevo de', nom);
   return o;
 }
@@ -1410,6 +1542,9 @@ function viewPedido(num){
         <div class="m" style="grid-column:1/-1"><div class="k">${o.modo==='retiro'?'Retira':'Entrega a'}</div><div class="v">${o.nom||'Cliente'}${o.tel?' &middot; '+o.tel:''}</div>${o.dir?`<div class="k" style="text-transform:none;letter-spacing:0;font-size:12.5px;margin-top:4px">${o.dir}</div>`:''}</div>
         <div class="m"><div class="k">Entrega estimada</div><div class="v">24 a 48 horas</div></div>
         <div class="m"><div class="k">Pagado con</div><div class="v">${o.metodo}</div></div>
+        ${o.comp?`<div class="m" style="grid-column:1/-1"><div class="k">Comprobante recibido</div>
+          <div class="cpfile" style="margin-top:6px">${o.comp.prev?`<img src="${o.comp.prev}" alt="">`:'<span class="pdf">PDF</span>'}
+          <div class="cpn"><b>${o.comp.n}</b><span>${o.comp.kb} KB</span></div></div></div>`:''}
       </div>
     </div>
     <div class="ckcard"><h3>Lo que viene en camino</h3>
@@ -1441,7 +1576,8 @@ function route(){
     const lo=document.getElementById('logout'); if(lo)lo.onclick=()=>{sessionStorage.removeItem(ADMKEY);location.hash='#/';};
     return;
   }
-  if(seg[0]==='datos'){app.innerHTML=viewDatos();bindDatos();}
+  if(seg[0]==='cuenta'){app.innerHTML=viewCuenta();bindCuenta();}
+  else if(seg[0]==='datos'){app.innerHTML=viewDatos();bindDatos();}
   else if(seg[0]==='pedido')app.innerHTML=viewPedido(decodeURIComponent(seg[1]||''));
   else if(seg[0]==='carrito')app.innerHTML=viewCarrito();
   else if(seg[0]==='producto'){app.innerHTML=viewProducto(seg[1]);bindProducto();}
@@ -1450,7 +1586,7 @@ function route(){
   else if(seg[0]==='marcas')app.innerHTML=viewMarcas();
   else if(seg[0]==='sucursales')app.innerHTML=viewSucursales();
   else if(seg[0]==='cotizacion'){app.innerHTML=viewCotizacion();bindCotizacion();}
-  else if(seg[0]==='pago')app.innerHTML=viewPago();
+  else if(seg[0]==='pago'){app.innerHTML=viewPago();bindComp();}
   else if(seg[0]==='logistica')app.innerHTML=viewLogistica();
   else app.innerHTML=viewHome();
   bindHeader();
