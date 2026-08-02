@@ -344,7 +344,17 @@ display:flex;flex-direction:column;box-shadow:0 34px 80px -20px rgba(12,22,34,.5
 .drawer .df{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
 .drawer .df .btn{flex:1}
 .avchecks{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:8px}
-.avchecks label{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--carta)}
+@media(max-width:560px){.avchecks{grid-template-columns:1fr}}
+.avchecks label{display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:10px;
+font-size:13.5px;font-weight:500;line-height:1.25;padding:10px 12px;border:1px solid var(--line);
+border-radius:10px;background:var(--surface);cursor:pointer;transition:border-color .18s,background .18s}
+.avchecks label:hover{border-color:var(--bajio)}
+.avchecks input{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:none;margin:0;
+border:1.5px solid var(--bajio);border-radius:5px;background:#fff;cursor:pointer;position:relative;transition:.18s}
+.avchecks input:checked{background:var(--boya);border-color:var(--boya)}
+.avchecks input:checked::after{content:"";position:absolute;left:5.5px;top:2px;width:5px;height:9px;
+border:solid var(--tinta);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.avchecks input:focus-visible{outline:2px solid var(--sonda);outline-offset:2px}
 .switch{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500}
 .dnote{font-size:12px;color:var(--gris);margin-top:14px;padding:11px 13px;background:var(--surface);border-radius:9px}
 
@@ -508,6 +518,7 @@ padding:0 0 2px;font-family:var(--sans);font-size:13px;font-weight:500;color:var
 cursor:pointer;align-self:flex-start;line-height:1.3}
 .imgacts .lnk:hover{color:var(--boya);border-color:var(--boya)}
 .imgacts .btn.sm{align-self:flex-start}
+.imgrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .imgacts{flex:1;min-width:190px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .imgacts input{width:100%}
 .fichahead{display:flex;gap:16px;align-items:flex-start}
@@ -523,6 +534,18 @@ background:var(--carta);display:grid;place-items:center;overflow:hidden}
 .fav{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .fav:last-child{border-bottom:0}
 .acts2{display:flex;gap:6px}
+
+/* ====== pasos del checkout y datos de entrega ====== */
+.steps{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.stp{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+color:var(--gris);border:1px solid var(--line);border-radius:99px;padding:7px 14px;background:var(--surface);text-decoration:none}
+.stp.on{border-color:var(--sonda);color:var(--sonda);font-weight:600}
+.stp.done{color:var(--sonda);border-color:var(--bajio)}
+.entrega{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;
+background:var(--carta);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:14px}
+.entrega .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
+.entrega .v{font-size:14px;font-weight:600;margin-top:3px}
+.entrega .d{font-size:13px;color:var(--gris);margin-top:3px;line-height:1.45}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -1004,8 +1027,10 @@ window.openProd=function(id){
       <div class="imgfield">
         <div class="imgprev" id="d-prev">${p&&p.img?`<img src="${p.img}" alt="">`:`<span class="ph">${pio(p?p.icon:ICONS[0])}</span>`}</div>
         <div class="imgacts">
-          <label class="btn gho sm" style="cursor:pointer">Subir foto<input type="file" id="d-file" accept="image/*" style="display:none"></label>
-          <button type="button" class="lnk" id="d-rm">Quitar foto</button>
+          <div class="imgrow">
+            <label class="btn gho sm" style="cursor:pointer">Subir foto<input type="file" id="d-file" accept="image/*" style="display:none"></label>
+            <button type="button" class="lnk" id="d-rm">Quitar foto</button>
+          </div>
           <input id="d-img" placeholder="o pegue la direcci&oacute;n de una imagen" value="${p&&p.img&&p.img.slice(0,5)!=='data:'?p.img:''}">
         </div>
       </div>
@@ -1176,13 +1201,76 @@ function viewCarrito(){
     </div>
     <div class="ckcard"><h3>Resumen</h3>
       <div class="cktot" style="margin-top:4px"><div class="r t"><span>Total a pagar</span><span class="num">${money(tot)}</span></div></div>
-      <a class="btn pri" href="#/pago" style="width:100%;padding:14px;font-size:15px;margin-top:16px">Continuar al pago</a>
+      <a class="btn pri" href="#/datos" style="width:100%;padding:14px;font-size:15px;margin-top:16px">Continuar</a>
       <a class="btn gho" href="#/catalogo" style="width:100%;margin-top:10px">Seguir comprando</a>
       <div class="seg">${I.check} Sus datos viajan cifrados</div>
     </div>
   </div></div></section>`+footer();
 }
 
+
+/* ============ DATOS DEL CLIENTE (paso previo al pago) ============ */
+const DKEY='bayline-checkout-v1';
+let CKD=(()=>{try{return JSON.parse(localStorage.getItem(DKEY))||{}}catch(e){return {}}})();
+if(!CKD.modo)CKD.modo='envio';
+const ckdSave=()=>{try{localStorage.setItem(DKEY,JSON.stringify(CKD))}catch(e){}};
+const ckdOK=()=>!!(CKD.nom&&CKD.tel&&(CKD.modo==='retiro'?CKD.suc:CKD.dir));
+const envioActual=()=>CKD.modo==='retiro'?0:ENVIO;
+
+function viewDatos(){
+  const ls=cartLines();
+  const head=header('')+`<div class="wrap pagetitle"><div class="crumb"><a href="#/">Inicio</a> &rsaquo; <a href="#/carrito">Carrito</a> &rsaquo; Datos</div><h1>Sus datos</h1><p>Con esto preparamos el pedido y le avisamos cuando vaya en camino. <b>Demostraci&oacute;n:</b> nada se env&iacute;a a un servidor.</p></div>`;
+  if(!ls.length) return head+`<section class="sec"><div class="wrap"><div class="ckcard cempty">
+    <div class="ic">${I.cart}</div><h3>Su carrito est&aacute; vac&iacute;o</h3>
+    <p>Agregue productos para continuar.</p><a class="btn pri" href="#/catalogo">Ver el cat&aacute;logo</a></div></div></section>`+footer();
+  const sub=cartSub(), env=envioActual(), tot=sub+env;
+  const act=DB.branches.filter(b=>b.act);
+  return head+`<section class="sec"><div class="wrap">
+    <div class="steps"><span class="stp on">1 &middot; Sus datos</span><span class="stp">2 &middot; Pago</span></div>
+    <div class="ckgrid">
+    <div class="ckcard"><h3>Datos de contacto</h3>
+      <div class="field"><label>Nombre completo</label><input id="k-nom" value="${CKD.nom||''}" placeholder="Nombre y apellido"></div>
+      <div class="field"><label>N&uacute;mero de tel&eacute;fono</label><input id="k-tel" value="${CKD.tel||''}" placeholder="8888-8888" inputmode="tel"></div>
+      <h3 style="margin-top:22px">&iquest;C&oacute;mo lo recibe?</h3>
+      <div class="pmeth" style="grid-template-columns:1fr 1fr">
+        <div class="pm2 ${CKD.modo!=='retiro'?'on':''}" data-modo="envio">Entrega a domicilio</div>
+        <div class="pm2 ${CKD.modo==='retiro'?'on':''}" data-modo="retiro">Retiro en sucursal</div>
+      </div>
+      <div id="k-modo">${CKD.modo==='retiro'
+        ?`<div class="field"><label>Sucursal donde retira</label><select id="k-suc">${act.map(b=>`<option value="${b.id}" ${CKD.suc===b.id?'selected':''}>${b.n}</option>`).join('')}</select></div>`
+        :`<div class="field"><label>Direcci&oacute;n de entrega</label><textarea id="k-dir" placeholder="Provincia, cant&oacute;n, distrito y se&ntilde;as exactas">${CKD.dir||''}</textarea></div>`}</div>
+      <div class="field"><label>Nota para el pedido (opcional)</label><input id="k-not" value="${CKD.not||''}" placeholder="Ej.: entregar por la tarde"></div>
+      <p class="err" id="k-err" style="display:none;color:var(--boya);font-size:13px;margin:0"></p>
+    </div>
+    <div class="ckcard"><h3>Resumen</h3>
+      <div class="cktot" style="margin-top:4px">
+        <div class="r"><span>${cartCount()} art&iacute;culo${cartCount()===1?'':'s'}</span><span class="num">${money(sub)}</span></div>
+        <div class="r"><span>${CKD.modo==='retiro'?'Retiro en sucursal':'Env&iacute;o a domicilio'}</span><span class="num">${env?money(env):'Sin costo'}</span></div>
+        <div class="r t"><span>Total a pagar</span><span class="num">${money(tot)}</span></div></div>
+      <button class="btn pri" id="k-next" style="width:100%;padding:14px;font-size:15px;margin-top:16px">Continuar al pago</button>
+      <a class="btn gho" href="#/carrito" style="width:100%;margin-top:10px">Volver al carrito</a>
+      <div class="seg">${I.check} Usamos sus datos solo para este pedido</div>
+    </div>
+  </div></div></section>`+footer();
+}
+function bindDatos(){
+  const g=id=>document.getElementById(id);
+  document.querySelectorAll('[data-modo]').forEach(x=>x.onclick=()=>{
+    CKD.nom=(g('k-nom')||{}).value||CKD.nom; CKD.tel=(g('k-tel')||{}).value||CKD.tel;
+    CKD.modo=x.dataset.modo; ckdSave(); route();});
+  const nx=g('k-next'); if(!nx)return;
+  nx.onclick=()=>{
+    CKD.nom=(g('k-nom').value||'').trim(); CKD.tel=(g('k-tel').value||'').trim();
+    CKD.not=(g('k-not').value||'').trim();
+    if(CKD.modo==='retiro'){CKD.suc=g('k-suc')?g('k-suc').value:''; CKD.dir='';}
+    else {CKD.dir=(g('k-dir')?g('k-dir').value:'').trim(); CKD.suc='';}
+    ckdSave();
+    const e=g('k-err');
+    if(!CKD.nom||!CKD.tel){e.style.display='block';e.innerHTML='Indique su nombre y su n&uacute;mero de tel&eacute;fono.';return;}
+    if(CKD.modo==='envio'&&!CKD.dir){e.style.display='block';e.innerHTML='Indique la direcci&oacute;n de entrega.';return;}
+    location.hash='#/pago';
+  };
+}
 const PM={sinpe:{n:'SINPE M&oacute;vil',f:`<div class="field"><label>N&uacute;mero SINPE M&oacute;vil</label><input value="8888-8888"></div><div class="field"><label>Nombre de quien paga</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`},
  tarjeta:{n:'Tarjeta',f:`<div class="field"><label>N&uacute;mero de tarjeta</label><input value="4242 4242 4242 4242"></div><div class="field"><label>Vence</label><input value="12/29"></div><div class="field"><label>Nombre en la tarjeta</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`},
  transfer:{n:'Transferencia',f:`<div class="field"><label>Banco</label><input value="Banco Nacional"></div><div class="field"><label>Comprobante</label><input placeholder="N&uacute;mero de comprobante"></div><div class="field"><label>Nombre de quien paga</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`}};
@@ -1190,17 +1278,29 @@ let PMSEL='sinpe';
 
 function viewPago(){
   const ls=cartLines();
-  const head=header('')+`<div class="wrap pagetitle"><div class="crumb"><a href="#/">Inicio</a> &rsaquo; <a href="#/carrito">Carrito</a> &rsaquo; Pago</div><h1>Pago en l&iacute;nea</h1><p>Pague con SINPE M&oacute;vil o tarjeta, sin salir de la tienda. <b>Pantalla de demostraci&oacute;n:</b> no procesa cobros reales.</p></div>`;
+  const head=header('')+`<div class="wrap pagetitle"><div class="crumb"><a href="#/">Inicio</a> &rsaquo; <a href="#/carrito">Carrito</a> &rsaquo; <a href="#/datos">Datos</a> &rsaquo; Pago</div><h1>Pago en l&iacute;nea</h1><p>Pague con SINPE M&oacute;vil o tarjeta, sin salir de la tienda. <b>Pantalla de demostraci&oacute;n:</b> no procesa cobros reales.</p></div>`;
+  if(ls.length&&!ckdOK()){setTimeout(()=>{location.hash='#/datos';},0);
+    return head+`<section class="sec"><div class="wrap"><div class="ckcard cempty"><h3>Faltan sus datos</h3><p>Lo llevamos al paso anterior.</p></div></div></section>`+footer();}
   if(!ls.length) return head+`<section class="sec"><div class="wrap"><div class="ckcard cempty">
     <div class="ic">${I.cart}</div><h3>Su carrito est&aacute; vac&iacute;o</h3>
     <p>Agregue productos para continuar al pago.</p>
     <a class="btn pri" href="#/catalogo">Ver el cat&aacute;logo</a></div></div></section>`+footer();
-  const sub=cartSub(), tot=sub+ENVIO;
-  return head+`<section class="sec"><div class="wrap"><div class="ckgrid">
+  const sub=cartSub(), env=envioActual(), tot=sub+env;
+  const suc=CKD.modo==='retiro'?(branch(CKD.suc)||{}).n:'';
+  return head+`<section class="sec"><div class="wrap">
+    <div class="steps"><a class="stp done" href="#/datos">1 &middot; Sus datos</a><span class="stp on">2 &middot; Pago</span></div>
+    <div class="ckgrid">
     <div class="ckcard"><h3>Resumen del pedido</h3>
+      <div class="entrega">
+        <div><div class="k">${CKD.modo==='retiro'?'Retira':'Entrega a'}</div>
+          <div class="v">${CKD.nom} &middot; ${CKD.tel}</div>
+          <div class="d">${CKD.modo==='retiro'?('En '+suc):CKD.dir}</div>
+          ${CKD.not?`<div class="d">Nota: ${CKD.not}</div>`:''}</div>
+        <a class="lnk" href="#/datos">Modificar</a>
+      </div>
       ${ls.map(l=>`<div class="ckline"><span class="th">${pimg(l.p)}</span><div><div class="nm">${l.p.t}</div><div class="q">${l.p.brand} &middot; ${l.q} unidad${l.q===1?'':'es'}</div></div><span class="pr">${money(l.p.price*l.q)}</span></div>`).join('')}
       <div class="cktot"><div class="r"><span>Subtotal</span><span class="num">${money(sub)}</span></div>
-        <div class="r"><span>Env&iacute;o a domicilio</span><span class="num">${money(ENVIO)}</span></div>
+        <div class="r"><span>${CKD.modo==='retiro'?'Retiro en sucursal':'Env&iacute;o a domicilio'}</span><span class="num">${env?money(env):'Sin costo'}</span></div>
         <div class="r t"><span>Total a pagar</span><span class="num">${money(tot)}</span></div></div>
       <a class="btn gho" href="#/carrito" style="margin-top:14px">Modificar el pedido</a>
     </div>
@@ -1215,7 +1315,7 @@ function viewPago(){
 }
 
 function payDemo(){
-  const tot=cartSub()+ENVIO;
+  const tot=cartSub()+envioActual();
   const ov=document.createElement('div'); ov.className='payov'; ov.id='payov';
   ov.innerHTML=`<div class="paybox"><div class="spin"></div>
     <h3>Conectando con la pasarela</h3><p>Autorizando ${money(tot)} por ${PM[PMSEL].n}...</p></div>`;
@@ -1266,15 +1366,19 @@ const ordLoad=()=>{try{return JSON.parse(localStorage.getItem(OKEY))||[]}catch(e
 const ordSave=a=>{try{localStorage.setItem(OKEY,JSON.stringify(a))}catch(e){}};
 function ordCreate(num,metodo){
   const ls=cartLines(), sub=cartSub();
-  const o={ord:num, ts:Date.now(), metodo:metodo, suc:branch(ALM).n,
+  const o={ord:num, ts:Date.now(), metodo:metodo,
+    suc:CKD.modo==='retiro'?((branch(CKD.suc)||{}).n||branch(ALM).n):branch(ALM).n,
+    modo:CKD.modo, dir:CKD.dir||'', nom:CKD.nom||'', tel:CKD.tel||'', nota:CKD.not||'',
     guia:'GUIA 04-'+String(1180+ordLoad().length).padStart(4,'0'),
-    lines:ls.map(l=>({t:l.p.t,brand:l.p.brand,icon:l.p.icon,price:l.p.price,q:l.q})),
-    sub:sub, envio:ENVIO, tot:sub+ENVIO};
+    lines:ls.map(l=>({t:l.p.t,brand:l.p.brand,icon:l.p.icon,img:l.p.img||'',price:l.p.price,q:l.q})),
+    sub:sub, envio:envioActual(), tot:sub+envioActual()};
   const all=ordLoad(); all.unshift(o); ordSave(all);
   /* queda tambien en la base para el panel, ligado a su cliente */
-  const nom=(val('pay-nom')||'').trim()||'Cliente de mostrador';
+  const nom=(CKD.nom||val('pay-nom')||'').trim()||'Cliente de mostrador';
+  const tel=(CKD.tel||'').replace(/[^0-9]/g,'');
   let c=DB.customers.find(x=>x.n.toLowerCase()===nom.toLowerCase());
-  if(!c){c={id:'c'+Date.now(),n:nom,tipo:'Persona',wa:'',mail:'',desde:new Date().toISOString().slice(0,10)};DB.customers.unshift(c);}
+  if(!c){c={id:'c'+Date.now(),n:nom,tipo:'Persona',wa:tel,mail:'',desde:new Date().toISOString().slice(0,10)};DB.customers.unshift(c);}
+  else if(tel&&!c.wa){c.wa=tel;}
   DB.orders.unshift({...o, cli:c.id, est:'prep'});
   save(); logAdd('Pedido nuevo de', nom);
   return o;
@@ -1292,8 +1396,8 @@ function viewPedido(num){
     {b:'Pago aprobado',s:'Su pago qued&oacute; confirmado',st:'done'},
     {b:'Pedido recibido',s:'La tienda confirm&oacute; su pedido',st:'done'},
     {b:'En preparaci&oacute;n en bodega',s:'Estamos alistando sus productos en '+o.suc,st:'now'},
-    {b:'En ruta',s:'Un transportista lo lleva a su direcci&oacute;n',st:''},
-    {b:'Entregado',s:'Firma de recibido y comprobante',st:''}];
+    {b:o.modo==='retiro'?'Listo para retirar':'En ruta',s:o.modo==='retiro'?('Le avisamos cuando pueda pasar por '+o.suc):'Un transportista lo lleva a su direcci&oacute;n',st:''},
+    {b:o.modo==='retiro'?'Retirado':'Entregado',s:'Firma de recibido y comprobante',st:''}];
   return head+`<section class="sec"><div class="wrap"><div class="ckgrid">
     <div class="ckcard">
       <div class="ordhead"><div><div class="on">${o.ord}</div><div class="od">Compra del ${ordFmt(o.ts)} &middot; ${o.lines.reduce((a,l)=>a+l.q,0)} art&iacute;culo${o.lines.reduce((a,l)=>a+l.q,0)===1?'':'s'}</div></div>
@@ -1302,7 +1406,8 @@ function viewPedido(num){
         <div class="tx"><b>${p.b}</b><span>${p.s}</span></div></div>`).join('')}</div>
       <div class="ordmeta">
         <div class="m"><div class="k">Gu&iacute;a</div><div class="v">${o.guia}</div></div>
-        <div class="m"><div class="k">Sale de</div><div class="v">${o.suc}</div></div>
+        <div class="m"><div class="k">${o.modo==='retiro'?'Retira en':'Sale de'}</div><div class="v">${o.suc}</div></div>
+        <div class="m" style="grid-column:1/-1"><div class="k">${o.modo==='retiro'?'Retira':'Entrega a'}</div><div class="v">${o.nom||'Cliente'}${o.tel?' &middot; '+o.tel:''}</div>${o.dir?`<div class="k" style="text-transform:none;letter-spacing:0;font-size:12.5px;margin-top:4px">${o.dir}</div>`:''}</div>
         <div class="m"><div class="k">Entrega estimada</div><div class="v">24 a 48 horas</div></div>
         <div class="m"><div class="k">Pagado con</div><div class="v">${o.metodo}</div></div>
       </div>
@@ -1336,7 +1441,8 @@ function route(){
     const lo=document.getElementById('logout'); if(lo)lo.onclick=()=>{sessionStorage.removeItem(ADMKEY);location.hash='#/';};
     return;
   }
-  if(seg[0]==='pedido')app.innerHTML=viewPedido(decodeURIComponent(seg[1]||''));
+  if(seg[0]==='datos'){app.innerHTML=viewDatos();bindDatos();}
+  else if(seg[0]==='pedido')app.innerHTML=viewPedido(decodeURIComponent(seg[1]||''));
   else if(seg[0]==='carrito')app.innerHTML=viewCarrito();
   else if(seg[0]==='producto'){app.innerHTML=viewProducto(seg[1]);bindProducto();}
   else if(seg[0]==='catalogo'){app.innerHTML=viewCatalogo(params);bindCatalogo();}
