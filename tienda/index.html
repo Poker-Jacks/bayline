@@ -487,6 +487,32 @@ font-family:var(--mono);font-size:12px;color:var(--tinta)}
 .hord .hd{font-size:12px;color:var(--gris);margin-top:4px}
 .hord .hl{font-size:13px;margin-top:7px;line-height:1.45}
 .hord .ht{font-family:var(--mono);font-weight:600;margin-top:7px}
+
+/* ====== foto de producto y ficha en lectura ====== */
+.pfoto{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+.prod .im .pfoto,.hcard .im .pfoto{border-radius:10px}
+.gallery .pfoto{border-radius:14px;max-height:420px}
+.pth .pfoto,.ckline .th .pfoto{border-radius:8px}
+.imgfield{display:flex;gap:14px;align-items:flex-start}
+.imgprev{width:96px;height:96px;flex-shrink:0;border:1px solid var(--line);border-radius:11px;
+background:var(--carta);display:grid;place-items:center;overflow:hidden}
+.imgprev img{width:100%;height:100%;object-fit:cover}
+.imgprev .ph{opacity:.5}
+.imgacts{flex:1;display:flex;flex-direction:column;gap:9px;align-items:flex-start}
+.imgacts input{width:100%}
+.fichahead{display:flex;gap:16px;align-items:flex-start}
+.fimg{width:130px;height:130px;flex-shrink:0;border:1px solid var(--line);border-radius:13px;
+background:var(--carta);display:grid;place-items:center;overflow:hidden}
+.fimg img{width:100%;height:100%;object-fit:cover}
+.fsku{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--gris)}
+.fprice{display:flex;align-items:baseline;gap:9px}
+.fprice b{font-family:var(--mono);font-size:22px;font-weight:600}
+.fprice s{color:var(--gris);font-size:13px}
+.fpu{font-size:12.5px;color:var(--gris);margin-top:3px}
+.favs{display:flex;flex-direction:column;gap:0}
+.fav{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.fav:last-child{border-bottom:0}
+.acts2{display:flex;gap:6px}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -601,6 +627,7 @@ const I={
 };
 const bl='<svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><g transform="translate(0 5)" stroke="currentColor"><path d="M36 34 L22 52 L30 72" pathLength="100" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="18 13.5"/><circle cx="22" cy="52" r="4.5" fill="currentColor" stroke="none"/><circle cx="30" cy="72" r="4.5" fill="currentColor" stroke="none"/><g transform="rotate(-14 36 34)"><path d="M38 16 L78 16 L78 52 L38 52 L20 34 Z" fill="none" stroke-width="6" stroke-linejoin="round"/><circle cx="36" cy="34" r="7" fill="none" stroke="#E8613C" stroke-width="5"/></g></g></svg>';
 const pio=id=>`<svg class="pico"><use href="#${id}"/></svg>`;
+const pimg=p=>p&&p.img?`<img class="pfoto" src="${p.img}" alt="" loading="lazy">`:pio(p?p.icon:ICONS[0]);
 
 /* ============ COMPONENTES ============ */
 function header(active){
@@ -645,7 +672,7 @@ function productCard(p){
   const a=pAv(p), disc=p.before?('-'+Math.round((1-p.price/p.before)*100)+'%'):'';
   return `<article class="prod">
     ${disc?`<span class="disc">${disc}</span>`:''}
-    <a class="im" href="#/producto/${p.id}">${pio(p.icon)}</a>
+    <a class="im" href="#/producto/${p.id}">${pimg(p)}</a>
     <span class="avail ${a.cls}">${I.check} ${a.label}</span>
     <a class="nm" href="#/producto/${p.id}">${p.t}</a>
     <div class="brand">${p.brand}</div>
@@ -675,7 +702,7 @@ function viewHome(){
       <p class="sub">Su catálogo en línea con precio visible y WhatsApp directo a la sucursal que tiene lo que usted busca.</p>
       <div class="cta-row"><a class="btn pri" href="#/catalogo">Ver el catálogo ${I.chev.replace('<svg','<svg width=15 height=15')}</a><a class="lnk" href="#/sucursales">Ver las sucursales</a></div>
     </div>
-    <div class="hgrid">${feat.map(p=>`<a class="hcard" href="#/producto/${p.id}"><div class="im">${pio(p.icon)}</div><div class="pz"><b>${money(p.price)}</b>${p.before?`<s>${money(p.before)}</s>`:''}</div></a>`).join('')}</div>
+    <div class="hgrid">${feat.map(p=>`<a class="hcard" href="#/producto/${p.id}"><div class="im">${pimg(p)}</div><div class="pz"><b>${money(p.price)}</b>${p.before?`<s>${money(p.before)}</s>`:''}</div></a>`).join('')}</div>
   </div></div></section>
   <section class="trust"><div class="wrap">
     <div class="tcard">${I.pin}<div><b>${DB.branches.filter(b=>b.act).length} sucursales</b><span>en toda la zona</span></div></div>
@@ -732,7 +759,7 @@ function viewProducto(id){
   return header('')+`<div class="wrap">
     <div class="pagetitle"><div class="crumb"><a href="#/">Inicio</a> › <a href="#/catalogo?cat=${p.cat}">${catName(p.cat)}</a> › ${p.t}</div></div>
     <div class="pdet">
-      <div class="gallery">${pio(p.icon)}</div>
+      <div class="gallery">${pimg(p)}</div>
       <div class="pinfo">
         <div class="sku">${p.brand} · SKU ${p.id.toUpperCase()}-${(p.price%1000).toString().padStart(3,'0')}</div>
         <h1>${p.t}</h1><p class="desc">${p.desc}</p>
@@ -871,7 +898,7 @@ function viewAdminProd(){
     <div id="ap-bulk"></div>
     <div class="tablewrap"><table class="tbl"><thead><tr>
       <th style="width:34px"><input type="checkbox" id="ap-all"></th>
-      <th data-s="t">Producto</th><th data-s="cat">Departamento</th><th data-s="price">Precio</th><th>Disponibilidad</th><th style="width:70px">Acciones</th>
+      <th data-s="t">Producto</th><th data-s="cat">Departamento</th><th data-s="price">Precio</th><th>Disponibilidad</th><th style="width:96px">Acciones</th>
     </tr></thead><tbody id="ap-body"></tbody></table></div>
     <div class="pag" id="ap-pag"></div>`);
 }
@@ -883,11 +910,11 @@ function renderProdTable(){
   document.getElementById('ap-body').innerHTML=rows.map(p=>{
     const nA=DB.branches.filter(b=>b.act).length, ok=DB.branches.filter(b=>b.act&&(p.av[b.id]||'ok')!=='out').length;
     return `<tr><td><input type="checkbox" class="ap-row" data-id="${p.id}" ${s.sel.has(p.id)?'checked':''}></td>
-      <td><div class="pcell"><span class="pth">${pio(p.icon)}</span><div><div class="pn">${p.t}</div><div class="pb">${p.brand}</div></div></div></td>
+      <td><div class="pcell"><span class="pth">${pimg(p)}</span><div><div class="pn">${p.t}</div><div class="pb">${p.brand}</div></div></div></td>
       <td>${catName(p.cat)}</td>
       <td class="price"><b>${money(p.price)}</b>${p.before?`<s>${money(p.before)}</s>`:''}</td>
       <td class="stok">${ok} / ${nA} sucursales</td>
-      <td><button class="iconbtn" onclick="openProd('${p.id}')">${I.edit}</button></td></tr>`;}).join('')
+      <td class="acts2"><button class="iconbtn" onclick="verProd('${p.id}')" title="Ver ficha">${I.eye||I.search}</button><button class="iconbtn" onclick="openProd('${p.id}')" title="Editar">${I.edit}</button></td></tr>`;}).join('')
     || `<tr><td colspan="6" class="empty">Sin resultados.</td></tr>`;
   document.getElementById('ap-pag').innerHTML=`<span>Mostrando ${total?start+1:0}–${Math.min(start+s.size,total)} de ${total}</span>
     <div class="pg"><label class="psz">Por p&aacute;gina <select onchange="admProdState.size=+this.value;admProdState.page=1;renderProdTable()">${[10,20,50].map(v=>`<option value="${v}" ${s.size===v?'selected':''}>${v}</option>`).join('')}</select></label><span>Página ${s.page} de ${pages}</span><button ${s.page<=1?'disabled':''} onclick="admProdState.page--;renderProdTable()">‹</button><button ${s.page>=pages?'disabled':''} onclick="admProdState.page++;renderProdTable()">›</button></div>`;
@@ -897,25 +924,91 @@ function renderProdTable(){
   const all=document.getElementById('ap-all'); if(all){all.checked=rows.length&&rows.every(p=>s.sel.has(p.id)); all.onchange=e=>{rows.forEach(p=>e.target.checked?s.sel.add(p.id):s.sel.delete(p.id));renderProdTable();};}
 }
 window.bulkDelete=function(){ if(!confirm('¿Eliminar '+admProdState.sel.size+' productos?'))return; DB.products=DB.products.filter(p=>!admProdState.sel.has(p.id)); admProdState.sel.clear(); save(); renderProdTable(); };
+let pImg=null;
+function imgResize(file,cb){
+  const r=new FileReader();
+  r.onload=()=>{const im=new Image();
+    im.onload=()=>{const M=680,sc=Math.min(1,M/Math.max(im.width,im.height));
+      const c=document.createElement('canvas');
+      c.width=Math.round(im.width*sc); c.height=Math.round(im.height*sc);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      cb(c.toDataURL('image/jpeg',.72));};
+    im.onerror=()=>cb('');
+    im.src=r.result;};
+  r.readAsDataURL(file);
+}
+function bindFoto(p){
+  const prev=document.getElementById('d-prev'), f=document.getElementById('d-file'),
+        rm=document.getElementById('d-rm'), url=document.getElementById('d-img');
+  if(!prev)return;
+  const paint=src=>{prev.innerHTML=src?`<img src="${src}" alt="">`:`<span class="ph">${pio(p?p.icon:ICONS[0])}</span>`;};
+  if(f)f.onchange=()=>{const file=f.files&&f.files[0]; if(!file)return;
+    imgResize(file,d=>{pImg=d; if(url)url.value=''; paint(d);});};
+  if(url)url.oninput=()=>{pImg=url.value.trim()||null; paint(pImg);};
+  if(rm)rm.onclick=()=>{pImg=''; if(url)url.value=''; paint('');};
+}
+
+window.verProd=function(id){
+  const p=DB.products.find(x=>x.id===id); if(!p)return;
+  const act=DB.branches.filter(b=>b.act);
+  const est={ok:'Disponible',low:'&Uacute;ltimas unidades',out:'Agotado'};
+  drawer('Ficha de producto',`
+    <div class="fichahead">
+      <div class="fimg">${p.img?`<img src="${p.img}" alt="">`:`<span class="ph">${pio(p.icon)}</span>`}</div>
+      <div class="fmeta">
+        <div class="fsku">${p.brand} &middot; SKU ${p.id.toUpperCase()}</div>
+        <h3 style="margin:4px 0 8px;font-size:19px">${p.t}</h3>
+        <div class="fprice"><b>${money(p.price)}</b>${p.before?`<s>${money(p.before)}</s>`:''}</div>
+        <div class="fpu">por ${p.unit} &middot; IVA incluido</div>
+      </div>
+    </div>
+    <div class="ordmeta" style="margin-top:18px">
+      <div class="m"><div class="k">Departamento</div><div class="v">${catName(p.cat)}</div></div>
+      <div class="m"><div class="k">Marca</div><div class="v">${p.brand}</div></div>
+      <div class="m"><div class="k">Unidad de venta</div><div class="v">${p.unit}</div></div>
+      <div class="m"><div class="k">Foto</div><div class="v">${p.img?'Cargada':'Sin foto'}</div></div>
+    </div>
+    <h3 style="margin:22px 0 8px;font-size:15px">Descripci&oacute;n</h3>
+    <p style="color:var(--gris);font-size:14px;line-height:1.6;margin:0">${p.desc||'Sin descripci&oacute;n.'}</p>
+    <h3 style="margin:22px 0 8px;font-size:15px">Disponibilidad por sucursal</h3>
+    <div class="favs">${act.map(b=>{const e=p.av[b.id]||'ok';
+      return `<div class="fav"><span>${b.n}</span><span class="badge-${e}">${est[e]}</span></div>`;}).join('')}</div>
+  `, ()=>true);
+  const df=document.querySelector('#drawer .df');
+  if(df)df.innerHTML=`<a class="btn gho" href="#/producto/${p.id}" target="_blank" rel="noopener">Ver en la tienda</a>
+    <button class="btn pri" onclick="closeDrawer();openProd('${p.id}')">Editar</button>`;
+};
 window.openProd=function(id){
   const p=id?DB.products.find(x=>x.id===id):null;
+  pImg=p&&p.img?p.img:null;
   drawer(id?'Editar producto':'Nuevo producto',`
     <div class="field"><label>Título</label><input id="d-t" value="${p?p.t:''}"></div>
     <div class="field"><label>Marca</label><input id="d-b" value="${p?p.brand:''}" list="brandlist"><datalist id="brandlist">${BRANDS.map(b=>`<option>${b}</option>`).join('')}</datalist></div>
-    <div class="field"><label>Categoría</label><select id="d-c">${CATS.map(c=>`<option value="${c.id}" ${p&&p.cat===c.id?'selected':''}>${c.n}</option>`).join('')}</select></div>
+    <div class="field"><label>Departamento</label><select id="d-c">${CATS.map(c=>`<option value="${c.id}" ${p&&p.cat===c.id?'selected':''}>${c.n}</option>`).join('')}</select></div>
     <div class="field"><label>Precio ₡</label><input id="d-p" type="number" value="${p?p.price:''}"></div>
     <div class="field"><label>Precio antes ₡ (opcional)</label><input id="d-pb" type="number" value="${p&&p.before?p.before:''}" placeholder="Para marcarlo en Promociones"></div>
     <div class="field"><label>Unidad</label><input id="d-u" value="${p?p.unit:'Uni'}" placeholder="Uni, Kg, Litro…"></div>
     <div class="field"><label>Descripción</label><textarea id="d-d">${p?p.desc:''}</textarea></div>
     <div class="field"><label>Disponibilidad por sucursal</label><div class="avchecks">${DB.branches.map(b=>`<label><input type="checkbox" class="d-av" data-b="${b.id}" ${!p||(p.av[b.id]||'ok')!=='out'?'checked':''}> ${b.n}</label>`).join('')}</div></div>
-    <div class="dnote">No sube foto en el demo; en el sitio real este paso incluiría subir fotos del producto.</div>`,
+    <div class="field"><label>Foto del producto</label>
+      <div class="imgfield">
+        <div class="imgprev" id="d-prev">${p&&p.img?`<img src="${p.img}" alt="">`:`<span class="ph">${pio(p?p.icon:ICONS[0])}</span>`}</div>
+        <div class="imgacts">
+          <label class="btn gho sm" style="cursor:pointer">Subir foto<input type="file" id="d-file" accept="image/*" style="display:none"></label>
+          <button type="button" class="lnk" id="d-rm">Quitar foto</button>
+          <input id="d-img" placeholder="o pegue la direcci&oacute;n de una imagen" value="${p&&p.img&&p.img.slice(0,5)!=='data:'?p.img:''}">
+        </div>
+      </div>
+      <div class="dnote">La foto se guarda en este navegador para la demostraci&oacute;n. Si no sube ninguna, el producto usa el &iacute;cono de su categor&iacute;a.</div>
+    </div>`,
   ()=>{
     const t=val('d-t'); if(!t){alert('Ingrese el título.');return false;}
     const av={}; document.querySelectorAll('.d-av').forEach(c=>av[c.dataset.b]=c.checked?'ok':'out');
-    const obj={t, brand:val('d-b')||'Marca A', cat:val('d-c'), price:+val('d-p')||0, before:+val('d-pb')||0, unit:val('d-u')||'Uni', desc:val('d-d'), av, icon:p?p.icon:ICONS[DB.products.length%ICONS.length]};
+    const obj={t, brand:val('d-b')||'Marca A', cat:val('d-c'), price:+val('d-p')||0, before:+val('d-pb')||0, unit:val('d-u')||'Uni', desc:val('d-d'), av, img:(pImg||val('d-img')||''), icon:p?p.icon:ICONS[DB.products.length%ICONS.length]};
     if(p){Object.assign(p,obj);logAdd('Edit&oacute;',t);} else {obj.id='p'+Date.now(); DB.products.unshift(obj);logAdd('Agreg&oacute;',t);}
     save(); renderProdTable(); return true;
   });
+  bindFoto(p);
 };
 let admSucFil='';
 function viewAdminSuc(){
@@ -1061,7 +1154,7 @@ function viewCarrito(){
   const sub=cartSub(), tot=sub+ENVIO;
   return head+`<section class="sec"><div class="wrap"><div class="ckgrid">
     <div class="ckcard"><h3>${cartCount()} art&iacute;culo${cartCount()===1?'':'s'}</h3>
-      ${ls.map(l=>`<div class="ckline"><span class="th">${pio(l.p.icon)}</span>
+      ${ls.map(l=>`<div class="ckline"><span class="th">${pimg(l.p)}</span>
         <div class="mid"><div><div class="nm">${l.p.t}</div><div class="q">${l.p.brand} &middot; ${money(l.p.price)} c/u</div></div>
         <div class="qty"><button data-q="${l.p.id}" data-d="-1">-</button><span>${l.q}</span><button data-q="${l.p.id}" data-d="1">+</button></div></div>
         <span class="pr">${money(l.p.price*l.q)}</span>
@@ -1095,7 +1188,7 @@ function viewPago(){
   const sub=cartSub(), tot=sub+ENVIO;
   return head+`<section class="sec"><div class="wrap"><div class="ckgrid">
     <div class="ckcard"><h3>Resumen del pedido</h3>
-      ${ls.map(l=>`<div class="ckline"><span class="th">${pio(l.p.icon)}</span><div><div class="nm">${l.p.t}</div><div class="q">${l.p.brand} &middot; ${l.q} unidad${l.q===1?'':'es'}</div></div><span class="pr">${money(l.p.price*l.q)}</span></div>`).join('')}
+      ${ls.map(l=>`<div class="ckline"><span class="th">${pimg(l.p)}</span><div><div class="nm">${l.p.t}</div><div class="q">${l.p.brand} &middot; ${l.q} unidad${l.q===1?'':'es'}</div></div><span class="pr">${money(l.p.price*l.q)}</span></div>`).join('')}
       <div class="cktot"><div class="r"><span>Subtotal</span><span class="num">${money(sub)}</span></div>
         <div class="r"><span>Env&iacute;o a domicilio</span><span class="num">${money(ENVIO)}</span></div>
         <div class="r t"><span>Total a pagar</span><span class="num">${money(tot)}</span></div></div>
@@ -1205,7 +1298,7 @@ function viewPedido(num){
       </div>
     </div>
     <div class="ckcard"><h3>Lo que viene en camino</h3>
-      ${o.lines.map(l=>`<div class="ckline"><span class="th">${pio(l.icon)}</span><div><div class="nm">${l.t}</div><div class="q">${l.brand} &middot; ${l.q} unidad${l.q===1?'':'es'}</div></div><span class="pr">${money(l.price*l.q)}</span></div>`).join('')}
+      ${o.lines.map(l=>`<div class="ckline"><span class="th">${pimg(l)}</span><div><div class="nm">${l.t}</div><div class="q">${l.brand} &middot; ${l.q} unidad${l.q===1?'':'es'}</div></div><span class="pr">${money(l.price*l.q)}</span></div>`).join('')}
       <div class="cktot"><div class="r"><span>Subtotal</span><span class="num">${money(o.sub)}</span></div>
         <div class="r"><span>Env&iacute;o a domicilio</span><span class="num">${money(o.envio)}</span></div>
         <div class="r t"><span>Total pagado</span><span class="num">${money(o.tot)}</span></div></div>
@@ -1256,7 +1349,7 @@ function bindHeader(){
   const q=document.getElementById('q'), ac=document.getElementById('ac');
   if(q){q.oninput=()=>{const v=q.value.trim().toLowerCase();if(!v){ac.innerHTML='';return;}
     const r=DB.products.filter(p=>p.t.toLowerCase().includes(v)||p.brand.toLowerCase().includes(v)).slice(0,6);
-    ac.innerHTML=r.length?`<div class="ac">${r.map(p=>`<a href="#/producto/${p.id}"><span class="th">${pio(p.icon)}</span><div><div class="t">${p.t}</div><div class="m">${p.brand} · ${catName(p.cat)}</div></div><span class="p">${money(p.price)}</span></a>`).join('')}</div>`:'';};
+    ac.innerHTML=r.length?`<div class="ac">${r.map(p=>`<a href="#/producto/${p.id}"><span class="th">${pimg(p)}</span><div><div class="t">${p.t}</div><div class="m">${p.brand} · ${catName(p.cat)}</div></div><span class="p">${money(p.price)}</span></a>`).join('')}</div>`:'';};
     q.onkeydown=e=>{if(e.key==='Enter'){const v=q.value.trim().toLowerCase();const first=DB.products.find(p=>p.t.toLowerCase().includes(v)||p.brand.toLowerCase().includes(v));if(first)location.hash='#/producto/'+first.id;}};
     q.onblur=()=>setTimeout(()=>{if(ac)ac.innerHTML='';},180);}
 }
