@@ -98,10 +98,6 @@ input,select,textarea{font-family:inherit;font-size:14px;color:var(--tinta)}
 .hcard .pz s{font-family:var(--mono);font-size:11.5px;color:var(--gris);margin-left:7px}
 
 /* ticker */
-.ticker{background:var(--sonda);color:var(--espuma);overflow:hidden;white-space:nowrap;padding:11px 0;font-family:var(--mono);font-size:12.5px}
-.ticker .run{display:inline-block;animation:tick 40s linear infinite}
-.ticker s{color:#7fa0b6}.ticker .sep{color:var(--boya);margin:0 18px}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* trust */
 .trust{padding:20px 0}
@@ -463,6 +459,34 @@ padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
 .ordmeta .m .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
 .ordmeta .m .v{font-size:14px;font-weight:600;margin-top:3px}
 @media(max-width:560px){.ordmeta{grid-template-columns:1fr}}
+
+/* ====== panel: registro, filtros, paginacion ====== */
+.chg{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0 4px;font-size:13.5px;color:var(--gris)}
+.chg b{color:var(--tinta)}
+.actlist{display:flex;flex-direction:column;gap:0}
+.act{display:flex;gap:13px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.act:last-child{border-bottom:0}
+.act .ah{font-family:var(--mono);font-size:11.5px;color:var(--gris);padding-top:2px;flex-shrink:0}
+.act .at b{font-weight:600}
+.aempty{color:var(--gris);font-size:13.5px;max-width:52ch;margin:6px 0 0}
+.hsub{font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.04em;color:var(--gris);text-transform:none;margin-left:9px}
+.anote{color:var(--gris);font-size:13px;line-height:1.6;max-width:78ch;margin:18px 0 0}
+.chips2{display:flex;gap:8px;flex-wrap:wrap}
+.chip2{border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:8px 15px;
+font-family:var(--sans);font-size:13px;font-weight:600;color:var(--gris);cursor:pointer}
+.chip2:hover{border-color:var(--sonda)}
+.chip2.on{background:var(--sonda);border-color:var(--sonda);color:#fff}
+.psz{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gris);margin-right:12px}
+.psz select{border:1px solid var(--line);border-radius:8px;padding:5px 7px;background:var(--surface);
+font-family:var(--mono);font-size:12px;color:var(--tinta)}
+
+/* ====== historial de cliente ====== */
+.hord{border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:10px;background:var(--carta)}
+.hord .hh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hord .on{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--sonda)}
+.hord .hd{font-size:12px;color:var(--gris);margin-top:4px}
+.hord .hl{font-size:13px;margin-top:7px;line-height:1.45}
+.hord .ht{font-family:var(--mono);font-weight:600;margin-top:7px}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -507,12 +531,40 @@ function seedProducts(){
   return P;
 }
 /* estado persistente (admin edita → localStorage) */
+/* ============ CLIENTES E HISTORIAL ============ */
+const SEED_CUSTOMERS=[
+  {id:'c1',n:'Distribuidora La Central',tipo:'Empresa',wa:'50688880001',mail:'compras@lacentral.cr',desde:'2026-02-11'},
+  {id:'c2',n:'Mar&iacute;a Fernanda Rojas',tipo:'Persona',wa:'50688880002',mail:'mf.rojas@correo.cr',desde:'2026-03-04'},
+  {id:'c3',n:'Constructora Vega y Asociados',tipo:'Empresa',wa:'50688880003',mail:'proveeduria@vega.cr',desde:'2026-01-19'},
+  {id:'c4',n:'Carlos Jim&eacute;nez Mora',tipo:'Persona',wa:'50688880004',mail:'cjimenez@correo.cr',desde:'2026-04-22'},
+  {id:'c5',n:'Taller El Progreso',tipo:'Empresa',wa:'50688880005',mail:'taller.progreso@correo.cr',desde:'2026-05-30'},
+  {id:'c6',n:'Ana Sof&iacute;a Vargas',tipo:'Persona',wa:'50688880006',mail:'asvargas@correo.cr',desde:'2026-06-14'}
+];
+function seedOrders(prods){
+  const est=['entregado','entregado','entregado','ruta','prep','entregado','entregado','ruta','entregado','entregado','prep','entregado'];
+  const cli=['c1','c3','c2','c1','c5','c3','c4','c1','c6','c2','c3','c5'];
+  const dias=[92,84,71,63,55,48,40,33,26,19,11,4];
+  return dias.map((d,i)=>{
+    const n=1+(i%3), items=[];
+    for(let k=0;k<n;k++){const p=prods[(i*3+k)%prods.length]; items.push({id:p.id,t:p.t,brand:p.brand,icon:p.icon,price:p.price,q:1+((i+k)%3)});}
+    const sub=items.reduce((a,l)=>a+l.price*l.q,0);
+    return {ord:'BL-2026-'+String(100+i).padStart(4,'0'), cli:cli[i], ts:Date.now()-d*86400000,
+      metodo:['SINPE M&oacute;vil','Tarjeta','Transferencia'][i%3], suc:SEED_BRANCHES[i%3].n,
+      guia:'GUIA 04-'+String(1100+i).padStart(4,'0'), lines:items, sub:sub, envio:3500, tot:sub+3500, est:est[i]};
+  });
+}
+
 const KEY='bayline-store-v1';
 let DB=load();
-function load(){ try{const r=localStorage.getItem(KEY); if(r) return JSON.parse(r);}catch(e){}
-  return {products:seedProducts(), branches:SEED_BRANCHES.map(b=>({...b}))}; }
+function load(){ let d=null;
+  try{const r=localStorage.getItem(KEY); if(r) d=JSON.parse(r);}catch(e){}
+  if(!d) d={products:seedProducts(), branches:SEED_BRANCHES.map(b=>({...b}))};
+  if(!d.customers) d.customers=SEED_CUSTOMERS.map(c=>({...c}));
+  if(!d.orders) d.orders=seedOrders(d.products);
+  return d; }
 function save(){ try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} }
-function resetDB(){ DB={products:seedProducts(),branches:SEED_BRANCHES.map(b=>({...b}))}; save(); }
+function resetDB(){ const pr=seedProducts(); DB={products:pr,branches:SEED_BRANCHES.map(b=>({...b})),customers:SEED_CUSTOMERS.map(c=>({...c})),orders:seedOrders(pr)}; save(); }
+
 
 /* estado de UI */
 let ALM=DB.branches[0].id;            // sucursal seleccionada
@@ -604,6 +656,14 @@ function productCard(p){
   </article>`;
 }
 
+
+/* ============ REGISTRO DE ACTIVIDAD (panel) ============ */
+const LKEY='bayline-admin-log-v1';
+const logList=()=>{try{return JSON.parse(localStorage.getItem(LKEY))||[]}catch(e){return []}};
+const logSave=a=>{try{localStorage.setItem(LKEY,JSON.stringify(a.slice(0,30)))}catch(e){}};
+function logAdd(acc,que){const a=logList();a.unshift({a:acc,q:que,ts:Date.now()});logSave(a);}
+function logClear(){logSave([]);}
+function logHora(ts){try{return new Date(ts).toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
 /* ============ VISTAS STOREFRONT ============ */
 function viewHome(){
   const promos=DB.products.filter(p=>p.before).slice(0,8), feat=DB.products.slice(0,4);
@@ -617,7 +677,6 @@ function viewHome(){
     </div>
     <div class="hgrid">${feat.map(p=>`<a class="hcard" href="#/producto/${p.id}"><div class="im">${pio(p.icon)}</div><div class="pz"><b>${money(p.price)}</b>${p.before?`<s>${money(p.before)}</s>`:''}</div></a>`).join('')}</div>
   </div></div></section>
-  <div class="ticker"><div class="run">${tick}${tick}</div></div>
   <section class="trust"><div class="wrap">
     <div class="tcard">${I.pin}<div><b>${DB.branches.filter(b=>b.act).length} sucursales</b><span>en toda la zona</span></div></div>
     <div class="tcard">${I.star}<div><b>4.4 en reseñas</b><span>opiniones verificadas</span></div></div>
@@ -741,6 +800,7 @@ function adminShell(active,body){
         <a href="#/admin/panel" class="${active==='panel'?'on':''}">${I.dash}Panel</a>
         <a href="#/admin/productos" class="${active==='prod'?'on':''}">${I.box}Productos</a>
         <a href="#/admin/sucursales" class="${active==='suc'?'on':''}">${I.store}Sucursales</a>
+        <a href="#/admin/clientes" class="${active==='cli'?'on':''}">${I.user||I.store}Clientes</a>
         <a href="#/admin/config" class="${active==='cfg'?'on':''}">${I.cog}Configuración</a>
       </nav>
       <button class="out" id="logout">${I.out}Salir</button>
@@ -766,6 +826,7 @@ function viewLogin(err){
 function viewAdminPanel(){
   const P=DB.products, promos=P.filter(p=>p.before).length, brands=new Set(P.map(p=>p.brand)).size;
   const byCat=CATS.map(c=>({n:c.n,v:P.filter(p=>p.cat===c.id).length})); const max=Math.max(...byCat.map(x=>x.v),1);
+  const lg=logList();
   return adminShell('panel',`
     <div class="ahead"><div><h1>Panel</h1><div class="sub">Resumen de su catálogo</div></div><a class="btn pri sm" href="#/admin/productos" onclick="setTimeout(openProd,60)">+ Nuevo producto</a></div>
     <div class="stats">
@@ -774,14 +835,22 @@ function viewAdminPanel(){
       <div class="stat"><div class="si">${I.star}</div><b>${brands}</b><span>Marcas distintas</span></div>
       <div class="stat"><div class="si">${I.store}</div><b>${DB.branches.length}</b><span>Sucursales</span></div>
     </div>
+    <div class="chg">${lg.length?`<span><b>${lg.length}</b> cambio${lg.length===1?'':'s'} en esta sesión, guardados en este navegador</span><button class="lnk" onclick="logClear();route()">Limpiar registro</button>`:'<span>Sin cambios en esta sesión</span>'}</div>
     <div class="acards">
-      <div class="acard"><h3>Productos por categoría</h3>${byCat.map(x=>`<div class="bar"><span class="bl">${x.n}</span><span class="bt"><span class="bf" style="width:${x.v/max*100}%"></span></span><span class="bn">${x.v}</span></div>`).join('')}</div>
+      <div class="acard"><h3>Actividad reciente</h3>
+        ${lg.length?`<div class="actlist">${lg.slice(0,8).map(x=>`<div class="act"><span class="ah">${logHora(x.ts)}</span><span class="at"><b>${x.a}</b> ${x.q}</span></div>`).join('')}</div>`
+        :'<p class="aempty">Sin cambios todavía. Lo que agregue, edite o elimine va a aparecer acá.</p>'}
+      </div>
       <div class="acard"><h3>Accesos rápidos</h3>
         <a class="qa" href="#/admin/productos"><span class="i">${I.box}</span><div><b>Gestionar productos</b><span>Editar precios, stock y promociones</span></div><span class="ar">${I.arrow}</span></a>
         <a class="qa" href="#/admin/sucursales"><span class="i">${I.store}</span><div><b>Gestionar sucursales</b><span>Direcciones y contactos</span></div><span class="ar">${I.arrow}</span></a>
+        <a class="qa" href="#/admin/clientes"><span class="i">${I.user||I.store}</span><div><b>Gestionar clientes</b><span>Historial de compras por cliente</span></div><span class="ar">${I.arrow}</span></a>
         <a class="qa" href="#/"><span class="i">${I.grid}</span><div><b>Ver el sitio público</b><span>Cómo lo ve el cliente</span></div><span class="ar">${I.arrow}</span></a>
       </div>
-    </div>`);
+    </div>
+    <div class="acard" style="margin-top:18px"><h3>Productos por departamento <span class="hsub">${CATS.length} departamentos en la taxonom&iacute;a</span></h3>
+      ${byCat.map(x=>`<div class="bar"><span class="bl">${x.n}</span><span class="bt"><span class="bf" style="width:${x.v/max*100}%"></span></span><span class="bn">${x.v}</span></div>`).join('')}</div>
+    <p class="anote">Esta es la propuesta de Fase 2: el panel donde su equipo cargar&iacute;a su propio cat&aacute;logo. Los n&uacute;meros de arriba son los productos de referencia del demo; los cambios que haga en <b>Productos</b> se guardan en este navegador para que se sienta real, todav&iacute;a sin servidor detr&aacute;s.</p>`);
 }
 function filteredProds(){
   let l=DB.products.slice();
@@ -796,13 +865,13 @@ function viewAdminProd(){
     <div class="ahead"><div><h1>Productos</h1><div class="sub" id="pcount"></div></div><button class="btn pri sm" onclick="openProd()">+ Nuevo producto</button></div>
     <div class="atoolbar">
       <div class="sr">${I.search}<input id="ap-q" placeholder="Buscar por título o marca…" value="${admProdState.q}"></div>
-      <select id="ap-cat"><option value="">Todas las categorías</option>${CATS.map(c=>`<option value="${c.id}" ${admProdState.cat===c.id?'selected':''}>${c.n}</option>`).join('')}</select>
+      <select id="ap-cat"><option value="">Todos los departamentos</option>${CATS.map(c=>`<option value="${c.id}" ${admProdState.cat===c.id?'selected':''}>${c.n}</option>`).join('')}</select>
       <a class="lnk" id="ap-clear">Limpiar filtros</a>
     </div>
     <div id="ap-bulk"></div>
     <div class="tablewrap"><table class="tbl"><thead><tr>
       <th style="width:34px"><input type="checkbox" id="ap-all"></th>
-      <th data-s="t">Producto</th><th data-s="cat">Categoría</th><th data-s="price">Precio</th><th>Disponibilidad</th><th style="width:70px">Acciones</th>
+      <th data-s="t">Producto</th><th data-s="cat">Departamento</th><th data-s="price">Precio</th><th>Disponibilidad</th><th style="width:70px">Acciones</th>
     </tr></thead><tbody id="ap-body"></tbody></table></div>
     <div class="pag" id="ap-pag"></div>`);
 }
@@ -821,7 +890,7 @@ function renderProdTable(){
       <td><button class="iconbtn" onclick="openProd('${p.id}')">${I.edit}</button></td></tr>`;}).join('')
     || `<tr><td colspan="6" class="empty">Sin resultados.</td></tr>`;
   document.getElementById('ap-pag').innerHTML=`<span>Mostrando ${total?start+1:0}–${Math.min(start+s.size,total)} de ${total}</span>
-    <div class="pg"><span>Página ${s.page} de ${pages}</span><button ${s.page<=1?'disabled':''} onclick="admProdState.page--;renderProdTable()">‹</button><button ${s.page>=pages?'disabled':''} onclick="admProdState.page++;renderProdTable()">›</button></div>`;
+    <div class="pg"><label class="psz">Por p&aacute;gina <select onchange="admProdState.size=+this.value;admProdState.page=1;renderProdTable()">${[10,20,50].map(v=>`<option value="${v}" ${s.size===v?'selected':''}>${v}</option>`).join('')}</select></label><span>Página ${s.page} de ${pages}</span><button ${s.page<=1?'disabled':''} onclick="admProdState.page--;renderProdTable()">‹</button><button ${s.page>=pages?'disabled':''} onclick="admProdState.page++;renderProdTable()">›</button></div>`;
   const bulk=document.getElementById('ap-bulk');
   bulk.innerHTML=s.sel.size?`<div class="bulkbar"><b>${s.sel.size}</b> seleccionados <button class="btn gho sm" onclick="bulkDelete()">${I.trash} Eliminar seleccionados</button> <a class="lnk" onclick="admProdState.sel.clear();renderProdTable()">Deseleccionar</a></div>`:'';
   document.querySelectorAll('.ap-row').forEach(c=>c.onchange=e=>{const id=e.target.dataset.id;e.target.checked?s.sel.add(id):s.sel.delete(id);renderProdTable();});
@@ -844,22 +913,29 @@ window.openProd=function(id){
     const t=val('d-t'); if(!t){alert('Ingrese el título.');return false;}
     const av={}; document.querySelectorAll('.d-av').forEach(c=>av[c.dataset.b]=c.checked?'ok':'out');
     const obj={t, brand:val('d-b')||'Marca A', cat:val('d-c'), price:+val('d-p')||0, before:+val('d-pb')||0, unit:val('d-u')||'Uni', desc:val('d-d'), av, icon:p?p.icon:ICONS[DB.products.length%ICONS.length]};
-    if(p){Object.assign(p,obj);} else {obj.id='p'+Date.now(); DB.products.unshift(obj);}
+    if(p){Object.assign(p,obj);logAdd('Edit&oacute;',t);} else {obj.id='p'+Date.now(); DB.products.unshift(obj);logAdd('Agreg&oacute;',t);}
     save(); renderProdTable(); return true;
   });
 };
+let admSucFil='';
 function viewAdminSuc(){
   return adminShell('suc',`
     <div class="ahead"><div><h1>Sucursales</h1><div class="sub">${DB.branches.length} de ${DB.branches.length} sucursales</div></div><button class="btn pri sm" onclick="openSuc()">+ Nueva sucursal</button></div>
-    <div class="tablewrap"><table class="tbl"><thead><tr><th>Sucursal</th><th>Zona</th><th>Contacto</th><th>Estado</th><th style="width:90px">Acciones</th></tr></thead><tbody id="as-body"></tbody></table></div>`);
+    <div class="atoolbar" id="as-filters"><div class="chips2">${['','__act'].concat(SECTORES).map(v=>`<button class="chip2 ${admSucFil===v?'on':''}" data-f="${v}">${v===''?'Todos':v==='__act'?'Solo activos':v}</button>`).join('')}</div></div>
+    <div class="tablewrap"><table class="tbl"><thead><tr><th>Sucursal</th><th>Sector</th><th>Contacto</th><th>Estado</th><th style="width:90px">Acciones</th></tr></thead><tbody id="as-body"></tbody></table></div>`);
 }
 function renderSucTable(){
-  document.getElementById('as-body').innerHTML=DB.branches.map(b=>`<tr>
+  const f=admSucFil;
+  const list=DB.branches.filter(b=>!f?true:f==='__act'?b.act:b.sector===f);
+  const fb=document.getElementById('as-filters');
+  if(fb)fb.querySelectorAll('[data-f]').forEach(x=>{x.onclick=()=>{admSucFil=x.dataset.f;renderSucTable();
+    fb.querySelectorAll('[data-f]').forEach(y=>y.classList.toggle('on',y===x));};});
+  document.getElementById('as-body').innerHTML=list.map(b=>`<tr>
     <td><div class="pn">${b.n}</div><div class="pb" style="text-transform:none;letter-spacing:0">${b.adr}</div></td>
     <td class="sect">${b.sector}</td>
     <td class="mono" style="font-size:12px">${b.wa?'WhatsApp '+b.wa.slice(-8):(b.tel?'Tel. '+b.tel:'sin telefono')}</td>
     <td class="${b.act?'stok':'badge-out'}">${b.act?'✓ Activa':'Inactiva'}</td>
-    <td><button class="iconbtn" onclick="openSuc('${b.id}')">${I.edit}</button> <button class="iconbtn del" onclick="delSuc('${b.id}')">${I.trash}</button></td></tr>`).join('');
+    <td><button class="iconbtn" onclick="openSuc('${b.id}')">${I.edit}</button> <button class="iconbtn del" onclick="delSuc('${b.id}')">${I.trash}</button></td></tr>`).join('') || `<tr><td colspan="5" class="empty">No hay sucursales que calcen con ese filtro.</td></tr>`;
 }
 window.delSuc=function(id){ if(!confirm('¿Eliminar esta sucursal?'))return; DB.branches=DB.branches.filter(b=>b.id!==id); if(ALM===id)ALM=DB.branches[0].id; save(); renderSucTable(); };
 window.openSuc=function(id){
@@ -875,9 +951,61 @@ window.openSuc=function(id){
     const n=val('s-n'); if(!n){alert('Ingrese el nombre.');return false;}
     if(!val('s-w')&&!val('s-t')){alert('Ingrese al menos un número de contacto.');return false;}
     const obj={n,adr:val('s-a'),sector:val('s-s'),wa:val('s-w'),tel:val('s-t'),act:document.getElementById('s-act').checked};
-    if(b){Object.assign(b,obj);}else{obj.id='s'+Date.now();DB.branches.push(obj);}
+    if(b){Object.assign(b,obj);logAdd('Edit&oacute; la sucursal',n);}else{obj.id='s'+Date.now();DB.branches.push(obj);logAdd('Agreg&oacute; la sucursal',n);}
     save(); renderSucTable(); return true;
   });
+};
+
+let admCliQ='';
+const ordsOf=id=>DB.orders.filter(o=>o.cli===id).sort((a,b)=>b.ts-a.ts);
+const EST={prep:{l:'En preparaci&oacute;n',c:'bod'},ruta:{l:'En ruta',c:'ruta'},entregado:{l:'Entregado',c:'ok'}};
+function viewAdminCli(){
+  return adminShell('cli',`
+    <div class="ahead"><div><h1>Clientes</h1><div class="sub" id="ccount"></div></div></div>
+    <div class="atoolbar">
+      <div class="sr">${I.search}<input id="ac-q" placeholder="Buscar por nombre o contacto&hellip;" value="${admCliQ}"></div>
+      <a class="lnk" id="ac-clear">Limpiar filtros</a>
+    </div>
+    <div class="tablewrap"><table class="tbl"><thead><tr>
+      <th>Cliente</th><th>Contacto</th><th>Pedidos</th><th>Total comprado</th><th>&Uacute;ltima compra</th><th style="width:70px">Acciones</th>
+    </tr></thead><tbody id="ac-body"></tbody></table></div>`);
+}
+function renderCliTable(){
+  const q=admCliQ.toLowerCase();
+  const list=DB.customers.filter(c=>!q||c.n.toLowerCase().includes(q)||(c.mail||'').toLowerCase().includes(q)||(c.wa||'').includes(q));
+  const el=document.getElementById('ac-body'); if(!el)return;
+  document.getElementById('ccount').textContent=list.length+' de '+DB.customers.length+' clientes';
+  el.innerHTML=list.map(c=>{
+    const os=ordsOf(c.id), tot=os.reduce((a,o)=>a+o.tot,0);
+    const ult=os[0]?new Date(os[0].ts).toLocaleDateString('es-CR',{day:'2-digit',month:'short',year:'numeric'}):'Sin compras';
+    return `<tr><td><div class="pcell"><div><div class="pn">${c.n}</div><div class="pb" style="text-transform:none;letter-spacing:0">${c.tipo} &middot; cliente desde ${c.desde}</div></div></div></td>
+      <td class="mono" style="font-size:12px">${c.wa?'WhatsApp '+c.wa.slice(-8):''}${c.wa&&c.mail?'<br>':''}${c.mail||''}</td>
+      <td class="stok">${os.length}</td>
+      <td class="mono" style="font-weight:600">${money(tot)}</td>
+      <td class="sect">${ult}</td>
+      <td><button class="iconbtn" onclick="verCliente('${c.id}')" title="Ver historial">${I.eye||I.search}</button></td></tr>`;
+  }).join('') || `<tr><td colspan="6" class="empty">No hay clientes que calcen con esa b&uacute;squeda.</td></tr>`;
+}
+window.verCliente=function(id){
+  const c=DB.customers.find(x=>x.id===id); if(!c)return;
+  const os=ordsOf(id), tot=os.reduce((a,o)=>a+o.tot,0), arts=os.reduce((a,o)=>a+o.lines.reduce((b,l)=>b+l.q,0),0);
+  drawer('Historial de '+c.n,`
+    <div class="ordmeta" style="margin-top:0">
+      <div class="m"><div class="k">Pedidos</div><div class="v">${os.length}</div></div>
+      <div class="m"><div class="k">Total comprado</div><div class="v">${money(tot)}</div></div>
+      <div class="m"><div class="k">Art&iacute;culos</div><div class="v">${arts}</div></div>
+      <div class="m"><div class="k">Contacto</div><div class="v" style="font-size:12.5px">${c.wa?'WhatsApp '+c.wa.slice(-8):(c.mail||'sin contacto')}</div></div>
+    </div>
+    <h3 style="margin:22px 0 10px;font-size:15px">Historial de compras</h3>
+    ${os.length?os.map(o=>`<div class="hord">
+      <div class="hh"><span class="on">${o.ord}</span><span class="opill ${EST[o.est||'entregado'].c}">${EST[o.est||'entregado'].l}</span></div>
+      <div class="hd">${new Date(o.ts).toLocaleDateString('es-CR',{day:'2-digit',month:'long',year:'numeric'})} &middot; ${o.metodo} &middot; ${o.suc}</div>
+      <div class="hl">${o.lines.map(l=>`${l.q} &times; ${l.t}`).join(' &middot; ')}</div>
+      <div class="ht">${money(o.tot)}</div></div>`).join('')
+    :'<p class="aempty">Este cliente todav&iacute;a no tiene compras registradas.</p>'}
+  `, ()=>true);
+  const df=document.querySelector('#drawer .df');
+  if(df)df.innerHTML='<button class="btn gho" onclick="closeDrawer()">Cerrar</button>';
 };
 function viewAdminCfg(){
   return adminShell('cfg',`<div class="ahead"><div><h1>Configuración</h1><div class="sub">Usuarios, roles e integraciones</div></div></div>
@@ -952,9 +1080,9 @@ function viewCarrito(){
   </div></div></section>`+footer();
 }
 
-const PM={sinpe:{n:'SINPE M&oacute;vil',f:`<div class="field"><label>N&uacute;mero SINPE M&oacute;vil</label><input value="8888-8888"></div><div class="field"><label>Nombre de quien paga</label><input placeholder="Nombre y apellido"></div>`},
- tarjeta:{n:'Tarjeta',f:`<div class="field"><label>N&uacute;mero de tarjeta</label><input value="4242 4242 4242 4242"></div><div class="field"><label>Vence</label><input value="12/29"></div><div class="field"><label>Nombre en la tarjeta</label><input placeholder="Nombre y apellido"></div>`},
- transfer:{n:'Transferencia',f:`<div class="field"><label>Banco</label><input value="Banco Nacional"></div><div class="field"><label>Comprobante</label><input placeholder="N&uacute;mero de comprobante"></div>`}};
+const PM={sinpe:{n:'SINPE M&oacute;vil',f:`<div class="field"><label>N&uacute;mero SINPE M&oacute;vil</label><input value="8888-8888"></div><div class="field"><label>Nombre de quien paga</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`},
+ tarjeta:{n:'Tarjeta',f:`<div class="field"><label>N&uacute;mero de tarjeta</label><input value="4242 4242 4242 4242"></div><div class="field"><label>Vence</label><input value="12/29"></div><div class="field"><label>Nombre en la tarjeta</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`},
+ transfer:{n:'Transferencia',f:`<div class="field"><label>Banco</label><input value="Banco Nacional"></div><div class="field"><label>Comprobante</label><input placeholder="N&uacute;mero de comprobante"></div><div class="field"><label>Nombre de quien paga</label><input id="pay-nom" placeholder="Nombre y apellido"></div>`}};
 let PMSEL='sinpe';
 
 function viewPago(){
@@ -1004,6 +1132,7 @@ function payDemo(){
   },1700);
 }
 window.closePay=function(){const o=document.getElementById('payov'); if(o)o.remove();};
+addEventListener('hashchange',window.closePay);
 
 document.addEventListener('click',function(e){
   const add=e.target.closest('[data-add]');
@@ -1038,7 +1167,14 @@ function ordCreate(num,metodo){
     guia:'GUIA 04-'+String(1180+ordLoad().length).padStart(4,'0'),
     lines:ls.map(l=>({t:l.p.t,brand:l.p.brand,icon:l.p.icon,price:l.p.price,q:l.q})),
     sub:sub, envio:ENVIO, tot:sub+ENVIO};
-  const all=ordLoad(); all.unshift(o); ordSave(all); return o;
+  const all=ordLoad(); all.unshift(o); ordSave(all);
+  /* queda tambien en la base para el panel, ligado a su cliente */
+  const nom=(val('pay-nom')||'').trim()||'Cliente de mostrador';
+  let c=DB.customers.find(x=>x.n.toLowerCase()===nom.toLowerCase());
+  if(!c){c={id:'c'+Date.now(),n:nom,tipo:'Persona',wa:'',mail:'',desde:new Date().toISOString().slice(0,10)};DB.customers.unshift(c);}
+  DB.orders.unshift({...o, cli:c.id, est:'prep'});
+  save(); logAdd('Pedido nuevo de', nom);
+  return o;
 }
 function ordFmt(ts){try{return new Date(ts).toLocaleDateString('es-CR',{day:'2-digit',month:'long',year:'numeric'});}catch(e){return '';}}
 
@@ -1091,6 +1227,7 @@ function route(){
     if(sub==='panel')app.innerHTML=viewAdminPanel();
     else if(sub==='productos'){app.innerHTML=viewAdminProd();bindAdminProd();renderProdTable();}
     else if(sub==='sucursales'){app.innerHTML=viewAdminSuc();renderSucTable();}
+    else if(sub==='clientes'){app.innerHTML=viewAdminCli();renderCliTable();bindAdminCli();}
     else if(sub==='config')app.innerHTML=viewAdminCfg();
     else app.innerHTML=viewAdminPanel();
     const lo=document.getElementById('logout'); if(lo)lo.onclick=()=>{sessionStorage.removeItem(ADMKEY);location.hash='#/';};
@@ -1147,6 +1284,12 @@ function bindAdminProd(){
   cat.onchange=()=>{admProdState.cat=cat.value;admProdState.page=1;renderProdTable();};
   document.getElementById('ap-clear').onclick=()=>{admProdState.q='';admProdState.cat='';admProdState.page=1;q.value='';cat.value='';renderProdTable();};
   document.querySelectorAll('.tbl thead th[data-s]').forEach(th=>th.onclick=()=>{const s=th.dataset.s;if(admProdState.sort===s)admProdState.dir*=-1;else{admProdState.sort=s;admProdState.dir=1;}renderProdTable();});
+}
+
+function bindAdminCli(){
+  const q=document.getElementById('ac-q'), cl=document.getElementById('ac-clear');
+  if(q)q.oninput=()=>{admCliQ=q.value.trim();renderCliTable();};
+  if(cl)cl.onclick=()=>{admCliQ='';if(q)q.value='';renderCliTable();};
 }
 function bindLogin(){
   const go=()=>{const u=val('lg-user'),p=val('lg-pass');if(u==='admin'&&p==='bayline2026'){sessionStorage.setItem(ADMKEY,'1');location.hash='#/admin/panel';route();}else{document.getElementById('app').innerHTML=viewLogin(true);bindLogin();}};
