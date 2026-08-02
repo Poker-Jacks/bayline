@@ -1,0 +1,55 @@
+name: Claude Review
+
+# Review advisory de Claude en cada PR. Postea un comentario; NUNCA bloquea el merge (no es
+# check requerido y corre con continue-on-error). Estandar del equipo: knowledge/ci-cd-standard.md §3.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write # lo pide claude-code-action (OIDC)
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    # Se salta en forks: un PR desde un fork no recibe secrets, y este repo es publico.
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      # Sin este paso el job falla en rojo en cada PR mientras el repo no tenga credencial, y
+      # un check que siempre esta rojo deja de leerse. `secrets` no se puede usar en un `if:`
+      # de job, por eso la comprobacion es un step.
+      - name: Hay credencial de Claude?
+        id: cred
+        env:
+          OAUTH: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          APIKEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$OAUTH" ] || [ -n "$APIKEY" ]; then
+            echo "hay=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "hay=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::sin CLAUDE_CODE_OAUTH_TOKEN ni ANTHROPIC_API_KEY — se salta el review advisory"
+          fi
+
+      - name: Claude review (advisory)
+        if: steps.cred.outputs.hay == 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@beta
+        with:
+          # O una suscripcion Max/Pro via CLAUDE_CODE_OAUTH_TOKEN (`claude setup-token` local),
+          # o un ANTHROPIC_API_KEY de pago por uso. La action usa el que este seteado.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          use_sticky_comment: true
+          model: claude-sonnet-4-6
+          direct_prompt: |
+            Revisa el diff de este PR: correccion, seguridad y adherencia a las convenciones
+            de CLAUDE.md. Es un sitio estatico servido por nginx, sin build step.
+            Postea un resumen conciso. Advisory — decide un humano.
