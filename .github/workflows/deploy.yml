@@ -1,0 +1,122 @@
+name: Deploy (poker-jacks)
+
+# Dos destinos, dos ramas:
+#
+#   main/master -> app `bayline`      (bayline.poker-jacks.tech)      EL QUE VE EL CLIENTE.
+#   dev         -> app `bayline-dev`  (bayline-dev.poker-jacks.tech)  Donde se itera.
+#
+# La rama de produccion se acepta como `main` O `master` a proposito: hoy este repo esta en
+# `master` (el resto de la org usa `main`) y el rename queda pendiente de coordinar con jason.
+# El tag de la imagen es `main` en los dos casos, asi que renombrar la rama no obliga a tocar
+# ni este workflow ni la config de la app en VPS Manager.
+#
+# Las dos apps comparten la MISMA imagen (registry.poker-jacks.tech/bayline) y se distinguen
+# por el tag: el webhook matchea por image_ref y despues descarta por watch_tag, asi que un
+# push de :dev no toca la app de main aunque compartan repo de registry.
+#
+# Espejo de Poker-Jacks/ferreteria-camara-demo. Se activa con la Variable DEPLOY_ENABLED=true.
+#
+# Nota de alcance: no hay entorno `stg`. El estandar del equipo (knowledge/ci-cd-standard.md)
+# pide dev/stg/main, pero esto es un sitio estatico de 3 paginas sin backend ni migraciones:
+# stg no aportaria una validacion que dev no de ya. Si Bayline crece a producto con backend,
+# el env de stg entra ahi.
+on:
+  push:
+    branches: [main, master, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: ${{ vars.REGISTRY_HOST || 'registry.poker-jacks.tech' }}
+      IMAGE_NAME: ${{ vars.IMAGE_NAME || 'bayline' }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Resolver destino segun la rama
+        run: |
+          case "${GITHUB_REF_NAME}" in
+            main|master)
+              echo "APP=bayline"                                      >> "$GITHUB_ENV"
+              echo "WATCH_TAG=main"                                   >> "$GITHUB_ENV"
+              echo "VERIFY_URL=https://bayline.poker-jacks.tech/"     >> "$GITHUB_ENV"
+              ;;
+            *)
+              echo "APP=bayline-dev"                                  >> "$GITHUB_ENV"
+              echo "WATCH_TAG=dev"                                    >> "$GITHUB_ENV"
+              echo "VERIFY_URL=https://bayline-dev.poker-jacks.tech/" >> "$GITHUB_ENV"
+              ;;
+          esac
+          echo "Rama ${GITHUB_REF_NAME}"
+
+      - name: Registry login (retry por el timeout cross-cloud)
+        env:
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+        run: |
+          for i in 1 2 3; do
+            echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY" -u "$REGISTRY_USERNAME" --password-stdin && break
+            echo "intento $i de login fallo; reintento en $((i*10))s"
+            sleep $((i*10))
+          done
+
+      - name: Build and push
+        run: |
+          IMG="${REGISTRY}/${IMAGE_NAME}"
+          # BUILD_SHA se hornea en los HTML como <meta name="build"> — es lo que verifica el
+          # paso final para probar que el sitio sirve ESTE build y no uno viejo.
+          docker build --build-arg "BUILD_SHA=${GITHUB_SHA}" \
+            -t "${IMG}:${GITHUB_SHA}" -t "${IMG}:${WATCH_TAG}" .
+          docker push "${IMG}:${GITHUB_SHA}"
+          docker push "${IMG}:${WATCH_TAG}"
+
+      # El webhook puede responder 200 y NO desplegar nada: si la app tiene auto_deploy apagado
+      # o el watch_tag no coincide, VPS Manager la salta y devuelve apps_deployed:0. Le paso al
+      # demo de ferreteria dos veces seguidas (2026-07-28/29) y el workflow quedo verde. Por eso
+      # aca se falla explicitamente en vez de confiar en el codigo HTTP.
+      - name: Trigger deploy webhook
+        env:
+          VPS_MANAGER_URL: ${{ secrets.VPS_MANAGER_URL }}
+          EVENTS_TOKEN: ${{ secrets.REGISTRY_EVENTS_TOKEN }}
+        run: |
+          resp=$(curl -fsS -X POST "${VPS_MANAGER_URL}/api/v1/webhooks/registry-push" \
+            -H "Authorization: Bearer ${EVENTS_TOKEN}" \
+            -H 'Content-Type: application/json' \
+            -d "{\"image\":\"${REGISTRY}/${IMAGE_NAME}\",\"tag\":\"${WATCH_TAG}\"}")
+          echo "$resp"
+          deployed=$(printf '%s' "$resp" | jq -r '.data.apps_deployed // .apps_deployed // 0')
+          matched=$(printf '%s' "$resp" | jq -r '.data.apps_matched // .apps_matched // 0')
+          if [ "${deployed:-0}" -lt 1 ]; then
+            echo "❌ el webhook no desplego nada (matched=${matched}, deployed=${deployed})."
+            echo "   Revisar en VPS Manager que la app '${APP}' tenga:"
+            echo "     · auto_deploy = true"
+            echo "     · watch_tag  = '${WATCH_TAG}'"
+            exit 1
+          fi
+          echo "✅ el webhook desplego ${deployed} app(s)"
+
+      # Un 200 lo devuelve TAMBIEN la version vieja, asi que verificar el codigo HTTP no prueba
+      # nada. Se compara la huella del build servida contra el SHA de este commit.
+      - name: Verificar que el sitio sirve ESTE build
+        run: |
+          for i in $(seq 1 30); do
+            servido=$(curl -fsS -H 'Cache-Control: no-cache' "${VERIFY_URL}?ci=${GITHUB_SHA}" 2>/dev/null \
+              | grep -o 'name="build" content="[a-f0-9]*"' | head -1 | grep -o '[a-f0-9]\{7,\}' || true)
+            if [ "$servido" = "$GITHUB_SHA" ]; then
+              echo "✅ ${VERIFY_URL} sirve ${GITHUB_SHA}"
+              exit 0
+            fi
+            echo "intento $i: sirve '${servido:-nada}', se espera '${GITHUB_SHA}'; reintento en 10s"
+            sleep 10
+          done
+          echo "❌ tras 5 minutos el sitio NO sirve este build (sigue una version vieja)"
+          exit 1

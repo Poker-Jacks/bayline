@@ -1,0 +1,110 @@
+name: CI
+
+# Este repo no tiene build step: los HTML son autocontenidos y se sirven tal cual. Asi que
+# el CI no compila nada — verifica las cuatro cosas que en un sitio estatico si se rompen
+# solas y no se ven hasta que el cliente lo tiene en pantalla.
+on:
+  push:
+    branches: [main, master, dev]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Secret scan
+        run: |
+          if grep -rEn 'AKIA[A-Z0-9]{16}|-----BEGIN ([A-Z ]+ )?PRIVATE KEY-----' \
+            --include='*.html' --include='*.js' --include='*.json' --include='*.env*' \
+            --exclude-dir=.git . ; then
+            echo "::error::secreto hardcodeado en el sitio"; exit 1
+          fi
+          echo "sin secretos hardcodeados"
+
+      - name: Ancla de la huella de build
+        # El deploy prueba que el sitio sirve ESTE commit leyendo <meta name="build">, que el
+        # Dockerfile inserta despues del <meta charset>. Un HTML sin ese ancla rompe el build;
+        # mejor que se vea aca, en el PR, que en el deploy.
+        run: |
+          fail=0
+          for f in $(find . -name '*.html' -not -path './.git/*'); do
+            if ! grep -q '<meta charset' "$f"; then
+              echo "::error file=$f::falta <meta charset> — es el ancla de la huella de build"
+              fail=1
+            fi
+          done
+          [ "$fail" = 0 ] && echo "todos los HTML tienen ancla"
+          exit $fail
+
+      - name: Sin URLs locales en el sitio publicado
+        run: |
+          if grep -rEn 'https?://(localhost|127\.0\.0\.1)' --include='*.html' --exclude-dir=.git . ; then
+            echo "::error::hay una URL local en el HTML publicado"; exit 1
+          fi
+          echo "sin URLs locales"
+
+      - name: Assets locales que no existen
+        # Una imagen rota en la landing del producto es de las pocas cosas que el cliente
+        # nota en el primer segundo. Se saltan las refs con ${...}: son plantillas de JS
+        # que se resuelven en runtime, no rutas de archivo.
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, sys
+          malos = []
+          for f in pathlib.Path('.').rglob('*.html'):
+              if '.git' in f.parts:
+                  continue
+              html = f.read_text(encoding='utf-8', errors='replace')
+              for m in re.finditer(r'(?:src|href)="([^"]+)"', html):
+                  ref = m.group(1)
+                  if ref.startswith(('data:', 'http://', 'https://', '//', '#', 'mailto:', 'tel:', '?')):
+                      continue
+                  if '${' in ref or '{{' in ref:
+                      continue
+                  destino = f.parent / ref.split('?')[0].split('#')[0]
+                  if not destino.exists():
+                      malos.append(f'{f}: {ref}')
+          for b in malos:
+              print(f'::error::asset local inexistente -> {b}')
+          print(f'{len(malos)} assets rotos')
+          sys.exit(1 if malos else 0)
+          PY
+
+  imagen:
+    # Buildear la imagen en cada PR es lo que evita descubrir un Dockerfile o un nginx.conf
+    # roto recien en el deploy, con la rama ya mergeada.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Build
+        run: docker build --build-arg "BUILD_SHA=${GITHUB_SHA}" -t bayline:ci .
+
+      - name: Smoke — las 3 paginas responden y sirven ESTE build
+        run: |
+          docker run -d --name bayline-ci -p 8080:8080 bayline:ci
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:8080/ -o /dev/null 2>/dev/null && break
+            sleep 1
+          done
+          fail=0
+          for ruta in / /tienda/ /v2/; do
+            code=$(curl -sS -o /tmp/pagina.html -w '%{http_code}' "http://localhost:8080${ruta}")
+            servido=$(grep -o 'name="build" content="[a-f0-9]*"' /tmp/pagina.html | head -1 | grep -o '[a-f0-9]\{7,\}' || true)
+            if [ "$code" != "200" ] || [ "$servido" != "$GITHUB_SHA" ]; then
+              echo "::error::${ruta} -> HTTP ${code}, build='${servido:-nada}' (se esperaba 200 y ${GITHUB_SHA})"
+              fail=1
+            else
+              echo "ok ${ruta}"
+            fi
+          done
+          echo "--- logs de nginx ---"; docker logs bayline-ci 2>&1 | tail -20
+          docker rm -f bayline-ci >/dev/null
+          exit $fail
