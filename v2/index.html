@@ -605,6 +605,25 @@ padding:12px 16px;font-weight:600;font-size:14px;text-decoration:none;border:1.5
 .cacts .o{border-color:var(--line-c,#e6e2d8);color:var(--ink,#101C26)}
 .cclose{margin-top:16px;background:none;border:0;font-family:inherit;font-size:13px;
 color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
+
+.cbox form{display:flex;flex-direction:column;gap:13px}
+.cfield{display:flex;flex-direction:column;gap:5px}
+.cfield label{font-size:12.5px;font-weight:600;color:var(--ink,#101C26)}
+.cfield input,.cfield textarea{font-family:inherit;font-size:14.5px;color:var(--ink,#101C26);
+background:var(--ground,#F5F2E9);border:1px solid var(--line-c,#e6e2d8);border-radius:10px;
+padding:11px 13px;width:100%}
+.cfield textarea{min-height:88px;resize:vertical}
+.cfield input:focus,.cfield textarea:focus{outline:2px solid var(--sonda,#12405E);outline-offset:1px}
+.cerr{font-size:12.5px;color:var(--boya,#E8613C);margin:0}
+.cerr:empty{display:none}
+.csend{background:var(--boya,#E8613C);color:var(--ink,#101C26);border:0;border-radius:10px;
+padding:13px 18px;font-family:inherit;font-weight:600;font-size:14.5px;cursor:pointer;width:100%}
+.csend:disabled{opacity:.6;cursor:default}
+.calt{font-size:12.5px;color:var(--muted,#5E6E79);text-align:center;margin:2px 0 0;line-height:1.5}
+.calt a{color:var(--boya,#E8613C);text-decoration:underline;text-underline-offset:2px}
+.cdone{text-align:center;padding:8px 0 4px}
+.cdone .tick{width:52px;height:52px;border-radius:50%;background:var(--boya,#E8613C);
+display:grid;place-items:center;margin:0 auto 14px}
 </style></noscript>
 
 <nav class="nav" id="nav"><div class="wrap">
@@ -1044,61 +1063,95 @@ stops.forEach(s=>{
 </script>
 
 <script>
-/* Los enlaces mailto no sirven si el visitante no tiene programa de correo configurado
-   (en Windows sin Outlook, el clic abre una pestaña en blanco). Este panel deja la
-   dirección a la vista para copiarla y ofrece abrir el correo en el navegador. */
+/* Formulario de contacto. El sitio es estatico: sin endpoint configurado, el envio se
+   completa abriendo el correo del visitante con todo ya escrito. Cuando exista el
+   endpoint, poner su URL en FORM_ENDPOINT y el envio pasa a ser directo. */
 (function(){
   var CORREO='jasondiazarias@gmail.com';
-  var box=null;
-  function abrir(asunto, cuerpo){
+  var FORM_ENDPOINT='';   /* <- al llenarse, el formulario envia solo */
+  var box=null, plan='';
+
+  function html(){
+    return '<div class="cbox" role="dialog" aria-modal="true" aria-labelledby="c-t">'+
+      '<h3 id="c-t">Hablemos de su negocio</h3>'+
+      '<p id="c-sub"></p>'+
+      '<form id="c-form" novalidate>'+
+        '<div class="cfield"><label for="c-nom">Su nombre</label><input id="c-nom" name="nombre" autocomplete="name" required></div>'+
+        '<div class="cfield"><label for="c-tel">Tel&eacute;fono</label><input id="c-tel" name="telefono" inputmode="tel" autocomplete="tel" placeholder="8888-8888"></div>'+
+        '<div class="cfield"><label for="c-cor">Su correo</label><input id="c-cor" name="correo" type="email" autocomplete="email" required placeholder="nombre@sunegocio.com"></div>'+
+        '<div class="cfield"><label for="c-msg">Cu&eacute;ntenos de su negocio</label><textarea id="c-msg" name="mensaje" placeholder="Qu&eacute; vende, cu&aacute;ntos productos maneja, qu&eacute; necesita resolver"></textarea></div>'+
+        '<p class="cerr" id="c-err"></p>'+
+        '<button class="csend" type="submit" id="c-send">Enviar</button>'+
+        '<p class="calt">Tambi&eacute;n puede escribirnos a <a id="c-dir" href="#"></a></p>'+
+      '</form>'+
+      '<button type="button" class="cclose" id="c-cerrar">Cerrar</button></div>';
+  }
+  function gracias(via){
+    box.querySelector('.cbox').innerHTML='<div class="cdone">'+
+      '<div class="tick"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#101C26" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 7"/></svg></div>'+
+      '<h3>'+(via==='directo'?'Mensaje enviado':'Ya casi')+'</h3>'+
+      '<p>'+(via==='directo'
+        ? 'Le respondemos al correo que nos dej&oacute;.'
+        : 'Le abrimos su correo con el mensaje escrito. <b>Solo falta que lo env&iacute;e</b> desde ah&iacute;.')+'</p>'+
+      '<button type="button" class="csend" id="c-cerrar2">Cerrar</button></div>';
+    box.querySelector('#c-cerrar2').onclick=cerrar;
+  }
+  function armar(d){
+    var asunto=plan||'Bayline · consulta desde la landing';
+    var cuerpo='Nombre: '+d.nombre+'\n'+
+      'Teléfono: '+(d.telefono||'(no indicado)')+'\n'+
+      'Correo: '+d.correo+'\n'+
+      (plan? 'Interesado en: '+plan+'\n':'')+
+      '\n'+(d.mensaje||'(sin mensaje)')+'\n';
+    return {asunto:asunto, cuerpo:cuerpo};
+  }
+  function abrir(asunto){
+    plan=asunto||'';
     if(!box){
-      box=document.createElement('div');
-      box.className='cscrim';
-      box.innerHTML='<div class="cbox" role="dialog" aria-modal="true" aria-label="Escríbanos">'+
-        '<h3>Escríbanos</h3>'+
-        '<p id="c-sub"></p>'+
-        '<div class="cmail"><span id="c-dir"></span><button type="button" id="c-copy">Copiar</button></div>'+
-        '<p class="cok" id="c-ok"></p>'+
-        '<div class="cacts">'+
-          '<a class="g" id="c-gmail" target="_blank" rel="noopener">Abrir en Gmail</a>'+
-          '<a class="o" id="c-outlook" target="_blank" rel="noopener">Abrir en Outlook</a>'+
-          '<a class="o" id="c-mailto">Abrir en mi programa de correo</a>'+
-        '</div>'+
-        '<button type="button" class="cclose" id="c-cerrar">Cerrar</button></div>';
+      box=document.createElement('div'); box.className='cscrim';
       document.body.appendChild(box);
-      box.addEventListener('click', function(e){ if(e.target===box) cerrar(); });
-      box.querySelector('#c-cerrar').onclick=cerrar;
-      box.querySelector('#c-copy').onclick=function(){
-        var ok=box.querySelector('#c-ok');
-        var listo=function(){ ok.textContent='Dirección copiada.'; };
-        if(navigator.clipboard&&navigator.clipboard.writeText){
-          navigator.clipboard.writeText(CORREO).then(listo, function(){ok.textContent='Selecciónela y cópiela con Ctrl+C.';});
-        } else {
-          var r=document.createRange(); r.selectNode(box.querySelector('#c-dir'));
-          var sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
-          ok.textContent='Selecciónela y cópiela con Ctrl+C.';
-        }
-      };
-      addEventListener('keydown', function(e){ if(e.key==='Escape') cerrar(); });
+      box.addEventListener('click',function(e){ if(e.target===box) cerrar(); });
+      addEventListener('keydown',function(e){ if(e.key==='Escape') cerrar(); });
     }
-    var q=encodeURIComponent, s=q(asunto), b=q(cuerpo);
-    box.querySelector('#c-dir').textContent=CORREO;
-    box.querySelector('#c-sub').textContent='Sobre: '+asunto;
-    box.querySelector('#c-ok').textContent='';
-    box.querySelector('#c-gmail').href='https://mail.google.com/mail/?view=cm&fs=1&to='+q(CORREO)+'&su='+s+'&body='+b;
-    box.querySelector('#c-outlook').href='https://outlook.live.com/mail/0/deeplink/compose?to='+q(CORREO)+'&subject='+s+'&body='+b;
-    box.querySelector('#c-mailto').href='mailto:'+CORREO+'?subject='+s+'&body='+b;
+    box.innerHTML=html();
+    box.querySelector('#c-sub').textContent=plan? 'Sobre: '+plan : 'Contáctenos y le respondemos.';
+    var dir=box.querySelector('#c-dir'); dir.textContent=CORREO; dir.href='mailto:'+CORREO;
+    box.querySelector('#c-cerrar').onclick=cerrar;
+    box.querySelector('#c-form').addEventListener('submit',enviar);
     box.classList.add('on');
+    setTimeout(function(){ var n=box.querySelector('#c-nom'); if(n) n.focus(); },60);
+  }
+  function enviar(e){
+    e.preventDefault();
+    var g=function(id){ return (box.querySelector(id).value||'').trim(); };
+    var d={nombre:g('#c-nom'), telefono:g('#c-tel'), correo:g('#c-cor'), mensaje:g('#c-msg')};
+    var err=box.querySelector('#c-err');
+    if(!d.nombre){ err.textContent='Indíquenos su nombre.'; box.querySelector('#c-nom').focus(); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.correo)){ err.textContent='Revise su correo: no parece completo.'; box.querySelector('#c-cor').focus(); return; }
+    err.textContent='';
+    var m=armar(d), btn=box.querySelector('#c-send');
+    btn.disabled=true; btn.textContent='Enviando...';
+    if(FORM_ENDPOINT){
+      fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({asunto:m.asunto, para:CORREO, datos:d})})
+        .then(function(r){ if(!r.ok) throw 0; gracias('directo'); })
+        .catch(function(){ salidaCorreo(m); });
+    } else { salidaCorreo(m); }
+  }
+  function salidaCorreo(m){
+    var q=encodeURIComponent;
+    var url='https://mail.google.com/mail/?view=cm&fs=1&to='+q(CORREO)+'&su='+q(m.asunto)+'&body='+q(m.cuerpo);
+    var w=window.open(url,'_blank','noopener');
+    if(!w){ location.href='mailto:'+CORREO+'?subject='+q(m.asunto)+'&body='+q(m.cuerpo); }
+    gracias('correo');
   }
   function cerrar(){ if(box) box.classList.remove('on'); }
-  document.addEventListener('click', function(e){
+  document.addEventListener('click',function(e){
     var a=e.target.closest('a[href^="mailto:"]');
     if(!a) return;
     e.preventDefault();
-    var h=a.getAttribute('href')||'';
-    var qs=h.split('?')[1]||'';
-    var p=new URLSearchParams(qs);
-    abrir(p.get('subject')||'Bayline', p.get('body')||'');
+    var p=new URLSearchParams((a.getAttribute('href')||'').split('?')[1]||'');
+    abrir(p.get('subject')||'');
   });
 })();
 </script>
