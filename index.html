@@ -484,6 +484,30 @@ p{margin:0}
   .cmp .ic{width:15px;height:15px}
   .cmp .grp th{font-size:9px}
 }
+
+/* ====== contacto: funciona con o sin programa de correo ====== */
+.cscrim{position:fixed;inset:0;background:rgba(12,22,34,.62);z-index:200;display:none;
+place-items:center;padding:22px}
+.cscrim.on{display:grid}
+.cbox{background:var(--surface,#fff);border:1px solid var(--line-c,#e6e2d8);border-radius:16px;
+padding:28px 26px;max-width:440px;width:100%;box-shadow:0 30px 70px rgba(12,22,34,.3)}
+.cbox h3{margin:0 0 6px;font-size:20px;letter-spacing:-.01em}
+.cbox p{margin:0 0 18px;color:var(--muted,#5E6E79);font-size:14.5px;line-height:1.55}
+.cmail{display:flex;align-items:center;gap:10px;background:var(--ground,#F5F2E9);
+border:1px solid var(--line-c,#e6e2d8);border-radius:11px;padding:12px 14px;margin-bottom:8px}
+.cmail span{flex:1;font-family:var(--mono,ui-monospace);font-size:14px;word-break:break-all;color:var(--ink,#101C26)}
+.cmail button{flex-shrink:0;border:1px solid var(--line-c,#e6e2d8);background:var(--surface,#fff);
+border-radius:8px;padding:7px 12px;font-family:inherit;font-size:12.5px;font-weight:600;
+color:var(--ink,#101C26);cursor:pointer}
+.cmail button:hover{border-color:var(--sonda,#12405E)}
+.cok{font-size:12.5px;color:var(--ok,#2f7d5c);margin:0 0 14px;min-height:17px}
+.cacts{display:flex;flex-direction:column;gap:9px}
+.cacts a{display:flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;
+padding:12px 16px;font-weight:600;font-size:14px;text-decoration:none;border:1.5px solid transparent}
+.cacts .g{background:var(--boya,#E8613C);color:var(--ink,#101C26)}
+.cacts .o{border-color:var(--line-c,#e6e2d8);color:var(--ink,#101C26)}
+.cclose{margin-top:16px;background:none;border:0;font-family:inherit;font-size:13px;
+color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
 </style>
 
 <!-- Iconografía de producto · monoline carta náutica (reemplaza recuadros vacíos) -->
@@ -833,5 +857,65 @@ stops.forEach(s=>{
   s.addEventListener('click',()=>setPhase(s.dataset.ph));
   s.addEventListener('focus',()=>setPhase(s.dataset.ph));
 });
+</script>
+
+<script>
+/* Los enlaces mailto no sirven si el visitante no tiene programa de correo configurado
+   (en Windows sin Outlook, el clic abre una pestaña en blanco). Este panel deja la
+   dirección a la vista para copiarla y ofrece abrir el correo en el navegador. */
+(function(){
+  var CORREO='jasondiazarias@gmail.com';
+  var box=null;
+  function abrir(asunto, cuerpo){
+    if(!box){
+      box=document.createElement('div');
+      box.className='cscrim';
+      box.innerHTML='<div class="cbox" role="dialog" aria-modal="true" aria-label="Escríbanos">'+
+        '<h3>Escríbanos</h3>'+
+        '<p id="c-sub"></p>'+
+        '<div class="cmail"><span id="c-dir"></span><button type="button" id="c-copy">Copiar</button></div>'+
+        '<p class="cok" id="c-ok"></p>'+
+        '<div class="cacts">'+
+          '<a class="g" id="c-gmail" target="_blank" rel="noopener">Abrir en Gmail</a>'+
+          '<a class="o" id="c-outlook" target="_blank" rel="noopener">Abrir en Outlook</a>'+
+          '<a class="o" id="c-mailto">Abrir en mi programa de correo</a>'+
+        '</div>'+
+        '<button type="button" class="cclose" id="c-cerrar">Cerrar</button></div>';
+      document.body.appendChild(box);
+      box.addEventListener('click', function(e){ if(e.target===box) cerrar(); });
+      box.querySelector('#c-cerrar').onclick=cerrar;
+      box.querySelector('#c-copy').onclick=function(){
+        var ok=box.querySelector('#c-ok');
+        var listo=function(){ ok.textContent='Dirección copiada.'; };
+        if(navigator.clipboard&&navigator.clipboard.writeText){
+          navigator.clipboard.writeText(CORREO).then(listo, function(){ok.textContent='Selecciónela y cópiela con Ctrl+C.';});
+        } else {
+          var r=document.createRange(); r.selectNode(box.querySelector('#c-dir'));
+          var sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
+          ok.textContent='Selecciónela y cópiela con Ctrl+C.';
+        }
+      };
+      addEventListener('keydown', function(e){ if(e.key==='Escape') cerrar(); });
+    }
+    var q=encodeURIComponent, s=q(asunto), b=q(cuerpo);
+    box.querySelector('#c-dir').textContent=CORREO;
+    box.querySelector('#c-sub').textContent='Sobre: '+asunto;
+    box.querySelector('#c-ok').textContent='';
+    box.querySelector('#c-gmail').href='https://mail.google.com/mail/?view=cm&fs=1&to='+q(CORREO)+'&su='+s+'&body='+b;
+    box.querySelector('#c-outlook').href='https://outlook.live.com/mail/0/deeplink/compose?to='+q(CORREO)+'&subject='+s+'&body='+b;
+    box.querySelector('#c-mailto').href='mailto:'+CORREO+'?subject='+s+'&body='+b;
+    box.classList.add('on');
+  }
+  function cerrar(){ if(box) box.classList.remove('on'); }
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="mailto:"]');
+    if(!a) return;
+    e.preventDefault();
+    var h=a.getAttribute('href')||'';
+    var qs=h.split('?')[1]||'';
+    var p=new URLSearchParams(qs);
+    abrir(p.get('subject')||'Bayline', p.get('body')||'');
+  });
+})();
 </script>
 </html>
