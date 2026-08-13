@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>Recibimos su mensaje</title>
+<style>
+  @media (prefers-color-scheme: dark) {
+    .bg      { background:#0C1622 !important; }
+    .tarjeta { background:#12202E !important; border-color:#223546 !important; }
+    .tinta   { color:#F2F6F8 !important; }
+    .gris    { color:#93A6B2 !important; }
+    .linea   { border-color:#223546 !important; }
+    .enl     { color:#7FB2D4 !important; }
+    .caja    { background:#0C1622 !important; border-color:#223546 !important; }
+  }
+  @media (max-width:620px) {
+    .pad  { padding-left:22px !important; padding-right:22px !important; }
+    .disp { font-size:26px !important; }
+  }
+</style>
+</head>
+<body class="bg" style="margin:0;padding:0;background:#F5F2E9;">
+
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+  Recibimos su mensaje. Le escribimos de vuelta en menos de un día hábil.
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="bg" style="background:#F5F2E9;">
+<tr><td align="center" style="padding:28px 12px;">
+
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="tarjeta" style="width:600px;max-width:100%;background:#FBF9F2;border:1px solid #E2DCC9;border-radius:14px;overflow:hidden;">
+
+    <!-- cabecera -->
+    <tr><td style="background:#0C1622;padding:20px 34px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td align="left" style="font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:19px;font-weight:700;letter-spacing:-0.02em;color:#F5F2E9;">
+          Bayline
+        </td>
+        <td align="right" style="font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#BDD3DE;text-transform:uppercase;">
+          Su comercio, en ruta
+        </td>
+      </tr></table>
+    </td></tr>
+
+    <!-- titular -->
+    <tr><td class="pad" style="padding:38px 34px 0;">
+      <h1 class="tinta disp" style="margin:0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:30px;line-height:1.2;font-weight:700;letter-spacing:-0.02em;color:#101C26;">
+        Recibimos su mensaje,<br>{{nombre_corto}}.
+      </h1>
+      <p class="gris" style="margin:16px 0 0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16.5px;line-height:1.62;color:#5E6E79;">
+        Le escribimos de vuelta en menos de un día hábil. Le responde una persona del equipo, no un formulario, y viene con preguntas sobre su operación antes que con un presupuesto.
+      </p>
+    </td></tr>
+
+    <!-- que sigue -->
+    <tr><td class="pad" style="padding:30px 34px 0;">
+      <p style="margin:0 0 14px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#5E6E79;text-transform:uppercase;">Qué sigue</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr><td valign="top" width="26" style="padding:0 0 12px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;color:#E8613C;font-weight:700;">&bull;</td>
+            <td valign="top" class="tinta" style="padding:0 0 12px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.58;color:#101C26;">Revisamos qué vende y cómo maneja hoy su inventario.</td></tr>
+        <tr><td valign="top" width="26" style="padding:0 0 12px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;color:#E8613C;font-weight:700;">&bull;</td>
+            <td valign="top" class="tinta" style="padding:0 0 12px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.58;color:#101C26;">Le mostramos la plataforma con productos parecidos a los suyos.</td></tr>
+        <tr><td valign="top" width="26" style="padding:0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;color:#E8613C;font-weight:700;">&bull;</td>
+            <td valign="top" class="tinta" style="padding:0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.58;color:#101C26;">Si no le calzamos, se lo decimos. No perdemos su tiempo.</td></tr>
+      </table>
+    </td></tr>
+
+    <!-- copia de lo que envio -->
+    <tr><td class="pad" style="padding:32px 34px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="caja" style="background:#F2F6F8;border:1px solid #E2DCC9;border-radius:11px;">
+        <tr><td style="padding:20px 22px;">
+          <p style="margin:0 0 12px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#5E6E79;text-transform:uppercase;">Lo que nos escribió</p>
+          <p class="tinta" style="margin:0 0 14px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15.5px;line-height:1.6;color:#101C26;">{{mensaje}}</p>
+          <p class="gris" style="margin:0;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.7;color:#5E6E79;">
+            {{plan}}<br>{{telefono}}
+          </p>
+        </td></tr>
+      </table>
+      <p class="gris" style="margin:13px 0 0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13.5px;line-height:1.55;color:#5E6E79;">
+        Si algo de esto quedó mal, respóndanos a este mismo correo y lo corregimos.
+      </p>
+    </td></tr>
+
+    <!-- pie -->
+    <tr><td class="pad" style="padding:30px 34px 32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td class="linea" style="border-top:1px solid #E2DCC9;padding-top:18px;">
+          <p style="margin:0 0 5px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14.5px;font-weight:700;letter-spacing:-0.01em;color:#101C26;" class="tinta">Bayline</p>
+          <p class="gris" style="margin:0;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.8;color:#5E6E79;">
+            <a href="https://bayline.poker-jacks.tech" style="color:#5E6E79;text-decoration:none;">bayline.poker-jacks.tech</a><br>
+            Un producto de Poker Jacks &middot; Costa Rica
+          </p>
+        </td>
+      </tr></table>
+    </td></tr>
+
+  </table>
+
+</td></tr>
+</table>
+
+</body>
+</html>

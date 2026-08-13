@@ -68,7 +68,10 @@ jobs:
                       continue
                   if '${' in ref or '{{' in ref:
                       continue
-                  destino = f.parent / ref.split('?')[0].split('#')[0]
+                  limpio = ref.split('?')[0].split('#')[0]
+                  # una ruta que arranca con / es relativa a la raiz del sitio,
+                  # no al disco: resolverla contra f.parent daba un falso positivo
+                  destino = pathlib.Path('.') / limpio.lstrip('/') if limpio.startswith('/') else f.parent / limpio
                   if not destino.exists():
                       malos.append(f'{f}: {ref}')
           for b in malos:
