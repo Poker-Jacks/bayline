@@ -15,6 +15,7 @@
     .regla   { border-color:#223546 !important; }
     .cita    { background:#0C1622 !important; border-color:#223546 !important; }
     .enl     { color:#7FB2D4 !important; }
+    .rotulo  { color:#7FB2D4 !important; }
     .dato    { color:#F2F6F8 !important; }
     .piebase { background:#12202E !important; }
   }
@@ -40,10 +41,18 @@
     <tr><td bgcolor="#0C1622" background="https://bayline.poker-jacks.tech/email/contornos-marea.png"
             style="background-color:#0C1622;background-image:url('https://bayline.poker-jacks.tech/email/contornos-marea.png');background-size:cover;background-position:center;padding:26px 32px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td align="left" style="font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.02em;color:#F5F2E9;line-height:1.1;">
-          Bayline
+        <td align="left" valign="middle">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td width="48" valign="middle" style="line-height:0;">
+              <img src="https://bayline.poker-jacks.tech/email/marca-clara.png" width="48" height="48" alt="" style="display:block;border:0;outline:none;">
+            </td>
+            <td width="13" style="font-size:0;line-height:0;">&nbsp;</td>
+            <td valign="middle" style="font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:21px;font-weight:700;letter-spacing:-0.02em;color:#F5F2E9;line-height:1.1;">
+              Bayline
+            </td>
+          </tr></table>
         </td>
-        <td align="right" style="font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.1em;color:#BDD3DE;text-transform:uppercase;">
+        <td align="right" style="font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;letter-spacing:0.1em;color:#BDD3DE;text-transform:uppercase;">
           {{folio}}
         </td>
       </tr></table>
@@ -58,19 +67,19 @@
     <tr><td class="marco" style="padding:24px 32px 0;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="etiq" width="128" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.1em;color:#5E6E79;text-transform:uppercase;">Teléfono</td>
+          <td class="etiq rotulo" width="128" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;letter-spacing:0.1em;color:#12405E;text-transform:uppercase;">Teléfono</td>
           <td class="valor dato" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#101C26;">
             <a class="enl" href="tel:{{telefono_e164}}" style="color:#12405E;text-decoration:none;">{{telefono}}</a>
           </td>
         </tr>
         <tr>
-          <td class="etiq" width="128" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.1em;color:#5E6E79;text-transform:uppercase;">Correo</td>
+          <td class="etiq rotulo" width="128" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;letter-spacing:0.1em;color:#12405E;text-transform:uppercase;">Correo</td>
           <td class="valor dato" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#101C26;">
             <a class="enl" href="mailto:{{correo}}" style="color:#12405E;text-decoration:none;">{{correo}}</a>
           </td>
         </tr>
         <tr>
-          <td class="etiq" width="128" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.1em;color:#5E6E79;text-transform:uppercase;">Interesado en</td>
+          <td class="etiq rotulo" width="128" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;letter-spacing:0.1em;color:#12405E;text-transform:uppercase;">Interesado en</td>
           <td class="valor dato" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#101C26;">{{plan}}</td>
         </tr>
       </table>
