@@ -883,7 +883,7 @@ stops.forEach(s=>{
    endpoint, poner su URL en FORM_ENDPOINT y el envio pasa a ser directo. */
 (function(){
   var CORREO='jasondiazarias@gmail.com';
-  var FORM_ENDPOINT='';   /* <- al llenarse, el formulario envia solo */
+  var FORM_ENDPOINT='/api/contacto';   /* pj-forms: entrega por Resend con Reply-To del visitante */
   var box=null, plan='';
 
   function html(){
