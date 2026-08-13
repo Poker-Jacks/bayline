@@ -17,6 +17,7 @@
     .linea   { border-color:#223546 !important; }
     .enl     { color:#7FB2D4 !important; }
     .dato    { color:#F2F6F8 !important; }
+    .caja    { background:#0C1622 !important; border-color:#223546 !important; }
   }
   @media (max-width:620px) {
     .pad   { padding-left:22px !important; padding-right:22px !important; }
@@ -90,16 +91,17 @@
       </tr></table>
     </td></tr>
 
-    <!-- responder -->
-    <tr><td class="pad" style="padding:30px 34px 0;">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td style="background:#E8613C;border-radius:9px;">
-          <a href="mailto:{{correo}}?subject=Re:%20{{plan_url}}" style="display:inline-block;padding:13px 26px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:700;color:#101C26;text-decoration:none;">Responderle a {{nombre_corto}}</a>
-        </td>
-      </tr></table>
-      <p class="gris" style="margin:12px 0 0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.55;color:#5E6E79;">
-        También puede darle Responder a este correo: sale directo a {{correo}}.
-      </p>
+    <!-- como responder -->
+    <tr><td class="pad" style="padding:28px 34px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="caja" style="background:#F2F6F8;border:1px solid #E2DCC9;border-radius:11px;">
+        <tr><td style="padding:16px 20px;">
+          <p style="margin:0 0 6px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#5E6E79;text-transform:uppercase;">Para responderle</p>
+          <p class="tinta" style="margin:0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#101C26;">
+            Dele <b>Responder</b> a este correo y sale a {{correo}}. Manténgale el asunto tal cual
+            para que del lado de {{nombre_corto}} quede todo en un solo hilo.
+          </p>
+        </td></tr>
+      </table>
     </td></tr>
 
     <!-- pie -->
