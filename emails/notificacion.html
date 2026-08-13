@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>{{nombre}} escribió desde la landing</title>
+<style>
+  /* Progresivo: los clientes que lo respeten pintan en oscuro. Los que borren
+     este bloque se quedan con el diseño claro de los estilos en linea, que es completo. */
+  @media (prefers-color-scheme: dark) {
+    .bg      { background:#0C1622 !important; }
+    .tarjeta { background:#12202E !important; border-color:#223546 !important; }
+    .tinta   { color:#F2F6F8 !important; }
+    .gris    { color:#93A6B2 !important; }
+    .linea   { border-color:#223546 !important; }
+    .enl     { color:#7FB2D4 !important; }
+    .dato    { color:#F2F6F8 !important; }
+  }
+  @media (max-width:620px) {
+    .pad   { padding-left:22px !important; padding-right:22px !important; }
+    .etiq  { display:block !important; width:100% !important; padding-bottom:2px !important; }
+    .valor { display:block !important; width:100% !important; padding-bottom:14px !important; }
+  }
+</style>
+</head>
+<body class="bg" style="margin:0;padding:0;background:#F5F2E9;">
+
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+  {{nombre}} le escribió desde la landing. Teléfono {{telefono}}. Interesado en {{plan}}.
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="bg" style="background:#F5F2E9;">
+<tr><td align="center" style="padding:28px 12px;">
+
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="tarjeta" style="width:600px;max-width:100%;background:#FBF9F2;border:1px solid #E2DCC9;border-radius:14px;overflow:hidden;">
+
+    <!-- cabecera -->
+    <tr><td style="background:#0C1622;padding:20px 34px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td align="left" style="font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:19px;font-weight:700;letter-spacing:-0.02em;color:#F5F2E9;">
+          Bayline
+        </td>
+        <td align="right" style="font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#BDD3DE;text-transform:uppercase;">
+          Consulta desde la landing
+        </td>
+      </tr></table>
+    </td></tr>
+
+    <!-- titular -->
+    <tr><td class="pad" style="padding:34px 34px 6px;">
+      <h1 class="tinta" style="margin:0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:25px;line-height:1.25;font-weight:700;letter-spacing:-0.02em;color:#101C26;">
+        {{nombre}} le escribió.
+      </h1>
+    </td></tr>
+
+    <!-- datos -->
+    <tr><td class="pad" style="padding:22px 34px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+
+        <tr>
+          <td class="etiq" width="132" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#5E6E79;text-transform:uppercase;">Teléfono</td>
+          <td class="valor dato" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#101C26;">
+            <a class="enl" href="tel:{{telefono_e164}}" style="color:#12405E;text-decoration:none;">{{telefono}}</a>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="etiq" width="132" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#5E6E79;text-transform:uppercase;">Correo</td>
+          <td class="valor dato" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#101C26;">
+            <a class="enl" href="mailto:{{correo}}" style="color:#12405E;text-decoration:none;">{{correo}}</a>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="etiq" width="132" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:500;letter-spacing:0.09em;color:#5E6E79;text-transform:uppercase;">Interesado en</td>
+          <td class="valor dato" valign="top" style="padding:0 0 13px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#101C26;">{{plan}}</td>
+        </tr>
+
+      </table>
+    </td></tr>
+
+    <!-- mensaje -->
+    <tr><td class="pad" style="padding:12px 34px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="border-left:3px solid #E8613C;padding:2px 0 2px 18px;">
+          <p class="tinta" style="margin:0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.62;color:#101C26;">{{mensaje}}</p>
+        </td>
+      </tr></table>
+    </td></tr>
+
+    <!-- responder -->
+    <tr><td class="pad" style="padding:30px 34px 0;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="background:#E8613C;border-radius:9px;">
+          <a href="mailto:{{correo}}?subject=Re:%20{{plan_url}}" style="display:inline-block;padding:13px 26px;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:700;color:#101C26;text-decoration:none;">Responderle a {{nombre_corto}}</a>
+        </td>
+      </tr></table>
+      <p class="gris" style="margin:12px 0 0;font-family:'Author',-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.55;color:#5E6E79;">
+        También puede darle Responder a este correo: sale directo a {{correo}}.
+      </p>
+    </td></tr>
+
+    <!-- pie -->
+    <tr><td class="pad" style="padding:26px 34px 30px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td class="linea" style="border-top:1px solid #E2DCC9;padding-top:16px;font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.75;color:#5E6E79;">
+          <span class="gris" style="color:#5E6E79;">{{fecha}}</span><br>
+          <a href="{{url}}" style="color:#5E6E79;text-decoration:none;">{{url}}</a><br>
+          <span class="gris" style="color:#5E6E79;">IP {{ip}}</span>
+        </td>
+      </tr></table>
+    </td></tr>
+
+  </table>
+
+</td></tr>
+</table>
+
+</body>
+</html>
