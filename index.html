@@ -527,6 +527,18 @@ padding:13px 18px;font-family:inherit;font-weight:600;font-size:14.5px;cursor:po
 .cdone{text-align:center;padding:8px 0 4px}
 .cdone .tick{width:52px;height:52px;border-radius:50%;background:var(--boya,#E8613C);
 display:grid;place-items:center;margin:0 auto 14px}
+
+.cconsent{display:flex;gap:10px;align-items:flex-start;cursor:pointer;
+  font-size:13px;line-height:1.55;color:var(--muted,#5E6E79)}
+.cconsent input{appearance:none;-webkit-appearance:none;flex:0 0 auto;
+  width:18px;height:18px;margin:1px 0 0;border:1.5px solid var(--line-c,#e6e2d8);
+  border-radius:5px;background:var(--ground,#F5F2E9);cursor:pointer;position:relative}
+.cconsent input:checked{background:var(--boya,#E8613C);border-color:var(--boya,#E8613C)}
+.cconsent input:checked::after{content:'';position:absolute;left:5px;top:1px;
+  width:5px;height:10px;border:solid var(--ink,#101C26);border-width:0 2px 2px 0;
+  transform:rotate(42deg)}
+.cconsent input:focus-visible{outline:2px solid var(--sonda,#12405E);outline-offset:2px}
+.cconsent a{color:var(--boya,#E8613C);text-decoration:underline;text-underline-offset:2px}
 </style>
 
 <!-- Iconografía de producto · monoline carta náutica (reemplaza recuadros vacíos) -->
@@ -895,7 +907,7 @@ stops.forEach(s=>{
         '<div class="cfield"><label for="c-tel">Tel&eacute;fono</label><input id="c-tel" name="telefono" inputmode="tel" autocomplete="tel" placeholder="8888-8888"></div>'+
         '<div class="cfield"><label for="c-cor">Su correo</label><input id="c-cor" name="correo" type="email" autocomplete="email" required placeholder="nombre@sunegocio.com"></div>'+
         '<div class="cfield"><label for="c-msg">Cu&eacute;ntenos de su negocio</label><textarea id="c-msg" name="mensaje" placeholder="Qu&eacute; vende, cu&aacute;ntos productos maneja, qu&eacute; necesita resolver"></textarea></div>'+
-        '<p class="cerr" id="c-err"></p>'+
+        '<label class="cconsent" for="c-ok"><input type="checkbox" id="c-ok" name="consentimiento">'+'<span>Autorizo a Poker Jacks a guardar mi nombre, correo, tel&eacute;fono y mensaje '+'<b>&uacute;nicamente para responder esta consulta</b>. Puedo retirar esta autorizaci&oacute;n cuando quiera. '+'<a href="/privacidad.html" target="_blank" rel="noopener">C&oacute;mo tratamos sus datos</a></span></label>'+'<p class="cerr" id="c-err"></p>'+
         '<button class="csend" type="submit" id="c-send">Enviar</button>'+
         '<p class="calt">Tambi&eacute;n puede escribirnos a <a id="c-dir" href="#"></a></p>'+
       '</form>'+
@@ -943,12 +955,16 @@ stops.forEach(s=>{
     var err=box.querySelector('#c-err');
     if(!d.nombre){ err.textContent='Indíquenos su nombre.'; box.querySelector('#c-nom').focus(); return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.correo)){ err.textContent='Revise su correo: no parece completo.'; box.querySelector('#c-cor').focus(); return; }
+    if(!box.querySelector('#c-ok').checked){ err.textContent='Marque la autorización para poder guardarle los datos y responderle.'; box.querySelector('#c-ok').focus(); return; }
     err.textContent='';
     var m=armar(d), btn=box.querySelector('#c-send');
     btn.disabled=true; btn.textContent='Enviando...';
     if(FORM_ENDPOINT){
       fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({asunto:m.asunto, para:CORREO, datos:d})})
+        body:JSON.stringify({asunto:m.asunto, para:CORREO, datos:d,
+          consentimiento:{aceptado:true, version:'2026-08-12',
+            texto:'Autorizo a Poker Jacks a guardar mi nombre, correo, telefono y mensaje unicamente para responder esta consulta.',
+            fecha:new Date().toISOString(), pagina:location.href}})})
         .then(function(r){ if(!r.ok) throw 0; gracias('directo'); })
         .catch(function(){ salidaCorreo(m); });
     } else { salidaCorreo(m); }
