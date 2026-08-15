@@ -47,7 +47,7 @@ La notificación interna es otro mensaje a otro destinatario: su asunto es libre
 | `Auto-Submitted` | `auto-replied` | RFC 3834. **Esto es lo que corta los bucles** con los "estoy fuera de la oficina": los responders no deben contestar un mensaje que lo traiga. |
 | `X-Auto-Response-Suppress` | `OOF, AutoReply, DR, RN, NRN` | Propietario de Microsoft. Suprime OOO, acuses de entrega y de lectura de Exchange. |
 | `Message-ID` | `<lead-{uuid}@poker-jacks.tech>` | **Guardarlo junto al lead.** Es el ancla del hilo: la respuesta humana lo usa en `In-Reply-To` y `References`. |
-| `Reply-To` | una dirección que reciba | Hoy `jasondiazarias@gmail.com`. Cuando Email Routing esté, `hola@poker-jacks.tech`. **Nunca un `no-reply`.** |
+| `Reply-To` | una dirección que reciba | Hoy `hola@poker-jacks.tech`. Cuando Email Routing esté, `hola@poker-jacks.tech`. **Nunca un `no-reply`.** |
 
 **Que NO lleve:**
 
