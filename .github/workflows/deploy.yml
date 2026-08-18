@@ -76,8 +76,24 @@ jobs:
           # paso final para probar que el sitio sirve ESTE build y no uno viejo.
           docker build --build-arg "BUILD_SHA=${GITHUB_SHA}" \
             -t "${IMG}:${GITHUB_SHA}" -t "${IMG}:${WATCH_TAG}" .
-          docker push "${IMG}:${GITHUB_SHA}"
-          docker push "${IMG}:${WATCH_TAG}"
+          # El login de arriba ya reintentaba y el push no, aunque el push es el que mas se cae:
+          # manda la imagen entera contra el registry, asi que es la operacion mas larga y la
+          # que mas expuesta esta al timeout cross-cloud del runner. Paso el 17-ago desplegando
+          # a main ("Client.Timeout exceeded while awaiting headers") con el sitio ya construido
+          # y probado: el deploy quedo rojo por la red, no por el cambio. Mismo patron que ya
+          # usan vivco-frontend y la demo de ferreteria; esto lo porta aca, que era el ultimo
+          # repo sin el.
+          push_con_reintento() {
+            for i in 1 2 3; do
+              docker push "$1" && return 0
+              echo "docker push $1: intento $i fallo; reintento en $((i*10))s"
+              sleep $((i*10))
+            done
+            echo "::error::docker push $1 fallo tras 3 intentos — el registry no esta alcanzable desde el runner"
+            return 1
+          }
+          push_con_reintento "${IMG}:${GITHUB_SHA}"
+          push_con_reintento "${IMG}:${WATCH_TAG}"
 
       # El webhook puede responder 200 y NO desplegar nada: si la app tiene auto_deploy apagado
       # o el watch_tag no coincide, VPS Manager la salta y devuelve apps_deployed:0. Le paso al
