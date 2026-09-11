@@ -2,9 +2,9 @@
 <html lang="es">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Bayline · su comercio, en ruta</title>
+<title>Bayline · su comercio, en ruta</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><link rel="apple-touch-icon" href="/icono-180.png">
 <meta name="description" content="Bayline es la plataforma de comercio para negocios de Costa Rica: catálogo, pagos en línea y logística en un solo lugar, con 0% de comisión de nuestra parte.">
-<link rel="icon" href="data:image/svg%2Bxml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 96 96%27%3E%3Crect width=%2796%27 height=%2796%27 rx=%2718%27 fill=%27%230C1622%27/%3E%3Cg stroke=%27%23F2F6F8%27 fill=%27none%27 stroke-width=%275%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M38 16 L78 16 L78 52 L38 52 L20 34 Z%27 transform=%27rotate(-14 36 34)%27/%3E%3C/g%3E%3Ccircle cx=%2735%27 cy=%2737%27 r=%276.5%27 fill=%27none%27 stroke=%27%23E8613C%27 stroke-width=%274%27/%3E%3C/svg%3E">
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Bayline">
 <meta property="og:title" content="Bayline · su comercio, en ruta">
@@ -508,6 +508,47 @@ padding:12px 16px;font-weight:600;font-size:14px;text-decoration:none;border:1.5
 .cacts .o{border-color:var(--line-c,#e6e2d8);color:var(--ink,#101C26)}
 .cclose{margin-top:16px;background:none;border:0;font-family:inherit;font-size:13px;
 color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
+
+.cbox form{display:flex;flex-direction:column;gap:13px}
+.cfield{display:flex;flex-direction:column;gap:5px}
+.cfield label{font-size:12.5px;font-weight:600;color:var(--ink,#101C26)}
+.cfield input,.cfield textarea{font-family:inherit;font-size:14.5px;color:var(--ink,#101C26);
+background:var(--ground,#F5F2E9);border:1px solid var(--line-c,#e6e2d8);border-radius:10px;
+padding:11px 13px;width:100%}
+.cfield textarea{min-height:88px;resize:vertical}
+.cfield input:focus,.cfield textarea:focus{outline:2px solid var(--sonda,#12405E);outline-offset:1px}
+.cerr{font-size:12.5px;color:var(--boya,#E8613C);margin:0}
+.cerr:empty{display:none}
+.csend{background:var(--boya,#E8613C);color:var(--ink,#101C26);border:0;border-radius:10px;
+padding:13px 18px;font-family:inherit;font-weight:600;font-size:14.5px;cursor:pointer;width:100%}
+.csend:disabled{opacity:.6;cursor:default}
+.calt{font-size:12.5px;color:var(--muted,#5E6E79);text-align:center;margin:2px 0 0;line-height:1.5}
+.calt a{color:var(--boya,#E8613C);text-decoration:underline;text-underline-offset:2px}
+.cdone{text-align:center;padding:8px 0 4px}
+.cdone .tick{width:52px;height:52px;border-radius:50%;background:var(--boya,#E8613C);
+display:grid;place-items:center;margin:0 auto 14px}
+
+.cconsent{display:flex;gap:10px;align-items:flex-start;cursor:pointer;
+  font-size:13px;line-height:1.55;color:var(--muted,#5E6E79)}
+.cconsent input{appearance:none;-webkit-appearance:none;flex:0 0 auto;
+  width:18px;height:18px;margin:1px 0 0;border:1.5px solid var(--line-c,#e6e2d8);
+  border-radius:5px;background:var(--ground,#F5F2E9);cursor:pointer;position:relative}
+.cconsent input:checked{background:var(--boya,#E8613C);border-color:var(--boya,#E8613C)}
+.cconsent input:checked::after{content:'';position:absolute;left:5px;top:1px;
+  width:5px;height:10px;border:solid var(--ink,#101C26);border-width:0 2px 2px 0;
+  transform:rotate(42deg)}
+.cconsent input:focus-visible{outline:2px solid var(--sonda,#12405E);outline-offset:2px}
+.cconsent a{color:var(--boya,#E8613C);text-decoration:underline;text-underline-offset:2px}
+
+.plan .vende{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--boya);margin-bottom:.45rem}
+.plan.dest .vende{color:var(--boya)}
+
+/* Video del sistema. preload="metadata" a proposito: son 2 MB y no los tiene que
+   pagar quien solo pasa scrolleando. De entrada solo carga el poster. */
+.sysvid{margin:clamp(2rem,5vw,3.2rem) auto 0;max-width:860px;width:100%}
+.sysvid video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:var(--marea);
+  border:1px solid rgba(189,211,222,.20);border-radius:3px}
 </style>
 
 <!-- Iconografía de producto · monoline carta náutica (reemplaza recuadros vacíos) -->
@@ -553,7 +594,6 @@ color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
   <svg class="contours" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice"><use href="#bl-contours"/><g class="glowlines" aria-hidden="true"><polyline points="0 0 25 2.4 50 4.7 75 6.9 100 9 125 11 150 12.8 175 14.3 200 15.6 225 16.7 250 17.4 275 17.9 300 18 325 17.8 350 17.4 375 16.6 400 15.5" pathLength="100" style="animation-delay:-0s"/><polyline points="0 33.6 25 35.3 50 36.8 75 38 100 38.9 125 39.6 150 39.9 175 40 200 39.7 225 39.1 250 38.3 275 37.1 300 35.7 325 34.1 350 32.2 375 30.2 400 28" pathLength="100" style="animation-delay:-3.1s"/><polyline points="0 61.7 25 62 50 61.9 75 61.6 100 60.9 125 59.9 150 58.7 175 57.2 200 55.5 225 53.6 250 51.5 275 49.3 300 47 325 44.6 350 42.3 375 39.9 400 37.7" pathLength="100" style="animation-delay:-6.2s"/><polyline points="0 81.5 25 80.2 50 78.6 75 76.9 100 74.9 125 72.8 150 70.5 175 68.2 200 65.8 225 63.5 250 61.2 275 59 300 56.8 325 54.9 350 53.1 375 51.6 400 50.3" pathLength="100" style="animation-delay:-1.6s"/><polyline points="0 94 25 91.8 50 89.4 75 87.1 100 84.7 125 82.4 150 80.2 175 78.2 200 76.3 225 74.6 250 73.1 275 71.9 300 71 325 70.4 350 70.1 375 70 400 70.3" pathLength="100" style="animation-delay:-4.7s"/><polyline points="0 103.7 25 101.5 50 99.5 75 97.7 100 96.1 125 94.7 150 93.6 175 92.8 200 92.2 225 92 250 92.1 275 92.5 300 93.2 325 94.2 350 95.4 375 96.9 400 98.6" pathLength="100" style="animation-delay:-2.3s"/><polyline points="0 116.3 25 115.3 50 114.6 75 114.1 100 114 125 114.2 150 114.7 175 115.5 200 116.5 225 117.9 250 119.5 275 121.3 300 123.2 325 125.4 350 127.6 375 129.9 400 132.3" pathLength="100" style="animation-delay:-5.4s"/><polyline points="0 136.3 25 136.9 50 137.8 75 139 100 140.4 125 142 150 143.9 175 145.9 200 148.1 225 150.4 250 152.7 275 155.1 300 157.4 325 159.7 350 161.9 375 163.9 400 165.8" pathLength="100" style="animation-delay:-7.0s"/></g></svg>
   <div class="wrap">
     <div>
-      <span class="kick rv">Plataforma de comercio · Costa Rica</span>
       <h1 class="rv" style="--i:1">Su comercio,<br><span class="rt">en ruta.</span></h1>
       <p class="lead rv" style="--i:2">No es solo una página web: es su canal comercial digitalizado. Catálogo,
         pagos en línea y logística en una plataforma que crece con su negocio. Usted elige hasta dónde
@@ -642,6 +682,15 @@ color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
       </button>
     </div>
 
+  
+    <figure class="sysvid rv" style="--i:4">
+      <video controls preload="metadata" playsinline
+             poster="media/anuncio-poster.jpg"
+             width="1280" height="720">
+        <source src="media/anuncio-bayline-dockbay.mp4" type="video/mp4">
+        Su navegador no puede reproducir el video.
+      </video>
+    </figure>
   </div>
 </section>
 
@@ -694,7 +743,7 @@ color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
     </div>
     <div class="pgrid">
       <article class="plan rv" style="--i:1">
-        <div class="pn">Impulso</div><div class="stage">Empiece su transformación digital</div>
+        <div class="vende">Presencia digital</div><div class="pn">Impulso</div>
         <p class="ideal">Para el negocio que quiere presencia digital profesional sin cambiar su operación interna.</p>
         <div class="price"><i>desde</i><b>$150</b><span>/mes +IVA</span></div>
         <div class="annual">+ implementación desde $500</div>
@@ -705,11 +754,11 @@ color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
           <li>Panel autoadministrable · optimizado para móvil y buscadores</li>
           <li class="no">Pagos en línea (pasarelas)</li>
         </ul>
-        <a class="btn gho" href="mailto:jasondiazarias@gmail.com?subject=Bayline%20%C2%B7%20plan%20Impulso&body=Hola%2C%20me%20interesa%20el%20plan%20Impulso%20para%20mi%20negocio.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Hablar con un asesor</a>
+        <!--email_off--><a class="btn gho" href="mailto:hola@poker-jacks.tech?subject=Bayline%20%C2%B7%20plan%20Impulso&body=Hola%2C%20me%20interesa%20el%20plan%20Impulso%20para%20mi%20negocio.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Hablar con un asesor</a><!--/email_off-->
       </article>
       <article class="plan pop rv" style="--i:2">
         <span class="poptag">Recomendado</span>
-        <div class="pn">Comercial</div><div class="stage">Venda más y automatice sus procesos</div>
+        <div class="vende">Canal de ingresos</div><div class="pn">Comercial</div>
         <p class="ideal">Para empresas listas para recibir pedidos en línea y automatizar su operación comercial.</p>
         <div class="price"><i>desde</i><b>$400</b><span>/mes +IVA</span></div>
         <div class="annual">+ implementación desde $2,000</div>
@@ -720,10 +769,10 @@ color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
           <li>Gestión de clientes, historial e integración con su ERP/API</li>
           <li>Soporte prioritario · respuesta el mismo día</li>
         </ul>
-        <a class="btn pri" href="mailto:jasondiazarias@gmail.com?subject=Bayline%20%C2%B7%20plan%20Comercial&body=Hola%2C%20me%20interesa%20el%20plan%20Comercial%20para%20mi%20negocio.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Agendar demo<svg class="arr" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <!--email_off--><a class="btn pri" href="mailto:hola@poker-jacks.tech?subject=Bayline%20%C2%B7%20plan%20Comercial&body=Hola%2C%20me%20interesa%20el%20plan%20Comercial%20para%20mi%20negocio.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Agendar demo<svg class="arr" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><!--/email_off-->
       </article>
       <article class="plan rv" style="--i:3">
-        <div class="pn">Corporativo</div><div class="stage">Escale toda su operación</div>
+        <div class="vende">Control operativo</div><div class="pn">Corporativo</div>
         <p class="ideal">Para empresas que necesitan controlar toda su operación logística de principio a fin.</p>
         <div class="price"><i>desde</i><b>$1,000</b><span>/mes +IVA</span></div>
         <div class="annual">+ implementación desde $8,000</div>
@@ -734,7 +783,7 @@ color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
           <li>Multi-sucursal y multi-bodega · dashboard ejecutivo y auditoría</li>
           <li>Soporte con canal directo y revisiones periódicas de la operación</li>
         </ul>
-        <a class="btn gho" href="mailto:jasondiazarias@gmail.com?subject=Bayline%20%C2%B7%20plan%20Corporativo&body=Hola%2C%20me%20interesa%20el%20plan%20Corporativo%20para%20mi%20negocio.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Solicitar demo<svg class="arr" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <!--email_off--><a class="btn gho" href="mailto:hola@poker-jacks.tech?subject=Bayline%20%C2%B7%20plan%20Corporativo&body=Hola%2C%20me%20interesa%20el%20plan%20Corporativo%20para%20mi%20negocio.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Solicitar demo<svg class="arr" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><!--/email_off-->
       </article>
     </div>
   </div>
@@ -760,14 +809,14 @@ color:var(--muted,#5E6E79);cursor:pointer;text-decoration:underline;padding:0}
         <tr><th>Rutas y seguimiento de envíos</th><td><svg class="ic no" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="no incluido"><path d="M6.5 6.5l9 9M15.5 6.5l-9 9"/></svg></td><td class="hl"><svg class="ic no" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="no incluido"><path d="M6.5 6.5l9 9M15.5 6.5l-9 9"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
         <tr><th>Multi-sucursal y multi-bodega</th><td><svg class="ic no" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="no incluido"><path d="M6.5 6.5l9 9M15.5 6.5l-9 9"/></svg></td><td class="hl"><svg class="ic no" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="no incluido"><path d="M6.5 6.5l9 9M15.5 6.5l-9 9"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
         <tr><th>Dashboard ejecutivo y auditoría</th><td><svg class="ic no" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="no incluido"><path d="M6.5 6.5l9 9M15.5 6.5l-9 9"/></svg></td><td class="hl"><svg class="ic no" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="no incluido"><path d="M6.5 6.5l9 9M15.5 6.5l-9 9"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
-        <tr><th>Monitoreo</th><td>Básico</td><td class="hl">Proactivo</td><td>Proactivo</td></tr>
-        <tr><th>Primera respuesta de soporte</th><td>1 día hábil</td><td class="hl">Mismo día</td><td>Canal directo</td></tr>
+        
+        
         <tr class="grp"><th colspan="4">Incluido en todos los planes</th></tr>
         <tr><th>Hosting administrado, SSL y respaldos</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
         <tr><th>Monitoreo y actualizaciones de seguridad</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
         <tr><th>Corrección de errores sin costo</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
         <tr><th>Mejoras del producto incluidas</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
-        <tr><th>0% de comisión de Bayline por sus ventas</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+        <tr><th>0% de comisión de Bayline por sus ventas</th><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="hl"><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><svg class="ic yes" viewBox="0 0 22 22" aria-label="incluido"><circle cx="11" cy="11" r="10" fill="var(--boya)"/><path d="M6.6 11.2l2.9 2.9 5.9-6.4" fill="none" stroke="#101C26" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr><tr class="grp"><th colspan="4">Soporte y operación</th></tr><tr><th>Monitoreo</th><td>Básico</td><td class="hl">Proactivo</td><td>Proactivo</td></tr><tr><th>Primera respuesta de soporte</th><td>1 día hábil</td><td class="hl">Mismo día</td><td>Canal directo</td></tr>
       </tbody>
     </table>
   </div>
@@ -794,7 +843,7 @@ Cosa distinta es la <b>pasarela de pagos</b> (la empresa que procesa la tarjeta 
     <span class="kick rv">El siguiente paso toma 30 minutos</span>
     <h2 class="rv" style="--i:1">Véalo funcionando <span class="rt">con sus propios productos.</span></h2>
     <div class="finalctas rv" style="--i:2">
-      <a class="btn pri" href="mailto:jasondiazarias@gmail.com?subject=Bayline%20%C2%B7%20agendar%20una%20demostraci%C3%B3n&body=Hola%2C%20quiero%20agendar%20una%20demostraci%C3%B3n%20de%20Bayline.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Agendar demo<svg class="arr" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <!--email_off--><a class="btn pri" href="mailto:hola@poker-jacks.tech?subject=Bayline%20%C2%B7%20agendar%20una%20demostraci%C3%B3n&body=Hola%2C%20quiero%20agendar%20una%20demostraci%C3%B3n%20de%20Bayline.%0A%0ANombre%3A%0ANegocio%3A%0ATel%C3%A9fono%3A%0A">Agendar demo<svg class="arr" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 8.4l3.6 3.6-3.6 3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><!--/email_off-->
     </div>
   </div>
 </section>
@@ -860,61 +909,99 @@ stops.forEach(s=>{
 </script>
 
 <script>
-/* Los enlaces mailto no sirven si el visitante no tiene programa de correo configurado
-   (en Windows sin Outlook, el clic abre una pestaña en blanco). Este panel deja la
-   dirección a la vista para copiarla y ofrece abrir el correo en el navegador. */
+/* Formulario de contacto. El sitio es estatico: sin endpoint configurado, el envio se
+   completa abriendo el correo del visitante con todo ya escrito. Cuando exista el
+   endpoint, poner su URL en FORM_ENDPOINT y el envio pasa a ser directo. */
 (function(){
-  var CORREO='jasondiazarias@gmail.com';
-  var box=null;
-  function abrir(asunto, cuerpo){
+  var CORREO='hola@poker-jacks.tech';
+  var FORM_ENDPOINT='/api/contacto';   /* pj-forms: entrega por Resend con Reply-To del visitante */
+  var box=null, plan='';
+
+  function html(){
+    return '<div class="cbox" role="dialog" aria-modal="true" aria-labelledby="c-t">'+
+      '<h3 id="c-t">Hablemos de su negocio</h3>'+
+      '<p id="c-sub"></p>'+
+      '<form id="c-form" novalidate>'+
+        '<div class="cfield"><label for="c-nom">Su nombre</label><input id="c-nom" name="nombre" autocomplete="name" required></div>'+
+        '<div class="cfield"><label for="c-tel">Tel&eacute;fono</label><input id="c-tel" name="telefono" inputmode="tel" autocomplete="tel" placeholder="8888-8888"></div>'+
+        '<div class="cfield"><label for="c-cor">Su correo</label><input id="c-cor" name="correo" type="email" autocomplete="email" required placeholder="nombre@sunegocio.com"></div>'+
+        '<div class="cfield"><label for="c-msg">Cu&eacute;ntenos de su negocio</label><textarea id="c-msg" name="mensaje" placeholder="Qu&eacute; vende, cu&aacute;ntos productos maneja, qu&eacute; necesita resolver"></textarea></div>'+
+        '<label class="cconsent" for="c-ok"><input type="checkbox" id="c-ok" name="consentimiento">'+'<span>Autorizo a Poker Jacks a guardar mi nombre, correo, tel&eacute;fono y mensaje '+'<b>&uacute;nicamente para responder esta consulta</b>. Puedo retirar esta autorizaci&oacute;n cuando quiera. '+'<a href="/privacidad.html" target="_blank" rel="noopener">C&oacute;mo tratamos sus datos</a></span></label>'+'<p class="cerr" id="c-err"></p>'+
+        '<button class="csend" type="submit" id="c-send">Enviar</button>'+
+        '<p class="calt">Tambi&eacute;n puede escribirnos a <a id="c-dir" href="#"></a></p>'+
+      '</form>'+
+      '<button type="button" class="cclose" id="c-cerrar">Cerrar</button></div>';
+  }
+  function gracias(via){
+    box.querySelector('.cbox').innerHTML='<div class="cdone">'+
+      '<div class="tick"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#101C26" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 7"/></svg></div>'+
+      '<h3>'+(via==='directo'?'Mensaje enviado':'Ya casi')+'</h3>'+
+      '<p>'+(via==='directo'
+        ? 'Le respondemos al correo que nos dej&oacute;.'
+        : 'Le abrimos su correo con el mensaje escrito. <b>Solo falta que lo env&iacute;e</b> desde ah&iacute;.')+'</p>'+
+      '<button type="button" class="csend" id="c-cerrar2">Cerrar</button></div>';
+    box.querySelector('#c-cerrar2').onclick=cerrar;
+  }
+  function armar(d){
+    var asunto=plan||'Bayline · consulta desde la landing';
+    var cuerpo='Nombre: '+d.nombre+'\n'+
+      'Teléfono: '+(d.telefono||'(no indicado)')+'\n'+
+      'Correo: '+d.correo+'\n'+
+      (plan? 'Interesado en: '+plan+'\n':'')+
+      '\n'+(d.mensaje||'(sin mensaje)')+'\n';
+    return {asunto:asunto, cuerpo:cuerpo};
+  }
+  function abrir(asunto){
+    plan=asunto||'';
     if(!box){
-      box=document.createElement('div');
-      box.className='cscrim';
-      box.innerHTML='<div class="cbox" role="dialog" aria-modal="true" aria-label="Escríbanos">'+
-        '<h3>Escríbanos</h3>'+
-        '<p id="c-sub"></p>'+
-        '<div class="cmail"><span id="c-dir"></span><button type="button" id="c-copy">Copiar</button></div>'+
-        '<p class="cok" id="c-ok"></p>'+
-        '<div class="cacts">'+
-          '<a class="g" id="c-gmail" target="_blank" rel="noopener">Abrir en Gmail</a>'+
-          '<a class="o" id="c-outlook" target="_blank" rel="noopener">Abrir en Outlook</a>'+
-          '<a class="o" id="c-mailto">Abrir en mi programa de correo</a>'+
-        '</div>'+
-        '<button type="button" class="cclose" id="c-cerrar">Cerrar</button></div>';
+      box=document.createElement('div'); box.className='cscrim';
       document.body.appendChild(box);
-      box.addEventListener('click', function(e){ if(e.target===box) cerrar(); });
-      box.querySelector('#c-cerrar').onclick=cerrar;
-      box.querySelector('#c-copy').onclick=function(){
-        var ok=box.querySelector('#c-ok');
-        var listo=function(){ ok.textContent='Dirección copiada.'; };
-        if(navigator.clipboard&&navigator.clipboard.writeText){
-          navigator.clipboard.writeText(CORREO).then(listo, function(){ok.textContent='Selecciónela y cópiela con Ctrl+C.';});
-        } else {
-          var r=document.createRange(); r.selectNode(box.querySelector('#c-dir'));
-          var sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
-          ok.textContent='Selecciónela y cópiela con Ctrl+C.';
-        }
-      };
-      addEventListener('keydown', function(e){ if(e.key==='Escape') cerrar(); });
+      box.addEventListener('click',function(e){ if(e.target===box) cerrar(); });
+      addEventListener('keydown',function(e){ if(e.key==='Escape') cerrar(); });
     }
-    var q=encodeURIComponent, s=q(asunto), b=q(cuerpo);
-    box.querySelector('#c-dir').textContent=CORREO;
-    box.querySelector('#c-sub').textContent='Sobre: '+asunto;
-    box.querySelector('#c-ok').textContent='';
-    box.querySelector('#c-gmail').href='https://mail.google.com/mail/?view=cm&fs=1&to='+q(CORREO)+'&su='+s+'&body='+b;
-    box.querySelector('#c-outlook').href='https://outlook.live.com/mail/0/deeplink/compose?to='+q(CORREO)+'&subject='+s+'&body='+b;
-    box.querySelector('#c-mailto').href='mailto:'+CORREO+'?subject='+s+'&body='+b;
+    box.innerHTML=html();
+    box.querySelector('#c-sub').textContent=plan? 'Sobre: '+plan : 'Contáctenos y le respondemos.';
+    var dir=box.querySelector('#c-dir'); dir.textContent=CORREO; dir.href='mailto:'+CORREO;
+    box.querySelector('#c-cerrar').onclick=cerrar;
+    box.querySelector('#c-form').addEventListener('submit',enviar);
     box.classList.add('on');
+    setTimeout(function(){ var n=box.querySelector('#c-nom'); if(n) n.focus(); },60);
+  }
+  function enviar(e){
+    e.preventDefault();
+    var g=function(id){ return (box.querySelector(id).value||'').trim(); };
+    var d={nombre:g('#c-nom'), telefono:g('#c-tel'), correo:g('#c-cor'), mensaje:g('#c-msg')};
+    var err=box.querySelector('#c-err');
+    if(!d.nombre){ err.textContent='Indíquenos su nombre.'; box.querySelector('#c-nom').focus(); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.correo)){ err.textContent='Revise su correo: no parece completo.'; box.querySelector('#c-cor').focus(); return; }
+    if(!box.querySelector('#c-ok').checked){ err.textContent='Marque la autorización para poder guardarle los datos y responderle.'; box.querySelector('#c-ok').focus(); return; }
+    err.textContent='';
+    var m=armar(d), btn=box.querySelector('#c-send');
+    btn.disabled=true; btn.textContent='Enviando...';
+    if(FORM_ENDPOINT){
+      fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({asunto:m.asunto, para:CORREO, datos:d,
+          consentimiento:{aceptado:true, version:'2026-08-12',
+            texto:'Autorizo a Poker Jacks a guardar mi nombre, correo, telefono y mensaje unicamente para responder esta consulta.',
+            fecha:new Date().toISOString(), pagina:location.href}})})
+        .then(function(r){ if(!r.ok) throw 0; gracias('directo'); })
+        .catch(function(){ salidaCorreo(m); });
+    } else { salidaCorreo(m); }
+  }
+  function salidaCorreo(m){
+    var q=encodeURIComponent;
+    var url='https://mail.google.com/mail/?view=cm&fs=1&to='+q(CORREO)+'&su='+q(m.asunto)+'&body='+q(m.cuerpo);
+    var w=window.open(url,'_blank','noopener');
+    if(!w){ location.href='mailto:'+CORREO+'?subject='+q(m.asunto)+'&body='+q(m.cuerpo); }
+    gracias('correo');
   }
   function cerrar(){ if(box) box.classList.remove('on'); }
-  document.addEventListener('click', function(e){
+  document.addEventListener('click',function(e){
     var a=e.target.closest('a[href^="mailto:"]');
     if(!a) return;
     e.preventDefault();
-    var h=a.getAttribute('href')||'';
-    var qs=h.split('?')[1]||'';
-    var p=new URLSearchParams(qs);
-    abrir(p.get('subject')||'Bayline', p.get('body')||'');
+    var p=new URLSearchParams((a.getAttribute('href')||'').split('?')[1]||'');
+    abrir(p.get('subject')||'');
   });
 })();
 </script>
