@@ -3,6 +3,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bayline · su comercio, en ruta</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><link rel="apple-touch-icon" href="/icono-180.png">
+
+<!-- ───────────────────────────────────────────────────────────────────────────
+     PÍXEL DE META · PENDIENTE DE ACTIVAR
+
+     PARA ENCENDERLO: reemplazá PEGAR_ID_DEL_PIXEL_AQUI por el identificador
+     numérico del píxel (unos 15 dígitos). Se saca en el Administrador de
+     eventos de Meta Business → Orígenes de datos → el píxel → «ID del píxel».
+     Es lo único que hay que cambiar; el resto ya está escrito.
+
+     MIENTRAS NO TENGA ID NO CARGA NADA: el guard de abajo corta antes de pedirle
+     el script a Facebook, así que la página no gana ni un request ni una cookie
+     de terceros mientras esto siga sin configurar.
+
+     POR QUÉ HACE FALTA: sin píxel no hay remarketing —no se puede volver a
+     mostrar el anuncio a quien ya visitó—, no se pueden armar públicos
+     similares a partir de los visitantes, y Meta no tiene con qué optimizar la
+     entrega. Es el prerrequisito de cualquier pauta pagada.
+
+     QUÉ REGISTRA: una visita de página (PageView) y, cuando alguien envía el
+     formulario de contacto, un evento Lead. Nada más: ni scroll, ni clics
+     sueltos, ni datos del formulario. El contenido de la consulta no viaja a
+     Meta.
+─────────────────────────────────────────────────────────────────────────── -->
+<script>
+window.PIXEL_META = 'PEGAR_ID_DEL_PIXEL_AQUI';
+(function () {
+  var id = window.PIXEL_META;
+  // Sin id configurado no se carga nada. Evita pedirle el script a Facebook
+  // —y dejar su cookie— mientras la pauta no esté andando.
+  if (!id || id.indexOf('PEGAR') === 0) return;
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+  (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', id);
+  fbq('track', 'PageView');
+})();
+</script>
+
 <meta name="description" content="Bayline es la plataforma de comercio para negocios de Costa Rica: catálogo, pagos en línea y logística en un solo lugar, con 0% de comisión de nuestra parte.">
 
 <meta property="og:type" content="website">
@@ -984,15 +1024,24 @@ stops.forEach(s=>{
           consentimiento:{aceptado:true, version:'2026-08-12',
             texto:'Autorizo a Poker Jacks a guardar mi nombre, correo, telefono y mensaje unicamente para responder esta consulta.',
             fecha:new Date().toISOString(), pagina:location.href}})})
-        .then(function(r){ if(!r.ok) throw 0; gracias('directo'); })
+        .then(function(r){ if(!r.ok) throw 0; registrarLead('formulario'); gracias('directo'); })
         .catch(function(){ salidaCorreo(m); });
     } else { salidaCorreo(m); }
   }
+  // El evento Lead solo se registra si el píxel está activo. Se dispara cuando
+  // el envío fue ACEPTADO, no al apretar el botón: un envío que falla no es un
+  // lead, y contarlo así le enseñaría a Meta a buscar a la gente equivocada.
+  function registrarLead(via){
+    if (typeof fbq !== 'function') return;
+    fbq('track', 'Lead', { content_name: 'contacto-landing', content_category: via });
+  }
+
   function salidaCorreo(m){
     var q=encodeURIComponent;
     var url='https://mail.google.com/mail/?view=cm&fs=1&to='+q(CORREO)+'&su='+q(m.asunto)+'&body='+q(m.cuerpo);
     var w=window.open(url,'_blank','noopener');
     if(!w){ location.href='mailto:'+CORREO+'?subject='+q(m.asunto)+'&body='+q(m.cuerpo); }
+    registrarLead('correo');
     gracias('correo');
   }
   function cerrar(){ if(box) box.classList.remove('on'); }
